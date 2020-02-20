@@ -1,6 +1,13 @@
 
 <nav class="navbar navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">
-    Home
-  </a>
+  <a class="navbar-brand"  routerLinkActive="active" routerLink="home">Home</a>
+  <a class="navbar-brand float-right"  routerLinkActive="active" routerLink="login">Login</a>
 </nav>
+
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
