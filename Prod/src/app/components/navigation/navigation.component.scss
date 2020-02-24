@@ -1,0 +1,14 @@
+.container-fluid{
+  font-family: "Roboto", sans-serif;
+}
+
+.navbar {
+  background-color: lightgray;
+  color: #4CAF50;
+  min-width: 50px;
+  height: 100%;
+}
+
+button .navbar-toggle {
+  position: fixed;
+}

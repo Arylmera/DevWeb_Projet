@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {Routes} from "@angular/router";
-import {HomeComponent} from "../home/home.component";
-import {FourthOFourthComponent} from "../../fourth-o-fourth/fourth-o-fourth.component";
+import {faBars} from "@fortawesome/free-solid-svg-icons";
+import {faHome} from "@fortawesome/free-solid-svg-icons";
+import {faSignInAlt} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-navigation',
@@ -10,9 +10,14 @@ import {FourthOFourthComponent} from "../../fourth-o-fourth/fourth-o-fourth.comp
 })
 
 export class NavigationComponent implements OnInit {
+  faBars = faBars;
+  faHome = faHome;
+  faSignInAlt = faSignInAlt;
+
   constructor() { }
 
   ngOnInit(): void {
+
   }
 
 }

@@ -233,3 +233,6 @@ $altTheme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
   padding: .5em .85em;
   min-height: 2.5em;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
