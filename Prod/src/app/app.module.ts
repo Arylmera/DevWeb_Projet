@@ -16,11 +16,13 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NewAccountComponent } from './components/new-account/new-account.component';
+import { PointListComponent } from './components/point-list/point-list.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent},
   { path: 'newAccount', component: NewAccountComponent},
+  { path: 'pointList', component: PointListComponent},
   { path: '', component: HomeComponent },
   { path: 'not-found', component: FourthOFourthComponent },
   { path: '**', component: FourthOFourthComponent }
@@ -33,12 +35,14 @@ const routes: Routes = [
     HomeComponent,
     FourthOFourthComponent,
     LoginComponent,
-    NewAccountComponent
+    NewAccountComponent,
+    PointListComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    BrowserModule,
     RouterModule.forRoot(routes),
     MatSidenavModule,
     FormsModule,

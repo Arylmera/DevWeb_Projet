@@ -1,0 +1,24 @@
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-3">
+      <form class="form" (submit)="selectPointsFromCateg()">
+        <label>Type de points souhaité</label>
+        <div *ngFor="let caract of caractList" class="form-inline">
+          <input class="form-check" type="checkbox" id="{{caract.id}}" value="{{caract.id}}" name="caractList">
+          <label class="form-check-label" >{{caract.name}}</label>
+        </div>
+        <button class="btn btn-primary" type="submit">Rechercher</button>
+      </form>
+    </div>
+    <div class="col-sm-8">
+      <div *ngFor="let p of pointList" class="text-center bg-dark text-white">
+        <p>{{p.name}}</p>
+        <p>{{p.description}}</p>
+        <p>Caractérisique : {{p.caract}}</p>
+        <p>Localisation : {{p.coord}}</p>
+      </div>
+    </div>
+  </div>
+</div>
