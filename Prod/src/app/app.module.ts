@@ -17,15 +17,17 @@ import {MatToolbarModule} from "@angular/material/toolbar";
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NewAccountComponent } from './components/new-account/new-account.component';
 import { PointListComponent } from './components/point-list/point-list.component';
+import { PointInfoComponent } from './components/point-info/point-info.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent},
   { path: 'newAccount', component: NewAccountComponent},
   { path: 'pointList', component: PointListComponent},
+  { path: 'pointInfo/:id', component: PointInfoComponent},
   { path: '', component: HomeComponent },
   { path: 'not-found', component: FourthOFourthComponent },
-  { path: '**', component: FourthOFourthComponent }
+  { path: '**', redirectTo: 'not-found' }
 ];
 
 @NgModule({
@@ -36,7 +38,8 @@ const routes: Routes = [
     FourthOFourthComponent,
     LoginComponent,
     NewAccountComponent,
-    PointListComponent
+    PointListComponent,
+    PointInfoComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +55,9 @@ const routes: Routes = [
     MatToolbarModule,
     FontAwesomeModule
   ],
-  providers: [],
+  providers: [
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
