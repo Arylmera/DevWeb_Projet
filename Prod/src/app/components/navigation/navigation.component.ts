@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {faBars} from "@fortawesome/free-solid-svg-icons";
 import {faHome} from "@fortawesome/free-solid-svg-icons";
 import {faSignInAlt} from "@fortawesome/free-solid-svg-icons";
-import {faMapMarkerAlt} from "@fortawesome/free-solid-svg-icons/faMapMarkerAlt";
+import {faMapPin} from "@fortawesome/free-solid-svg-icons/faMapPin";
+import {faMapMarkedAlt} from "@fortawesome/free-solid-svg-icons/faMapMarkedAlt";
 
 @Component({
   selector: 'app-navigation',
@@ -14,7 +15,8 @@ export class NavigationComponent implements OnInit {
   faBars = faBars;
   faHome = faHome;
   faSignInAlt = faSignInAlt;
-  famMapMakerAlt = faMapMarkerAlt;
+  faMapPin = faMapPin;
+  faMapMarkedAlt = faMapMarkedAlt;
 
   constructor() { }
 

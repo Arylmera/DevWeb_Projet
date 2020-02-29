@@ -18,6 +18,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NewAccountComponent } from './components/new-account/new-account.component';
 import { PointListComponent } from './components/point-list/point-list.component';
 import { PointInfoComponent } from './components/point-info/point-info.component';
+import { MapComponent } from './components/map/map.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'newAccount', component: NewAccountComponent},
   { path: 'pointList', component: PointListComponent},
   { path: 'pointInfo/:id', component: PointInfoComponent},
+  { path: 'map', component: MapComponent},
   { path: '', component: HomeComponent },
   { path: 'not-found', component: FourthOFourthComponent },
   { path: '**', redirectTo: 'not-found' }
@@ -39,7 +41,8 @@ const routes: Routes = [
     LoginComponent,
     NewAccountComponent,
     PointListComponent,
-    PointInfoComponent
+    PointInfoComponent,
+    MapComponent
   ],
   imports: [
     BrowserModule,
