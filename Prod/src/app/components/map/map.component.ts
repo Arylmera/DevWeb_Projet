@@ -9,7 +9,11 @@ import Point from 'ol/geom/Point';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import {OSM, Vector as VectorSource} from 'ol/source';
 import {Circle as CircleStyle, Fill, Stroke, Style} from 'ol/style';
+import {defaults as defaultInteractions, DragRotateAndZoom,} from "ol/interaction";
+import {fromLonLat, transform} from "ol/proj";
 
+
+const lln = [4.611746,50.668351];
 
 @Component({
   selector: 'app-map',
@@ -22,19 +26,21 @@ export class MapComponent implements AfterViewInit {
   constructor() { }
 
   ngAfterViewInit() {
+    let currentPosition = lln;
 
     /**
      * création de la vue
      */
     let view = new View({
-      center: [0,0],
-      zoom: 2
+      center: fromLonLat(currentPosition),
+      zoom: 15
     });
 
     /**
      * création de la map
      */
     let map = new Map({
+      interactions: defaultInteractions().extend([new DragRotateAndZoom()]),
       layers: [
         new TileLayer({
           source: new OSM()
@@ -43,6 +49,7 @@ export class MapComponent implements AfterViewInit {
       target: 'map',
       view: view
     });
+
 
     /**
      * création de la géolocalisation
@@ -83,7 +90,8 @@ export class MapComponent implements AfterViewInit {
      * géolocalisation dynamique
      */
     geolocation.on('change:position', function() {
-      var coordinates = geolocation.getPosition();
+      let coordinates = geolocation.getPosition();
+      setMapPositionGeolocation(coordinates);
       positionFeature.setGeometry(coordinates ?
         new Point(coordinates) : null);
     });
@@ -119,6 +127,15 @@ export class MapComponent implements AfterViewInit {
      */
     function getId(id) {
       return document.getElementById(id);
+    }
+
+    function setMapPositionGeolocation(centerPosition: number){
+      let position = fromLonLat(centerPosition);
+      console.log(position);
+      view.setCenter(transform([
+        +position[0],
+        +position[1]
+      ], 'EPSG:4326', 'EPSG:3857'));
     }
   }
 
