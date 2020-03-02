@@ -44,7 +44,6 @@ const routes: Routes = [
     PointListComponent,
     PointInfoComponent,
     MapComponent,
-    NavGoogleMapComponent
   ],
   imports: [
     BrowserModule,
