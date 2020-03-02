@@ -129,7 +129,7 @@ export class MapComponent implements AfterViewInit {
       return document.getElementById(id);
     }
 
-    function setMapPositionGeolocation(centerPosition: number){
+    function setMapPositionGeolocation(centerPosition: number[]){
       let position = fromLonLat(centerPosition);
       console.log(position);
       view.setCenter(transform([

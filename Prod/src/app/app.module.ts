@@ -19,6 +19,7 @@ import { NewAccountComponent } from './components/new-account/new-account.compon
 import { PointListComponent } from './components/point-list/point-list.component';
 import { PointInfoComponent } from './components/point-info/point-info.component';
 import { MapComponent } from './components/map/map.component';
+import { NavGoogleMapComponent } from './components/nav-google-map/nav-google-map.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -42,7 +43,8 @@ const routes: Routes = [
     NewAccountComponent,
     PointListComponent,
     PointInfoComponent,
-    MapComponent
+    MapComponent,
+    NavGoogleMapComponent
   ],
   imports: [
     BrowserModule,
