@@ -5,14 +5,16 @@ class Point {
   id: number;
   name: string;
   description: string;
-  coord: number[];
+  long: number;
+  lat: number;
   caract: number[];
 
-  constructor(id: number, name: string, description: string, coord: number[], caract: number[]) {
+  constructor(id: number, name: string, description: string, long: number, lat: number, caract: number[]) {
     this.id = id;
     this.name = name;
     this.description = description;
-    this.coord = coord;
+    this.long = long;
+    this.lat = lat;
     this.caract = caract;
   }
 }
@@ -48,7 +50,7 @@ export class PointListComponent implements OnInit {
 
     for(let i = 0; i < 10; i++){
       let caractNumber = [Math.floor(Math.random() * Math.floor(10)),Math.floor(Math.random() * Math.floor(10)),Math.floor(Math.random() * Math.floor(10))];
-      let p = new Point(i,'test point' + i, 'description du point', [i,i], caractNumber);
+      let p = new Point(i,'test point' + i, 'description du point', 1, 1, caractNumber);
       this.pointList[i] = p;
     }
     for(let i = 0; i < 10; i++){
@@ -93,6 +95,7 @@ export class PointListComponent implements OnInit {
   getPointById(id: number){
     for(let i = 0; i < this.pointList.length; i++){
       if(this.pointList[i].id == id){
+        console.log("returned point :"+ this.pointList[i]);
         return this.pointList[i];
       }
     }
