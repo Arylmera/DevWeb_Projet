@@ -1,4 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {PointsService} from "../../services/points/points.service";
 
 class Point {
   id: number;
@@ -38,9 +39,13 @@ export class PointListComponent implements OnInit {
   caractList: Caract[] = []; // liste total des caractérisitques
   caractListSelected: Caract[] = []; // liste des caractérisitues selectionnés
 
-  constructor() { }
+  constructor(private pointsService: PointsService) { }
 
   ngOnInit(): void {
+    this.pointsService.getPoints().subscribe(data => {
+      console.log(data)
+    });
+
     for(let i = 0; i < 10; i++){
       let caractNumber = [Math.floor(Math.random() * Math.floor(10)),Math.floor(Math.random() * Math.floor(10)),Math.floor(Math.random() * Math.floor(10))];
       let p = new Point(i,'test point' + i, 'description du point', [i,i], caractNumber);
