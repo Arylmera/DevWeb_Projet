@@ -1,5 +1,4 @@
 import { Component, AfterViewInit } from '@angular/core';
-
 import 'ol/ol.css';
 import Feature from 'ol/Feature';
 import Geolocation from 'ol/Geolocation';
@@ -8,10 +7,12 @@ import View from 'ol/View';
 import Point from 'ol/geom/Point';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import {OSM, Vector as VectorSource} from 'ol/source';
-import {Circle as CircleStyle, Fill, Stroke, Style} from 'ol/style';
+import {Circle as CircleStyle, Fill, Stroke, Style, Icon} from 'ol/style';
 import {defaults as defaultInteractions, DragRotateAndZoom,} from "ol/interaction";
 import {fromLonLat, transform} from "ol/proj";
-
+import Overlay from "ol/Overlay";
+import * as $ from 'jquery';
+import LineString from "ol/geom/LineString";
 
 const lln = [4.611746,50.668351];
 
@@ -25,119 +26,148 @@ export class MapComponent implements AfterViewInit {
 
   constructor() { }
 
-  ngAfterViewInit() {
-    let currentPosition = lln;
 
-    /**
-     * création de la vue
-     */
-    let view = new View({
-      center: fromLonLat(currentPosition),
-      zoom: 15
+  ngAfterViewInit() {
+
+    // creating the view
+    const view = new View({
+      center: fromLonLat(lln),
+      zoom: 19
     });
 
-    /**
-     * création de la map
-     */
-    let map = new Map({
-      interactions: defaultInteractions().extend([new DragRotateAndZoom()]),
-      layers: [
-        new TileLayer({
-          source: new OSM()
-        })
-      ],
+    const tileLayer = new TileLayer({
+      source: new OSM()
+    });
+
+    // creating the map
+    const map = new Map({
+      layers: [tileLayer],
       target: 'map',
       view: view
     });
 
+    // Geolocation marker
+    const markerEl = document.getElementById('geolocation_marker');
+    const marker = new Overlay({
+      positioning: 'center-center',
+      element: markerEl,
+      stopEvent: false
+    });
+    map.addOverlay(marker);
 
-    /**
-     * création de la géolocalisation
-     */
-    let geolocation = new Geolocation({
+    // LineString to store the different geolocation positions. This LineString
+    // is time aware.
+    // The Z dimension is actually used to store the rotation (heading).
+    const positions = new LineString([], 'XYZM');
+
+// Geolocation Control
+    const geolocation = new Geolocation({
+      projection: view.getProjection(),
       trackingOptions: {
-        enableHighAccuracy: true
-      },
-      projection: view.getProjection()
+        maximumAge: 10000,
+        enableHighAccuracy: true,
+        timeout: 600000
+      }
     });
 
-    /**
-     * ajout de la géolocalisation
-     */
-    let accuracyFeature = new Feature();
-    geolocation.on('change:accuracyGeometry', function() {
-      accuracyFeature.setGeometry(geolocation.getAccuracyGeometry());
-    });
+    let deltaMean = 500; // the geolocation sampling period mean in ms
 
-    /**
-     * affichage de la possition sur la carte
-     */
-    let positionFeature = new Feature();
-    positionFeature.setStyle(new Style({
-      image: new CircleStyle({
-        radius: 6,
-        fill: new Fill({
-          color: '#3399CC'
-        }),
-        stroke: new Stroke({
-          color: '#fff',
-          width: 2
-        })
-      })
-    }));
-
-    /**
-     * géolocalisation dynamique
-     */
-    geolocation.on('change:position', function() {
-      let coordinates = geolocation.getPosition();
-      setMapPositionGeolocation(coordinates);
-      positionFeature.setGeometry(coordinates ?
-        new Point(coordinates) : null);
-    });
-
-    geolocation.on('error', function(error) {
-      console.log('error in geolocation : '+ error);
-    });
-
+    // Listen to position changes
     geolocation.on('change', function() {
-      getId('accuracy').innerText = geolocation.getAccuracy() + ' [m]';
-      getId('speed').innerText = geolocation.getSpeed() + ' [m/s]';
+      const position = geolocation.getPosition();
+      const accuracy = geolocation.getAccuracy();
+      const heading = geolocation.getHeading() || 0;
+      const speed = geolocation.getSpeed() || 0;
+      const m = Date.now();
+
+      addPosition(position, heading, m, speed);
+
+      const coords = positions.getCoordinates();
+      const len = coords.length;
+      if (len >= 2) {
+        deltaMean = (coords[len - 1][3] - coords[0][3]) / (len - 1);
+      }
+
+      const html = [
+        'Position: ' + position[0].toFixed(2) + ', ' + position[1].toFixed(2),
+        'Accuracy: ' + accuracy,
+        'Heading: ' + Math.round(radToDeg(heading)) + '&deg;',
+        'Speed: ' + (speed * 3.6).toFixed(1) + ' km/h',
+        'Delta: ' + Math.round(deltaMean) + 'ms'
+      ].join('<br />');
+      document.getElementById('info').innerHTML = html;
     });
 
-    /**
-     * nouveau layer avec la map
-     */
-    new VectorLayer({
-      map: map,
-      source: new VectorSource({
-        features: [accuracyFeature, positionFeature]
-      })
+    geolocation.on('error', function() {
+      alert('geolocation error');
     });
 
-    /**
-     * lancement de la géolocalisation
-     */
-    geolocation.setTracking(true);
-
-    /**
-     * get element by id helper
-     * @param id
-     * @return element html
-     */
-    function getId(id) {
-      return document.getElementById(id);
+    // convert radians to degrees
+    function radToDeg(rad) {
+      return rad * 360 / (Math.PI * 2);
     }
 
-    function setMapPositionGeolocation(centerPosition: number[]){
-      let position = fromLonLat(centerPosition);
-      console.log(position);
-      view.setCenter(transform([
-        +position[0],
-        +position[1]
-      ], 'EPSG:4326', 'EPSG:3857'));
+    // convert degrees to radians
+    function degToRad(deg) {
+      return deg * Math.PI * 2 / 360;
     }
+
+    // modulo for negative values
+    function mod(n) {
+      return ((n % (2 * Math.PI)) + (2 * Math.PI)) % (2 * Math.PI);
+    }
+
+    function addPosition(position, heading, m, speed) {
+      const x = position[0];
+      const y = position[1];
+      const fCoords = positions.getCoordinates();
+      const previous = fCoords[fCoords.length - 1];
+      const prevHeading = previous && previous[2];
+      if (prevHeading) {
+        let headingDiff = heading - mod(prevHeading);
+
+        // force the rotation change to be less than 180°
+        if (Math.abs(headingDiff) > Math.PI) {
+          const sign = (headingDiff >= 0) ? 1 : -1;
+          headingDiff = -sign * (2 * Math.PI - Math.abs(headingDiff));
+        }
+        heading = prevHeading + headingDiff;
+      }
+      positions.appendCoordinate([x, y, heading, m]);
+
+      // only keep the 20 last coordinates
+      positions.setCoordinates(positions.getCoordinates().slice(-20));
+    }
+
+// recenters the view by putting the given coordinates at 3/4 from the top or
+// the screen
+    function getCenterWithHeading(position, rotation, resolution) {
+      const size = map.getSize();
+      const height = size[1];
+
+      return [
+        position[0] - Math.sin(rotation) * height * resolution / 4,
+        position[1] + Math.cos(rotation) * height * resolution / 4
+      ];
+    }
+
+    let previousM = 0;
+    function updateView() {
+      // use sampling period to get a smooth transition
+      let m = Date.now() - deltaMean * 1.5;
+      m = Math.max(m, previousM);
+      previousM = m;
+      // interpolate position along positions LineString
+      const c = positions.getCoordinateAtM(m, true);
+      if (c) {
+        view.setCenter(getCenterWithHeading(c, -c[2], view.getResolution()));
+        view.setRotation(-c[2]);
+        marker.setPosition(c);
+      }
+    }
+    // geolocate device
+      geolocation.setTracking(true); // Start position tracking
+      tileLayer.on('postrender', updateView);
+      map.render();
   }
-
-
 }
