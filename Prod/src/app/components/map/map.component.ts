@@ -21,7 +21,6 @@ export class MapComponent implements AfterViewInit {
 
   constructor() { }
 
-
   ngAfterViewInit() {
 
     // creating the view
@@ -45,7 +44,7 @@ export class MapComponent implements AfterViewInit {
     // Geolocation marker
     const markerEl = document.getElementById('geolocation_marker') as HTMLImageElement;
     const marker = new Overlay({
-      positioning: 'center-center',
+      //positioning: "center-center",
       element: markerEl,
       stopEvent: false
     });
@@ -154,6 +153,7 @@ export class MapComponent implements AfterViewInit {
         marker.setPosition(c);
       }
     }
+
     geolocation.setTracking(true); // Start position tracking
     tileLayer.on('postrender', updateView);
     map.render();
