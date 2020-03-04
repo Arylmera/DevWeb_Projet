@@ -1,17 +1,12 @@
 import { Component, AfterViewInit } from '@angular/core';
 import 'ol/ol.css';
-import Feature from 'ol/Feature';
 import Geolocation from 'ol/Geolocation';
 import Map from 'ol/Map';
 import View from 'ol/View';
-import Point from 'ol/geom/Point';
-import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
-import {OSM, Vector as VectorSource} from 'ol/source';
-import {Circle as CircleStyle, Fill, Stroke, Style, Icon} from 'ol/style';
-import {defaults as defaultInteractions, DragRotateAndZoom,} from "ol/interaction";
-import {fromLonLat, transform} from "ol/proj";
+import {Tile as TileLayer} from 'ol/layer';
+import {OSM} from 'ol/source';
+import {fromLonLat} from "ol/proj";
 import Overlay from "ol/Overlay";
-import * as $ from 'jquery';
 import LineString from "ol/geom/LineString";
 
 const lln = [4.611746,50.668351];
@@ -32,9 +27,10 @@ export class MapComponent implements AfterViewInit {
     // creating the view
     const view = new View({
       center: fromLonLat(lln),
-      zoom: 19
+      zoom: 17
     });
 
+    // creating layer
     const tileLayer = new TileLayer({
       source: new OSM()
     });
@@ -47,7 +43,7 @@ export class MapComponent implements AfterViewInit {
     });
 
     // Geolocation marker
-    const markerEl = document.getElementById('geolocation_marker');
+    const markerEl = document.getElementById('geolocation_marker') as HTMLImageElement;
     const marker = new Overlay({
       positioning: 'center-center',
       element: markerEl,
@@ -57,10 +53,10 @@ export class MapComponent implements AfterViewInit {
 
     // LineString to store the different geolocation positions. This LineString
     // is time aware.
-    // The Z dimension is actually used to store the rotation (heading).
-    const positions = new LineString([], 'XYZM');
+    // The Z dimension is actually used to store the rotation (headiing).
+    const positions = new LineString([]);
 
-// Geolocation Control
+    // Geolocation Control
     const geolocation = new Geolocation({
       projection: view.getProjection(),
       trackingOptions: {
@@ -70,30 +66,20 @@ export class MapComponent implements AfterViewInit {
       }
     });
 
-    let deltaMean = 500; // the geolocation sampling period mean in ms
+    let deltaMean = 600; // the geolocation sampling period mean in ms
 
     // Listen to position changes
     geolocation.on('change', function() {
       const position = geolocation.getPosition();
       const accuracy = geolocation.getAccuracy();
       const heading = geolocation.getHeading() || 0;
-      const speed = geolocation.getSpeed() || 0;
       const m = Date.now();
 
-      addPosition(position, heading, m, speed);
-
-      const coords = positions.getCoordinates();
-      const len = coords.length;
-      if (len >= 2) {
-        deltaMean = (coords[len - 1][3] - coords[0][3]) / (len - 1);
-      }
+      addPosition(position, heading, m);
 
       const html = [
         'Position: ' + position[0].toFixed(2) + ', ' + position[1].toFixed(2),
-        'Accuracy: ' + accuracy,
-        'Heading: ' + Math.round(radToDeg(heading)) + '&deg;',
-        'Speed: ' + (speed * 3.6).toFixed(1) + ' km/h',
-        'Delta: ' + Math.round(deltaMean) + 'ms'
+        'Accuracy: ' + accuracy + ' m',
       ].join('<br />');
       document.getElementById('info').innerHTML = html;
     });
@@ -106,18 +92,16 @@ export class MapComponent implements AfterViewInit {
     function radToDeg(rad) {
       return rad * 360 / (Math.PI * 2);
     }
-
     // convert degrees to radians
     function degToRad(deg) {
       return deg * Math.PI * 2 / 360;
     }
-
     // modulo for negative values
     function mod(n) {
       return ((n % (2 * Math.PI)) + (2 * Math.PI)) % (2 * Math.PI);
     }
 
-    function addPosition(position, heading, m, speed) {
+    function addPosition(position, heading, m) {
       const x = position[0];
       const y = position[1];
       const fCoords = positions.getCoordinates();
@@ -137,10 +121,15 @@ export class MapComponent implements AfterViewInit {
 
       // only keep the 20 last coordinates
       positions.setCoordinates(positions.getCoordinates().slice(-20));
+
+      if (heading) {
+        markerEl.src = '../../../assets/geolocation_marker_heading.png';
+      } else {
+        markerEl.src = '../../../assets/geolocation_marker.png';
+      }
     }
 
-// recenters the view by putting the given coordinates at 3/4 from the top or
-// the screen
+    // recenters the view by putting the given coordinates at 3/4 from the top or the screen
     function getCenterWithHeading(position, rotation, resolution) {
       const size = map.getSize();
       const height = size[1];
@@ -165,9 +154,8 @@ export class MapComponent implements AfterViewInit {
         marker.setPosition(c);
       }
     }
-    // geolocate device
-      geolocation.setTracking(true); // Start position tracking
-      tileLayer.on('postrender', updateView);
-      map.render();
+    geolocation.setTracking(true); // Start position tracking
+    tileLayer.on('postrender', updateView);
+    map.render();
   }
 }
