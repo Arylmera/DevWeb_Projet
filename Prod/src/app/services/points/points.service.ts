@@ -12,7 +12,7 @@ export class PointsService {
    * récupération de l'ensemble de la liste des points
    */
   getPoints(){
-    return this.http.get('localhost/api/');
+    return this.http.get('localhost/api/points');
   }
 
   /**
