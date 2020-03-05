@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as L from 'leaflet';
-import 'leaflet-easybutton';
-import "leaflet-routing-machine";
+import { PointsService} from "../points/points.service";
 
 
 @Injectable({
@@ -9,6 +7,6 @@ import "leaflet-routing-machine";
 })
 export class MapsService {
 
-  constructor() { }
+  constructor(private pointsService: PointsService) { }
 
 }

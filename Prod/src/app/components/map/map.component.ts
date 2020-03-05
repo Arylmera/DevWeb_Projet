@@ -1,12 +1,13 @@
 import {Component, AfterViewInit} from '@angular/core';
 import {MapsService} from "../../services/maps/maps.service";
+import {PointsService} from "../../services/points/points.service";
 import * as L from 'leaflet';
 import 'leaflet-easybutton';
 import "leaflet-routing-machine";
+import {forEach} from "ol/geom/flat/segments";
 
 
-const lln = [50.668351,4.611746];
-
+// lln = [50.668351,4.611746];
 // iconMap
 const PositionIcon = L.icon({
   iconUrl: '../../../assets/Map/Points/IIcon.svg',
@@ -34,13 +35,19 @@ export class MapComponent implements AfterViewInit {
   private current_latlong: [number,number] = [50.67,4.61];
   private pointToGo_latlong: [number, number];
 
-  constructor() { }
+  constructor(private mapsService: MapsService, private pointsService: PointsService) { }
 
   ngAfterViewInit() {
     this.initMap();
     //ajout des points
     this.addPoint([50.668351,4.611746],'Louvain La Neuve');
     this.addPoint([50.67, 4.6118], 'Test add point');
+    /*
+    this.pointsService.getPoints().forEach(point => {
+      this.addPoint([point.lat, point.long], point.description);
+    });
+    */
+
     // geolocation
     this.map.locate({setView: true ,watch: true , maxZoom: 20});
     this.map.on('locationfound', this.onLocationFound);

@@ -17,6 +17,7 @@ class Point {
     this.lat = lat;
     this.caract = caract;
   }
+
 }
 class Caract {
   id: number;
