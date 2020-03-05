@@ -1,9 +1,20 @@
 import {Component, AfterViewInit} from '@angular/core';
+import {MapsService} from "../../services/maps/maps.service";
 import * as L from 'leaflet';
 import 'leaflet-easybutton';
+import "leaflet-routing-machine";
 
-declare var fullscreen: any;
+
 const lln = [50.668351,4.611746];
+
+// iconMap
+const PositionIcon = L.icon({
+  iconUrl: '../../../assets/Map/Points/IIcon.svg',
+  iconSize: [25, 35],
+  iconAnchor: [25, 50],
+  shadowAnchor: [25, 25],
+  popupAnchor: [-12.5, -50],
+});
 const pointIcon = L.icon({
   iconUrl: '../../../assets/Map/Points/location.svg',
   iconSize: [25, 35],
@@ -20,45 +31,82 @@ const pointIcon = L.icon({
 
 export class MapComponent implements AfterViewInit {
   private map;
-
-  public fullscreenOptions: {[key:string]:any} = {
-    position: 'topleft',
-    title: 'View Fullscreen',
-    titleCancel: 'Exit Fullscreen',
-  };
+  private current_latlong: [number,number] = [50.67,4.61];
+  private pointToGo_latlong: [number, number];
 
   constructor() { }
 
   ngAfterViewInit() {
     this.initMap();
-    this.map.locate({setView: true, maxZoom: 16});
-    this.addPoint(50.668351,4.611746,'Louvain La Neuve');
-    this.addPoint(50.67, 4.6118, 'Test add point');
+    //ajout des points
+    this.addPoint([50.668351,4.611746],'Louvain La Neuve');
+    this.addPoint([50.67, 4.6118], 'Test add point');
+    // geolocation
+    this.map.locate({setView: true ,watch: true , maxZoom: 20});
+    this.map.on('locationfound', this.onLocationFound);
+    this.lunchRouting();
   }
 
+  /**
+   * calculate the route between 2 points
+   */
+  lunchRouting() {
+    L.Routing.control({
+      waypoints: [
+        L.latLng(this.current_latlong),
+        L.latLng(this.pointToGo_latlong)
+      ],
+      routeWhileDragging: false
+    }).addTo(this.map);
+  }
+
+  /**
+   * initilaisation de la map
+   */
   private initMap(): void {
-
     // création de la map
-    this.map = L.map('map').setView([50.668351,4.611746], 15);
-
+    this.map = L.map('map').setView([50.668351,4.611746], 17);
     // ajout des tuiles
-    L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', { // 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+    L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
       attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>',
-        //'| Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
       minZoom: 1,
       maxZoom: 20,
     }).addTo(this.map);
-
     //ajout des boutons
-    let centerButton= L.easyButton('fa-globe', function(btn, map){
-      helloPopup.setLatLng(map.getCenter()).openOn(map);
-    }).addTo( this.map );
-
   }
 
-  addPoint(lat: number, long: number, description: string){
-    let point = L.marker([lat, long], {icon: pointIcon}).addTo(this.map);
-    point.bindPopup(description);
+  /**
+   * helper pour l'ajout d'un point sur la carte
+   * @param latlong
+   * @param description
+   */
+  addPoint(latlong: [number,number], description: string){
+    let point = L.marker(latlong, {icon: pointIcon}).addTo(this.map).setOpacity(0.8);
+    let popup = L.popup().setContent(description);
+    point.bindPopup(popup);
+  }
+
+  /**
+   * when one point is clicked set pointToGo_latlong to position
+   */
+  private clickOnPoint(latlong: [number,number]) {
+    this.pointToGo_latlong = latlong;
+    this.map.locate({setView: true ,watch: true , maxZoom: 20});
+    console.log('on your way from your position to : ' + this.pointToGo_latlong);
+  }
+
+  /**
+   * si géolocalisé
+   * @param e
+   */
+  private onLocationFound(e) {
+    let radius = e.accuracy / 2;
+    this.current_latlong = e.latlng;
+    console.log("you are currently at : " + this.current_latlong);
+    L.marker(e.latlng, {icon: PositionIcon}).addTo(this.map).setOpacity(0.8);
+    L.circle(e.latlng, radius).addTo(this.map);
+    this.map.panTo(e.latlng);
+    this.map.setZoom(17);
   }
 
 }

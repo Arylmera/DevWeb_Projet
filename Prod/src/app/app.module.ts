@@ -21,7 +21,6 @@ import { PointInfoComponent } from './components/point-info/point-info.component
 import {MapComponent} from "./components/map/map.component";
 import {PointsService} from "./services/points/points.service";
 import {HttpClientModule} from "@angular/common/http";
-import {NgxLeafletFullscreenModule} from "@runette/ngx-leaflet-fullscreen";
 
 
 const routes: Routes = [
@@ -61,8 +60,7 @@ const routes: Routes = [
     MatIconModule,
     MatToolbarModule,
     FontAwesomeModule,
-    HttpClientModule,
-    NgxLeafletFullscreenModule
+    HttpClientModule
   ],
   providers: [
     PointsService
