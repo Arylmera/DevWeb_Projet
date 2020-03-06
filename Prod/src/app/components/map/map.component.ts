@@ -42,11 +42,12 @@ export class MapComponent implements AfterViewInit {
     //ajout des points
     this.addPoint([50.668351,4.611746],'Louvain La Neuve');
     this.addPoint([50.67, 4.6118], 'Test add point');
+
     /*
-    this.pointsService.getPoints().forEach(point => {
+    JSON.parse(this.pointsService.getPoints()).forEach(point => {
       this.addPoint([point.lat, point.long], point.description);
     });
-    */
+     */
 
     // geolocation
     this.map.locate({setView: true ,watch: true , maxZoom: 20});

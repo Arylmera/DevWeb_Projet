@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -11,31 +11,31 @@ export class PointsService {
   /**
    * récupération de l'ensemble de la liste des points
    */
-  getPoints(){
-    return this.http.get('localhost/api/points');
+  getPoints() {
+    return this.http.get('http://localhost:8080/api/points');
   }
 
   /**
    * récupération des info d'un point par sont id
    * @param id
    */
-  getPointById(id: number){
-    return this.http.get('localhost/api/');
+  getPointById(id: number) {
+    return this.http.get('http://localhost:8080/api/points/' + id);
   }
 
   /**
-   * récupération de la lsite des points basé sur la liste de leurs id
-   * @param id list
+   * récupération des points par leurs categories
+   * @param categ
    */
-  getPointList(id: number[]){
-    return this.http.get('localhost/api/');
+  getPointsByCateg(categ: string) {
+    return this.http.get('http://localhost:8080/api/points/' + categ );
   }
 
   /**
    * récupération de l'ensemble de la liste des catégories
    */
-  getCategories(){
-    return this.http.get('localhost/api/');
+  getCategories() {
+    return this.http.get('http://localhost:8080/api/caracteristiques');
   }
 
   /**
@@ -43,14 +43,7 @@ export class PointsService {
    * @param id
    */
   getCategorieById(id: number){
-    return this.http.get('localhost/api/');
+    return this.http.get('http://localhost:8080/api/caracteristiques' + id);
   }
 
-  /**
-   * récupération de la liste des points par leurs id
-   * @param id list
-   */
-  getCategorieList(id: number[]){
-    return this.http.get('localhost/api/');
-  }
 }

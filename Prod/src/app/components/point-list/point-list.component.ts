@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {PointsService} from "../../services/points/points.service";
+import {PointsService} from '../../services/points/points.service';
 
 class Point {
   id: number;
@@ -45,20 +45,21 @@ export class PointListComponent implements OnInit {
   constructor(private pointsService: PointsService) { }
 
   ngOnInit(): void {
+    // récupération des points du serveur
     this.pointsService.getPoints().subscribe(data => {
-      console.log(data)
+      for(const key in data) {
+        const tmpPoint = new Point(data[key].idPoint, data[key].namePoint, data[key].descriptionPoint,
+          data[key].latitudePoint, data[key].longitudePoint, [1]);
+        this.pointList.push(tmpPoint);
+      }
     });
-
-    for(let i = 0; i < 10; i++){
-      let caractNumber = [Math.floor(Math.random() * Math.floor(10)),Math.floor(Math.random() * Math.floor(10)),Math.floor(Math.random() * Math.floor(10))];
-      let p = new Point(i,'test point' + i, 'description du point', 1, 1, caractNumber);
-      this.pointList[i] = p;
-    }
-    for(let i = 0; i < 10; i++){
-      let c = new Caract(i,'caract nbr '+i);
-      this.caractList[i] = c;
-    }
-    this.pointListSelected = [...this.pointList];
+    // récupération des caractéristiques du serveur
+    this.pointsService.getCategories().subscribe( data => {
+      for(const key in data) {
+        const tmpCaract = new Caract(data[key].idCaracteristique, data[key].nameCaracteristique);
+        this.caractList.push(tmpCaract);
+      }
+    });
   }
 
   /**
@@ -66,9 +67,9 @@ export class PointListComponent implements OnInit {
    */
   selectPointsFromCaract() {
     this.caractListSelected = [];
-    let caractSelected = <any> document.getElementsByName('caractList');
-    for( let i = 0; i < caractSelected.length;i++){
-      if (caractSelected[i].checked){
+    const caractSelected = document.getElementsByName('caractList') as any;
+    for ( let i = 0; i < caractSelected.length; i ++) {
+      if (caractSelected[i].checked) {
         this.caractListSelected.push(caractSelected[i].value);
       }
     }
@@ -94,9 +95,9 @@ export class PointListComponent implements OnInit {
    * @return point
    */
   getPointById(id: number){
-    for(let i = 0; i < this.pointList.length; i++){
-      if(this.pointList[i].id == id){
-        console.log("returned point :"+ this.pointList[i]);
+    for(let i = 0; i < this.pointList.length; i++) {
+      if(this.pointList[i].id === id) {
+        console.log('returned point :' + this.pointList[i]);
         return this.pointList[i];
       }
     }
