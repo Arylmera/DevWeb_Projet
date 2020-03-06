@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PointsService} from "../points/points.service";
+import { PointsService} from '../points/points.service';
 
 
 @Injectable({
@@ -9,4 +9,6 @@ export class MapsService {
 
   constructor(private pointsService: PointsService) { }
 
+  getPointList() {
+  }
 }

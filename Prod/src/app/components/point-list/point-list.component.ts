@@ -1,34 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {PointsService} from '../../services/points/points.service';
 
-class Point {
-  id: number;
-  name: string;
-  description: string;
-  long: number;
-  lat: number;
-  caract: number[];
-
-  constructor(id: number, name: string, description: string, long: number, lat: number, caract: number[]) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.long = long;
-    this.lat = lat;
-    this.caract = caract;
-  }
-
-}
-class Caract {
-  id: number;
-  name: string;
-
-  constructor(id: number, name: string) {
-    this.id = id;
-    this.name = name;
-  }
-}
-
 @Component({
   selector: 'app-point-list',
   templateUrl: './point-list.component.html',
@@ -37,29 +9,18 @@ class Caract {
 
 export class PointListComponent implements OnInit {
 
-  pointList: Point[] = []; // liste total des points depuis la db
-  pointListSelected: Point[] = []; // liste des points selectionnés
-  caractList: Caract[] = []; // liste total des caractérisitques
-  caractListSelected: Caract[] = []; // liste des caractérisitues selectionnés
-
   constructor(private pointsService: PointsService) { }
+
+  pointList: any[] = []; // liste total des points depuis la db
+  pointListSelected: any[] = []; // liste des points selectionnés
+  caractList: any[] = []; // liste total des caractérisitques
+  caractListSelected: any[] = []; // liste des caractérisitues selectionnés
 
   ngOnInit(): void {
     // récupération des points du serveur
-    this.pointsService.getPoints().subscribe(data => {
-      for(const key in data) {
-        const tmpPoint = new Point(data[key].idPoint, data[key].namePoint, data[key].descriptionPoint,
-          data[key].latitudePoint, data[key].longitudePoint, [1]);
-        this.pointList.push(tmpPoint);
-      }
-    });
+    this.pointList = this.pointsService.getPointsList();
     // récupération des caractéristiques du serveur
-    this.pointsService.getCategories().subscribe( data => {
-      for(const key in data) {
-        const tmpCaract = new Caract(data[key].idCaracteristique, data[key].nameCaracteristique);
-        this.caractList.push(tmpCaract);
-      }
-    });
+    this.caractList = this.pointsService.getCaratList();
   }
 
   /**

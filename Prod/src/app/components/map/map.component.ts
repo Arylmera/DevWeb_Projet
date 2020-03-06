@@ -1,10 +1,9 @@
-import {Component, AfterViewInit} from '@angular/core';
-import {MapsService} from "../../services/maps/maps.service";
-import {PointsService} from "../../services/points/points.service";
+import {Component, AfterViewInit, OnInit} from '@angular/core';
+import {MapsService} from '../../services/maps/maps.service';
+import {PointsService} from '../../services/points/points.service';
 import * as L from 'leaflet';
 import 'leaflet-easybutton';
-import "leaflet-routing-machine";
-import {forEach} from "ol/geom/flat/segments";
+import 'leaflet-routing-machine';
 
 
 // lln = [50.668351,4.611746];
@@ -30,29 +29,36 @@ const pointIcon = L.icon({
   styleUrls: ['./map.component.scss']
 })
 
-export class MapComponent implements AfterViewInit {
+export class MapComponent implements AfterViewInit, OnInit {
   private map;
-  private current_latlong: [number,number] = [50.67,4.61];
-  private pointToGo_latlong: [number, number];
+  private pointList: any[] = [];
+  private currentLatlong = [50.67, 4.61];
+  private pointToGoLatlong = [50.67, 4.61];
 
   constructor(private mapsService: MapsService, private pointsService: PointsService) { }
 
+  ngOnInit(): void {
+    this.pointList = this.pointsService.getPointsList();
+    console.log(this.pointList);
+  }
+
   ngAfterViewInit() {
     this.initMap();
-    //ajout des points
-    this.addPoint([50.668351,4.611746],'Louvain La Neuve');
+    // ajout des points
+    this.addPoint([50.668351, 4.611746], 'Louvain La Neuve');
     this.addPoint([50.67, 4.6118], 'Test add point');
 
-    /*
-    JSON.parse(this.pointsService.getPoints()).forEach(point => {
-      this.addPoint([point.lat, point.long], point.description);
-    });
-     */
+    for(const point in this.pointList) {
+      this.addPoint([this.pointList[point].lat , this.pointList[point].long], this.pointList[point].description);
+      console.log(this.pointList[point].description);
+    }
 
     // geolocation
-    this.map.locate({setView: true ,watch: true , maxZoom: 20});
+
     this.map.on('locationfound', this.onLocationFound);
-    this.lunchRouting();
+    //this.lunchRouting();
+
+    setInterval(this.locate, 3000);
   }
 
   /**
@@ -61,8 +67,8 @@ export class MapComponent implements AfterViewInit {
   lunchRouting() {
     L.Routing.control({
       waypoints: [
-        L.latLng(this.current_latlong),
-        L.latLng(this.pointToGo_latlong)
+        L.latLng([this.currentLatlong[0], this.currentLatlong[1]]),
+        L.latLng([this.pointToGoLatlong[0], this.pointToGoLatlong[1]])
       ],
       routeWhileDragging: false
     }).addTo(this.map);
@@ -73,14 +79,14 @@ export class MapComponent implements AfterViewInit {
    */
   private initMap(): void {
     // création de la map
-    this.map = L.map('map').setView([50.668351,4.611746], 17);
+    this.map = L.map('map').setView([50.668351, 4.611746], 17);
     // ajout des tuiles
     L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
       attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>',
       minZoom: 1,
       maxZoom: 20,
     }).addTo(this.map);
-    //ajout des boutons
+    // ajout des boutons
   }
 
   /**
@@ -88,19 +94,23 @@ export class MapComponent implements AfterViewInit {
    * @param latlong
    * @param description
    */
-  addPoint(latlong: [number,number], description: string){
-    let point = L.marker(latlong, {icon: pointIcon}).addTo(this.map).setOpacity(0.8);
-    let popup = L.popup().setContent(description);
+  addPoint(latlong: [number, number], description: string) {
+    const point = L.marker(latlong, {icon: pointIcon}).addTo(this.map).setOpacity(0.8);
+    const popup = L.popup().setContent(description);
     point.bindPopup(popup);
   }
 
   /**
-   * when one point is clicked set pointToGo_latlong to position
+   * when one point is clicked set pointToGoLatlong to position
    */
-  private clickOnPoint(latlong: [number,number]) {
-    this.pointToGo_latlong = latlong;
-    this.map.locate({setView: true ,watch: true , maxZoom: 20});
-    console.log('on your way from your position to : ' + this.pointToGo_latlong);
+  private clickOnPoint(latlong: [number, number]) {
+    this.pointToGoLatlong = latlong;
+    this.map.locate({setView: true , watch: true , maxZoom: 20});
+    console.log('on your way from your position to : ' + this.pointToGoLatlong);
+  }
+
+  private locate() {
+    this.map.locate({setView: true , watch: true , maxZoom: 20});
   }
 
   /**
@@ -108,13 +118,13 @@ export class MapComponent implements AfterViewInit {
    * @param e
    */
   private onLocationFound(e) {
-    let radius = e.accuracy / 2;
-    this.current_latlong = e.latlng;
-    console.log("you are currently at : " + this.current_latlong);
-    L.marker(e.latlng, {icon: PositionIcon}).addTo(this.map).setOpacity(0.8);
-    L.circle(e.latlng, radius).addTo(this.map);
-    this.map.panTo(e.latlng);
-    this.map.setZoom(17);
+    const radius = e.accuracy / 2;
+    this.currentLatlong = e.latlng;
+    console.log('you are currently at : ' + this.currentLatlong);
+    //L.marker(e.latlng, {icon: PositionIcon}).addTo(this.map).setOpacity(0.8);
+    //L.circle(e.latlng, radius).addTo(this.map);
+    //this.map.panTo(e.latlng);
+    //this.map.setZoom(17);
   }
 
 }
