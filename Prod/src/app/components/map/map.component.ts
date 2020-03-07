@@ -124,15 +124,17 @@ export class MapComponent implements AfterViewInit, OnInit {
    * calculate the route between 2 points
    */
   lunchRouting() {
-    const options = { profile: 'mapbox/walking' };
+    const options = { profile: 'mapbox/walking', polylinePrecision: 6 };
     const mapRouter = L.Routing.control({
-      //router: L.Routing.mapbox( mapBoxKey, options),
+      router: (L.Routing as any).mapbox( mapBoxKey, options),
       waypoints: [
         L.latLng([this.currentLatlong[0], this.currentLatlong[1]]),
         L.latLng([this.pointToGoLatlong[0], this.pointToGoLatlong[1]])
       ],
       fitSelectedRoutes : false,
       routeWhileDragging: false,
+      autoRoute: false,
+      showAlternatives: false,
       collapsible: true,
       lineOptions: {
         styles: [{
@@ -142,7 +144,6 @@ export class MapComponent implements AfterViewInit, OnInit {
         }]
       },
     });
-
     mapRouter.addTo(this.map);
   }
 
