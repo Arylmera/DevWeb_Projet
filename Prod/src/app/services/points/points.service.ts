@@ -40,48 +40,6 @@ export class PointsService {
 
   constructor(private http: HttpClient) { }
 
-  /**
-   * récupération de la liste des points sur la base de donnée
-   */
-  refreshPointList() {
-    this.recupPoints().subscribe(data => {
-      for(const key in data) {
-        const tmpPoint = new Point(data[key].idPoint, data[key].namePoint, data[key].descriptionPoint,
-          data[key].latitudePoint, data[key].longitudePoint, [1]);
-        this.pointList.push(tmpPoint);
-      }
-    });
-    console.log(this.pointList);
-  }
-
-  /**
-   * récupération des catégories sur la base de données
-   */
-  refreshCaractList() {
-    this.recupCategories().subscribe( data => {
-      for(const key in data) {
-        const tmpCaract = new Caract(data[key].idCaracteristique, data[key].nameCaracteristique);
-        this.caractList.push(tmpCaract);
-      }
-    });
-    console.log(this.caractList);
-  }
-
-  /**
-   * fonction accès a la liste des points
-   */
-  getPointsList() {
-    this.refreshPointList();
-    return this.pointList;
-  }
-
-  /**
-   * fonction accès a la liste des catégories
-   */
-  getCaratList() {
-    this.refreshCaractList();
-    return this.caractList;
-  }
 
   /******************************************************
    * Fonctions récupérations depuis la Base de donnée
@@ -123,6 +81,51 @@ export class PointsService {
    */
   recupCategorieById(id: number){
     return this.http.get('http://localhost:8080/api/caracteristiques' + id);
+  }
+
+  /******************************************************
+   * Fonctions de gestion des données
+   ******************************************************/
+
+  /**
+   * récupération de la liste des points sur la base de donnée
+   */
+  refreshPointList() {
+    this.recupPoints().subscribe(data => {
+      for(const key in data) {
+        const tmpPoint = new Point(data[key].idPoint, data[key].namePoint, data[key].descriptionPoint,
+          data[key].latitudePoint, data[key].longitudePoint, [1]);
+        this.pointList.push(tmpPoint);
+      }
+    });
+  }
+
+  /**
+   * récupération des catégories sur la base de données
+   */
+  refreshCaractList() {
+    this.recupCategories().subscribe( data => {
+      for(const key in data) {
+        const tmpCaract = new Caract(data[key].idCaracteristique, data[key].nameCaracteristique);
+        this.caractList.push(tmpCaract);
+      }
+    });
+  }
+
+  /**
+   * fonction accès a la liste des points
+   */
+  getPointsList() {
+    this.refreshPointList();
+    return this.pointList;
+  }
+
+  /**
+   * fonction accès a la liste des catégories
+   */
+  getCaratList() {
+    this.refreshCaractList();
+    return this.caractList;
   }
 
 }

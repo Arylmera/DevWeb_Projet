@@ -5,7 +5,7 @@ import * as L from 'leaflet';
 import 'leaflet-easybutton';
 import 'leaflet-routing-machine';
 
-
+const mapBoxKey = 'pk.eyJ1IjoiYXJ5bG1lcmEiLCJhIjoiY2s3aGZ1OW0zMDk1bzNubW5ya2twdDZxcSJ9.IVUHXKtgN21QPirw0ZVWpQ';
 // lln = [50.668351,4.611746];
 // iconMap
 const PositionIcon = L.icon({
@@ -17,6 +17,13 @@ const PositionIcon = L.icon({
 });
 const pointIcon = L.icon({
   iconUrl: '../../../assets/Map/Points/location.svg',
+  iconSize: [25, 35],
+  iconAnchor: [25, 50],
+  shadowAnchor: [25, 25],
+  popupAnchor: [-12.5, -50],
+});
+const routingIcon = L.icon({
+  iconUrl: '../../../assets/Map/Points/routing-pin.svg',
   iconSize: [25, 35],
   iconAnchor: [25, 50],
   shadowAnchor: [25, 25],
@@ -40,38 +47,15 @@ export class MapComponent implements AfterViewInit, OnInit {
   ngOnInit(): void {
     this.pointList = this.pointsService.getPointsList();
     console.log(this.pointList);
+    this.initMap();
   }
 
   ngAfterViewInit() {
-    this.initMap();
-    // ajout des points
-    this.addPoint([50.668351, 4.611746], 'Louvain La Neuve');
-    this.addPoint([50.67, 4.6118], 'Test add point');
-
-    for(const point in this.pointList) {
-      this.addPoint([this.pointList[point].lat , this.pointList[point].long], this.pointList[point].description);
-      console.log(this.pointList[point].description);
-    }
-
     // geolocation
-
     this.map.on('locationfound', this.onLocationFound);
-    //this.lunchRouting();
+    this.lunchRouting();
 
     setInterval(this.locate, 3000);
-  }
-
-  /**
-   * calculate the route between 2 points
-   */
-  lunchRouting() {
-    L.Routing.control({
-      waypoints: [
-        L.latLng([this.currentLatlong[0], this.currentLatlong[1]]),
-        L.latLng([this.pointToGoLatlong[0], this.pointToGoLatlong[1]])
-      ],
-      routeWhileDragging: false
-    }).addTo(this.map);
   }
 
   /**
@@ -86,7 +70,16 @@ export class MapComponent implements AfterViewInit, OnInit {
       minZoom: 1,
       maxZoom: 20,
     }).addTo(this.map);
-    // ajout des boutons
+    // ajout des points
+    this.addPoint([50.668351, 4.611746], 'Louvain La Neuve');
+    this.addPoint([50.67, 4.6118], 'Test add point');
+    console.log('adding point from database with');
+    for (const point in this.pointList) {
+      if (this.pointList[point]) {
+        this.addPoint([this.pointList[point].lat, this.pointList[point].long], this.pointList[point].description);
+      }
+    }
+    console.log('print from db added');
   }
 
   /**
@@ -121,10 +114,36 @@ export class MapComponent implements AfterViewInit, OnInit {
     const radius = e.accuracy / 2;
     this.currentLatlong = e.latlng;
     console.log('you are currently at : ' + this.currentLatlong);
-    //L.marker(e.latlng, {icon: PositionIcon}).addTo(this.map).setOpacity(0.8);
-    //L.circle(e.latlng, radius).addTo(this.map);
-    //this.map.panTo(e.latlng);
-    //this.map.setZoom(17);
+    // L.marker(e.latlng, {icon: PositionIcon}).addTo(this.map).setOpacity(0.8);
+    // L.circle(e.latlng, radius).addTo(this.map);
+    // this.map.panTo(e.latlng);
+    // this.map.setZoom(17);
+  }
+
+  /**
+   * calculate the route between 2 points
+   */
+  lunchRouting() {
+    const options = { profile: 'mapbox/walking' };
+    const mapRouter = L.Routing.control({
+      //router: L.Routing.mapbox( mapBoxKey, options),
+      waypoints: [
+        L.latLng([this.currentLatlong[0], this.currentLatlong[1]]),
+        L.latLng([this.pointToGoLatlong[0], this.pointToGoLatlong[1]])
+      ],
+      fitSelectedRoutes : false,
+      routeWhileDragging: false,
+      collapsible: true,
+      lineOptions: {
+        styles: [{
+          color: 'green',
+          opacity: 1,
+          weight: 3
+        }]
+      },
+    });
+
+    mapRouter.addTo(this.map);
   }
 
 }
