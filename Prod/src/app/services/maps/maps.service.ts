@@ -8,7 +8,4 @@ import { PointsService} from '../points/points.service';
 export class MapsService {
 
   constructor(private pointsService: PointsService) { }
-
-  getPointList() {
-  }
 }

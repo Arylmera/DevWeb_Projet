@@ -14,7 +14,7 @@ var con = mysql.createConnection({
 con.connect(function(err) {
   if (err) throw err;
   console.log("Connected!");
-  con.query("select * from point", function(err, results, fields){
+  con.query("select * from points", function(err, results, fields){
     if (err) throw err;
     console.log(results);
   });
@@ -39,7 +39,7 @@ var html = function(results){
 };
 
 app.get('/api/points', function(req, res){
-  con.query("select * from point", function(err, results){
+  con.query("select * from points", function(err, results){
     if (err){
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       res.send("<h1>Wrong url Parameters</h1>")
