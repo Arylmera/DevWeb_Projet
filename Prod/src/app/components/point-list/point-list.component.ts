@@ -39,8 +39,8 @@ export class PointListComponent implements OnInit {
     }
 
     this.pointListSelected = [];
-    for(let i = 0; i < this.pointList.length; i++){
-      for(let j = 0; j < this.pointList[i].caract.length; j++) {
+    for (let i = 0; i < this.pointList.length; i++){
+      for (let j = 0; j < this.pointList[i].caract.length; j++) {
         for (let x = 0; x < this.caractListSelected.length; x++) {
           if (this.pointList[i].caract[j] === Number(this.caractListSelected[x])) {
             this.pointListSelected.push(this.pointList[i]);
