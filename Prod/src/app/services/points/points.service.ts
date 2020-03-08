@@ -79,7 +79,7 @@ export class PointsService {
    * récupération d'une catégorie sur base de sont id
    * @param id
    */
-  recupCaracteristiquesById(id: number){
+  recupCaracteristiquesById(id: number) {
     return this.http.get('http://localhost:8080/api/caracteristiques/id/' + id);
   }
 
