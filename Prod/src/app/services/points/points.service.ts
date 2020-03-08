@@ -49,7 +49,7 @@ export class PointsService {
    * récupération de l'ensemble de la liste des points
    */
   recupPoints() {
-    return this.http.get('http://localhost:8080/api/point');
+    return this.http.get('http://localhost:8080/api/points');
   }
 
   /**
@@ -57,7 +57,7 @@ export class PointsService {
    * @param id
    */
   recupPointById(id: number) {
-    return this.http.get('http://localhost:8080/api/point/id/' + id);
+    return this.http.get('http://localhost:8080/api/points/id/' + id);
   }
 
   /**
@@ -65,14 +65,14 @@ export class PointsService {
    * @param categ
    */
   recupPointsByCateg(categ: string) {
-    return this.http.get('http://localhost:8080/api/point/categorie/' + categ );
+    return this.http.get('http://localhost:8080/api/points/categorie/' + categ );
   }
 
   /**
    * récupération de l'ensemble de la liste des catégories
    */
   recupCategories() {
-    return this.http.get('http://localhost:8080/api/caracteristique');
+    return this.http.get('http://localhost:8080/api/categories');
   }
 
   /**
@@ -80,7 +80,7 @@ export class PointsService {
    * @param id
    */
   recupCategorieById(id: number){
-    return this.http.get('http://localhost:8080/api/caracteristiques' + id);
+    return this.http.get('http://localhost:8080/api/categories/id/' + id);
   }
 
   /******************************************************
