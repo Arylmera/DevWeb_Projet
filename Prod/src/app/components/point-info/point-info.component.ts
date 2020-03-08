@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {PointListComponent} from "../point-list/point-list.component";
-import {ActivatedRoute} from "@angular/router";
+import {PointListComponent} from '../point-list/point-list.component';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-point-info',

@@ -1,32 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {PointsService} from "../../services/points/points.service";
-
-class Point {
-  id: number;
-  name: string;
-  description: string;
-  long: number;
-  lat: number;
-  caract: number[];
-
-  constructor(id: number, name: string, description: string, long: number, lat: number, caract: number[]) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.long = long;
-    this.lat = lat;
-    this.caract = caract;
-  }
-}
-class Caract {
-  id: number;
-  name: string;
-
-  constructor(id: number, name: string) {
-    this.id = id;
-    this.name = name;
-  }
-}
+import {PointsService} from '../../services/points/points.service';
 
 @Component({
   selector: 'app-point-list',
@@ -36,28 +9,18 @@ class Caract {
 
 export class PointListComponent implements OnInit {
 
-  pointList: Point[] = []; // liste total des points depuis la db
-  pointListSelected: Point[] = []; // liste des points selectionnés
-  caractList: Caract[] = []; // liste total des caractérisitques
-  caractListSelected: Caract[] = []; // liste des caractérisitues selectionnés
-
   constructor(private pointsService: PointsService) { }
 
-  ngOnInit(): void {
-    this.pointsService.getPoints().subscribe(data => {
-      console.log(data)
-    });
+  pointList: any[] = []; // liste total des points depuis la db
+  pointListSelected: any[] = []; // liste des points selectionnés
+  caractList: any[] = []; // liste total des caractérisitques
+  caractListSelected: any[] = []; // liste des caractérisitues selectionnés
 
-    for(let i = 0; i < 10; i++){
-      let caractNumber = [Math.floor(Math.random() * Math.floor(10)),Math.floor(Math.random() * Math.floor(10)),Math.floor(Math.random() * Math.floor(10))];
-      let p = new Point(i,'test point' + i, 'description du point', 1, 1, caractNumber);
-      this.pointList[i] = p;
-    }
-    for(let i = 0; i < 10; i++){
-      let c = new Caract(i,'caract nbr '+i);
-      this.caractList[i] = c;
-    }
-    this.pointListSelected = [...this.pointList];
+  ngOnInit(): void {
+    // récupération des points du serveur
+    this.pointList = this.pointsService.getPointsList();
+    // récupération des caractéristiques du serveur
+    this.caractList = this.pointsService.getCaratList();
   }
 
   /**
@@ -65,9 +28,9 @@ export class PointListComponent implements OnInit {
    */
   selectPointsFromCaract() {
     this.caractListSelected = [];
-    let caractSelected = <any> document.getElementsByName('caractList');
-    for( let i = 0; i < caractSelected.length;i++){
-      if (caractSelected[i].checked){
+    const caractSelected = document.getElementsByName('caractList') as any;
+    for ( let i = 0; i < caractSelected.length; i ++) {
+      if (caractSelected[i].checked) {
         this.caractListSelected.push(caractSelected[i].value);
       }
     }
@@ -93,9 +56,9 @@ export class PointListComponent implements OnInit {
    * @return point
    */
   getPointById(id: number){
-    for(let i = 0; i < this.pointList.length; i++){
-      if(this.pointList[i].id == id){
-        console.log("returned point :"+ this.pointList[i]);
+    for(let i = 0; i < this.pointList.length; i++) {
+      if(this.pointList[i].id === id) {
+        console.log('returned point :' + this.pointList[i]);
         return this.pointList[i];
       }
     }
