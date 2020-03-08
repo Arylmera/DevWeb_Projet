@@ -1,4 +1,4 @@
-create schema if not exists devWeb_Project_Bdd collate utf8_general_ci;
+CREATE SCHEMA IF NOT EXISTS devWeb_Project_Bdd COLLATE utf8_general_ci;
 
 create table Categories
 (
@@ -7,14 +7,15 @@ create table Categories
     nameCategorie varchar(45) not null
 );
 
-create table Points
-(
-    idPoint          int(5) auto_increment,
-    namePoint        varchar(45)   not null,
-    descriptionPoint varchar(200)  null,
-    latitudePoint    decimal(8, 6) not null,
-    longitudePoint   decimal(8, 6) not null,
-    primary key (idPoint)
+CREATE TABLE Points (
+	idPoint int(5) AUTO_INCREMENT,
+	namePoint varchar(45) NOT NULL,
+	descriptionPoint varchar(200) NULL,
+	latitudePoint decimal (8,
+		6) NOT NULL,
+	longitudePoint decimal (8,
+		6) NOT NULL,
+	PRIMARY KEY (idPoint)
 );
 
 create table CategoriesPoints
@@ -30,13 +31,12 @@ create table CategoriesPoints
             on update cascade on delete cascade
 );
 
-create table Photos
-(
-    idPhoto      int(5)      not null,
-    fichierPhoto varchar(45) not null,
-    idPointPhoto int(5)      null,
-    constraint PRIMARY KEY (idPhoto),
-    constraint photosPoints FOREIGN KEY (idPointPhoto) REFERENCES Points (idPoint)
+CREATE TABLE Photos (
+	idPhoto int(5) NOT NULL,
+	fichierPhoto varchar(45) NOT NULL,
+	idPointPhoto int(5) NULL,
+	CONSTRAINT PRIMARY KEY (idPhoto),
+	CONSTRAINT photosPoints FOREIGN KEY (idPointPhoto) REFERENCES Points (idPoint)
 );
 
 INSERT INTO devWeb_Project_Bdd.Points (idPoint, namePoint, descriptionPoint, latitudePoint, longitudePoint) VALUES (1, 'Colibris', 'Vous pourrez trouver ici de beaux colibris colorés', 10.000000, 30.000000);
