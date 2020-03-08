@@ -57,4 +57,12 @@ app.get('/api/caracteristiques', function(req, res){
   });
 });
 
+app.get('/api/photos', function(req, res){
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  con.query("select fichierPhotos from Photos", function(err, results){
+    if (err) throw err;
+    res.send(results);
+  });
+});
+
 app.listen(8080);
