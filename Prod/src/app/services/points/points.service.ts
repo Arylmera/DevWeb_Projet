@@ -7,19 +7,19 @@ class Point {
   description: string;
   long: number;
   lat: number;
-  caract: number[];
+  categ: number[];
 
-  constructor(id: number, name: string, description: string, long: number, lat: number, caract: number[]) {
+  constructor(id: number, name: string, description: string, long: number, lat: number, categ: number[]) {
     this.id = id;
     this.name = name;
     this.description = description;
     this.long = long;
     this.lat = lat;
-    this.caract = caract;
+    this.categ = categ;
   }
 
 }
-class Caract {
+class Categ {
   id: number;
   name: string;
 
@@ -36,7 +36,7 @@ class Caract {
 export class PointsService {
 
   private pointList: Point[] = []; // liste total des points depuis la db
-  private caractList: Caract[] = []; // liste total des caractérisitques
+  private categList: Categ[] = []; // liste total des caractérisitques
 
   constructor(private http: HttpClient) { }
 
@@ -49,7 +49,7 @@ export class PointsService {
    * récupération de l'ensemble de la liste des points
    */
   recupPoints() {
-    return this.http.get('http://localhost:8080/api/points');
+    return this.http.get('http://localhost:8080/api/Points');
   }
 
   /**
@@ -57,30 +57,30 @@ export class PointsService {
    * @param id
    */
   recupPointById(id: number) {
-    return this.http.get('http://localhost:8080/api/points/id/' + id);
+    return this.http.get('http://localhost:8080/api/Points/id/' + id);
   }
 
   /**
    * récupération des points par leurs categories
    * @param categ
    */
-  recupPointsByCateg(categ: string) {
-    return this.http.get('http://localhost:8080/api/points/caracteristiques/' + categ );
+  recupPointsByCategorie(categ: string) {
+    return this.http.get('http://localhost:8080/api/pPoints/Categorie/' + categ );
   }
 
   /**
    * récupération de l'ensemble de la liste des catégories
    */
   recupCaracteristiques() {
-    return this.http.get('http://localhost:8080/api/caracteristiques');
+    return this.http.get('http://localhost:8080/api/Categories');
   }
 
   /**
    * récupération d'une catégorie sur base de sont id
    * @param id
    */
-  recupCaracteristiquesById(id: number) {
-    return this.http.get('http://localhost:8080/api/caracteristiques/id/' + id);
+  recupCategoriesById(id: number) {
+    return this.http.get('http://localhost:8080/api/Categories/id/' + id);
   }
 
   /******************************************************
@@ -105,12 +105,12 @@ export class PointsService {
   /**
    * récupération des catégories sur la base de données
    */
-  refreshCaractList() {
+  refreshCategorieList() {
     this.recupCaracteristiques().subscribe( data => {
       for (const key in data) {
         if (data[key]) {
-          const tmpCaract = new Caract(data[key].idCaracteristique, data[key].nameCaracteristique);
-          this.caractList.push(tmpCaract);
+          const tmpCaract = new Categ(data[key].idCategorie, data[key].nameCategorie);
+          this.categList.push(tmpCaract);
         }
       }
     });
@@ -128,8 +128,8 @@ export class PointsService {
    * fonction accès a la liste des catégories
    */
   getCaratList() {
-    this.refreshCaractList();
-    return this.caractList;
+    this.refreshCategorieList();
+    return this.categList;
   }
 
 }
