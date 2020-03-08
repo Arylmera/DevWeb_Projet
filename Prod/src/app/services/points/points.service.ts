@@ -65,22 +65,22 @@ export class PointsService {
    * @param categ
    */
   recupPointsByCateg(categ: string) {
-    return this.http.get('http://localhost:8080/api/points/categorie/' + categ );
+    return this.http.get('http://localhost:8080/api/points/caracteristiques/' + categ );
   }
 
   /**
    * récupération de l'ensemble de la liste des catégories
    */
-  recupCategories() {
-    return this.http.get('http://localhost:8080/api/categories');
+  recupCaracteristiques() {
+    return this.http.get('http://localhost:8080/api/caracteristiques');
   }
 
   /**
    * récupération d'une catégorie sur base de sont id
    * @param id
    */
-  recupCategorieById(id: number){
-    return this.http.get('http://localhost:8080/api/categories/id/' + id);
+  recupCaracteristiquesById(id: number){
+    return this.http.get('http://localhost:8080/api/caracteristiques/id/' + id);
   }
 
   /******************************************************
@@ -92,10 +92,12 @@ export class PointsService {
    */
   refreshPointList() {
     this.recupPoints().subscribe(data => {
-      for(const key in data) {
-        const tmpPoint = new Point(data[key].idPoint, data[key].namePoint, data[key].descriptionPoint,
-          data[key].latitudePoint, data[key].longitudePoint, [1]);
-        this.pointList.push(tmpPoint);
+      for (const key in data) {
+        if (data[key]) {
+          const tmpPoint = new Point(data[key].idPoint, data[key].namePoint, data[key].descriptionPoint,
+            data[key].latitudePoint, data[key].longitudePoint, [1]);
+          this.pointList.push(tmpPoint);
+        }
       }
     });
   }
@@ -104,10 +106,12 @@ export class PointsService {
    * récupération des catégories sur la base de données
    */
   refreshCaractList() {
-    this.recupCategories().subscribe( data => {
-      for(const key in data) {
-        const tmpCaract = new Caract(data[key].idCaracteristique, data[key].nameCaracteristique);
-        this.caractList.push(tmpCaract);
+    this.recupCaracteristiques().subscribe( data => {
+      for (const key in data) {
+        if (data[key]) {
+          const tmpCaract = new Caract(data[key].idCaracteristique, data[key].nameCaracteristique);
+          this.caractList.push(tmpCaract);
+        }
       }
     });
   }
