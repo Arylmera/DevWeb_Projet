@@ -18,7 +18,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NewAccountComponent } from './components/new-account/new-account.component';
 import { PointListComponent } from './components/point-list/point-list.component';
 import { PointInfoComponent } from './components/point-info/point-info.component';
-import { MapComponent } from './components/map/map.component';
+import {MapComponent} from "./components/map/map.component";
 import {PointsService} from "./services/points/points.service";
 import {HttpClientModule} from "@angular/common/http";
 import {MatMenuModule} from "@angular/material/menu";

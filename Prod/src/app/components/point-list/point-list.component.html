@@ -5,8 +5,8 @@
     <div class="col-sm-3">
       <form class="form">
         <label>Type de points souhaité</label>
-        <div *ngFor="let caract of caractList" class="form-inline">
-          <input class="form-check" type="checkbox" id="{{caract.id}}" value="{{caract.id}}" name="caractList" (change)="selectPointsFromCaract()">
+        <div *ngFor="let caract of CategList" class="form-inline">
+          <input class="form-check" type="checkbox" id="{{caract.id}}" value="{{caract.id}}" name="categList" (change)="selectPointsFromCaract()">
           <label class="form-check-label" >{{caract.name}}</label>
         </div>
       </form>
@@ -15,7 +15,7 @@
         <div *ngFor="let p of pointListSelected" class="text-center bg-dark text-white" [routerLink]="['/pointInfo', p.id]">
           <p>{{p.name}}</p>
           <p>{{p.description}}</p>
-          <p>Caractérisique : {{p.caract}}</p>
+          <p>Caractérisique : {{p.categ}}</p>
           <p>Localisation : {{p.long}} / {{p.lat}}</p>
         </div>
     </div>
