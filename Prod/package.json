@@ -33,6 +33,7 @@
     "jquery": "^3.4.1",
     "leaflet": "^1.6.0",
     "leaflet-easybutton": "^2.4.0",
+    "leaflet-gps": "^1.7.6",
     "leaflet-routing-machine": "^3.2.12",
     "mysql": "^2.18.1",
     "officegen": "^0.6.3",

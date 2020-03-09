@@ -4,12 +4,10 @@ import {PointsService} from '../../services/points/points.service';
 import * as L from 'leaflet';
 import 'leaflet-easybutton';
 import 'leaflet-routing-machine';
-import {control} from "leaflet";
-import zoom = control.zoom;
+import 'leaflet-gps';
 
 const mapboxAPI = 'pk.eyJ1IjoiYXJ5bG1lcmEiLCJhIjoiY2s3aGZ1OW0zMDk1bzNubW5ya2twdDZxcSJ9.IVUHXKtgN21QPirw0ZVWpQ';
-// tslint:disable-next-line:max-line-length
-const mapboxStyle = 'https://api.mapbox.com/styles/v1/arylmera/ck7ix7bma010g1io6aa528sla/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYXJ5bG1lcmEiLCJhIjoiY2s3aGZwYjhqMDNyeDNncXNzb2E1YXU4biJ9.ZwIiUW7BQRCOjwfhgLw6uA';
+const mapboxStyle = 'https://api.mapbox.com/styles/v1/arylmera/ck7ix7bma010g1io6aa528sla/tiles/256/{z}/{x}/{y}@2x?access_token='+ mapboxAPI;
 
 // lln = [50.668351,4.611746];
 // iconMap
@@ -43,6 +41,8 @@ export class MapComponent implements AfterViewInit, OnInit {
   private pointList: any[] = [];
   private currentLatlong = [50.67, 4.61];
   private pointToGoLatlong = [50.78, 4.62];
+  private positionMarker;
+  private positionCircle;
 
   constructor(private mapsService: MapsService, private pointsService: PointsService) { }
 
@@ -51,8 +51,8 @@ export class MapComponent implements AfterViewInit, OnInit {
    */
   ngOnInit(): void {
     this.pointList = this.pointsService.getPointsList();
-    console.log(this.pointList);
     this.initMap();
+    this.initPositionMaker();
   }
 
   /**
@@ -61,9 +61,7 @@ export class MapComponent implements AfterViewInit, OnInit {
   ngAfterViewInit() {
     // geolocation
     this.map.on('load', this.locate());
-    this.map.on('locationfound', this.onLocationFound);
-    this.lunchRouting();
-
+    //this.lunchRouting();
     //setInterval( () => { this.locate(); }, 1000);
   }
 
@@ -89,17 +87,46 @@ export class MapComponent implements AfterViewInit, OnInit {
   }
 
   /**
+   * initalisation du marker de position et de précision
+   */
+  private initPositionMaker(){
+    this.positionMarker = L.marker([0,0], {icon: PositionIcon})
+      .setOpacity(0.8)
+      .bindPopup(L.popup().setContent('you are here'));
+    this.positionMarker.addTo(this.map);
+    this.positionCircle = L.circle([0,0], 0, {
+      opacity: 0.5,
+      color: 'green'
+    });
+    this.positionMarker.addTo(this.map);
+  }
+
+  /**
+   * définition de la positon du marker de position
+   * @param position
+   */
+  private setPositionMarker(position: any){
+    this.positionMarker.setLatLng([position.latlng.lat, position.latlng.lng]);
+    this.positionCircle.setLatLng([position.latlng.lat, position.latlng.lng]);
+    this.positionCircle.setRadius( position.accuracy / 2 );
+  }
+
+  /**
    * helper pour l'ajout d'un point sur la carte
    * @param latlong / description
    */
   addPoint(latlong: [number, number], description: string) {
     const point = L.marker(latlong, {icon: pointIcon}).setOpacity(0.8);
-    const popupText = description + '<br> <button (click)="goToPoint(' + latlong + ')">Aller ici</button>'
+    const popupText = description + '<br> <button (click)="goToPoint(' + latlong + ')">Aller ici</button>';
     const popup = L.popup().setContent(popupText);
     point.bindPopup(popup);
     point.addTo(this.map);
   }
 
+  /**
+   * lancement routing vers le point selectioné
+   * @param latlong
+   */
   goToPoint(latlong: [number, number]) {
     this.pointToGoLatlong = latlong;
     console.log('lunching routing');
@@ -119,7 +146,9 @@ export class MapComponent implements AfterViewInit, OnInit {
    */
   private addPointsFromDb() {
     console.log('adding point from database with');
+    console.log(this.pointList);
     for (const point in this.pointList) {
+      console.log(point);
       if (this.pointList[point]) {
         console.log(this.pointList[point]);
         console.log(this.pointList[point].lat);
@@ -133,17 +162,18 @@ export class MapComponent implements AfterViewInit, OnInit {
    * localisation
    */
   private locate() {
-    this.map.locate({setView: true , watch: true , maxZoom: 18});
-    this.map.setZoom(18);
-  }
-
-  /**
-   * si position trouvée
-   */
-  private onLocationFound(e) {
-    const radius = e.accuracy / 2;
-    this.currentLatlong = e.latlng;
-    console.log('you are currently at : ' + this.currentLatlong + ' with in : ' + radius + ' meters');
+    this.map.locate(({
+      setView : false,
+      maxZoom: 120,
+      watch : true, // localisation en continu
+      enableHighAccuracy : true
+    }))
+      .on('locationfound', (e) => {
+      console.log (' your are at '+  e.latlng + ' with in '+ e.accuracy + 'm');
+      this.setPositionMarker(e);
+      this.map.panTo([e.latlng.lat, e.latlng.lng]);
+    });
+    //this.map.setZoom(18);
   }
 
   /**
