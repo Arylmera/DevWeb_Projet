@@ -5,30 +5,74 @@ import * as L from 'leaflet';
 import 'leaflet-easybutton';
 import 'leaflet-routing-machine';
 import 'leaflet-gps';
+import {forEach} from "ol/geom/flat/segments";
+
 
 const mapboxAPI = 'pk.eyJ1IjoiYXJ5bG1lcmEiLCJhIjoiY2s3aGZ1OW0zMDk1bzNubW5ya2twdDZxcSJ9.IVUHXKtgN21QPirw0ZVWpQ';
 const mapboxStyle = 'https://api.mapbox.com/styles/v1/arylmera/ck7ix7bma010g1io6aa528sla/tiles/256/{z}/{x}/{y}@2x?access_token='+ mapboxAPI;
 
 // lln = [50.668351,4.611746];
 // iconMap
-const PositionIcon = L.icon({
-  iconUrl: '../../../assets/Map/Points/IIcon.svg',
-  iconSize: [25, 35],
-  iconAnchor: [25, 50],
-  popupAnchor: [-12.5, -50],
+const greenIcon = new L.Icon({
+  iconUrl: '../../../assets/Map/marker/marker-icon-green.png',
+  shadowUrl: '../../../assets/Map/marker/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
 });
-const pointIcon = L.icon({
-  iconUrl: '../../../assets/Map/Points/location.svg',
-  iconSize: [25, 35],
-  iconAnchor: [25, 50],
-  popupAnchor: [-12.5, -50],
+const redIcon = new L.Icon({
+  iconUrl: '../../../assets/Map/marker/marker-icon-red.png',
+  shadowUrl: '../../../assets/Map/marker/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
 });
-const routingIcon = L.icon({
-  iconUrl: '../../../assets/Map/Points/routing-pin.svg',
-  iconSize: [25, 35],
-  iconAnchor: [25, 50],
-  popupAnchor: [-12.5, -50],
+const blueIcon = new L.Icon({
+  iconUrl: '../../../assets/Map/marker/marker-icon-blue.png',
+  shadowUrl: '../../../assets/Map/marker/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
 });
+const orangeIcon = new L.Icon({
+  iconUrl: '../../../assets/Map/marker/marker-icon-orange.png',
+  shadowUrl: '../../../assets/Map/marker/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+const yellowIcon = new L.Icon({
+  iconUrl: '../../../assets/Map/marker/marker-icon-yellow.png',
+  shadowUrl: '../../../assets/Map/marker/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+const greyIcon = new L.Icon({
+  iconUrl: '../../../assets/Map/marker/marker-icon-grey.png',
+  shadowUrl: '../../../assets/Map/marker/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+const violetIcon = new L.Icon({
+  iconUrl: '../../../assets/Map/marker/marker-icon-violet.png',
+  shadowUrl: '../../../assets/Map/marker/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+const positionIcon = greenIcon;
+const pointIcon = redIcon;
+const routingIcon = blueIcon;
 
 @Component({
   selector: 'app-map',
@@ -38,9 +82,9 @@ const routingIcon = L.icon({
 
 export class MapComponent implements AfterViewInit, OnInit {
   private map;
-  private pointList: any[] = [];
-  private currentLatlong = [50.67, 4.61];
-  private pointToGoLatlong = [50.78, 4.62];
+  private pointList;
+  private currentlatlng = [50.67, 4.61];
+  private pointToGolatlng = [50.78, 4.62];
   private positionMarker;
   private positionCircle;
 
@@ -50,7 +94,10 @@ export class MapComponent implements AfterViewInit, OnInit {
    * chargement de la page
    */
   ngOnInit(): void {
-    this.pointList = this.pointsService.getPointsList();
+    this.pointsService.recupPoints().subscribe( data => {
+      this.pointList = data;
+      this.addPointsFromDb();
+    });
     this.initMap();
     this.initPositionMaker();
   }
@@ -60,9 +107,10 @@ export class MapComponent implements AfterViewInit, OnInit {
    */
   ngAfterViewInit() {
     // geolocation
-    this.map.on('load', this.locate());
-    //this.lunchRouting();
-    //setInterval( () => { this.locate(); }, 1000);
+    this.map.on('load', this.locate()); // lancement de la géolocalisation
+    // ajout des points de test
+    this.addPoint([50.668351, 4.611746], 'Louvain La Neuve', 'point de test');
+    this.addPoint([50.67, 4.6118], 'Test add point', 'point de test');
   }
 
   /**
@@ -71,33 +119,32 @@ export class MapComponent implements AfterViewInit, OnInit {
   private initMap(): void {
     // ajout des tuiles de carte
     const mapLayer = L.tileLayer( mapboxStyle, { // 'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png'
-      attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>'
+      attribution: '© <a href=\'https://www.mapbox.com/about/maps/\'>Mapbox</a> © <a href=\'http://www.openstreetmap.org/copyright\'>OpenStreetMap</a> <strong><a href=\'https://www.mapbox.com/map-feedback/\' target=\'_blank\'>Improve this map</a></strong>'
     });
     // création de la map
     this.map = L.map('map', {
       center: ([50.67, 4.61]),
-      zoom: 18,
+      zoom: 18
     })
     .addLayer(mapLayer);
-    // ajout des points de test
-    this.addPoint([50.668351, 4.611746], 'Louvain La Neuve');
-    this.addPoint([50.67, 4.6118], 'Test add point');
-    // ajout des point de la base de donnée
-    this.addPointsFromDb();
+    L.easyButton('<img src="../../../assets/Map/target.png" width="10" height="10" class="img-resposive">', ((btn, map) => {
+      map.panTo([this.currentlatlng[0], this.currentlatlng[1]]);
+    })).addTo(this.map);
   }
 
   /**
    * initalisation du marker de position et de précision
    */
   private initPositionMaker(){
-    this.positionMarker = L.marker([0,0], {icon: PositionIcon})
+    this.positionMarker = L.marker([0,0], {icon: positionIcon})
       .setOpacity(0.8)
       .bindPopup(L.popup().setContent('you are here'));
     this.positionMarker.addTo(this.map);
-    this.positionCircle = L.circle([0,0], 0, {
+    this.positionCircle = L.circleMarker([0,0], {
       opacity: 0.5,
       color: 'green'
     });
+    this.positionCircle.setRadius(0);
     this.positionMarker.addTo(this.map);
   }
 
@@ -113,49 +160,48 @@ export class MapComponent implements AfterViewInit, OnInit {
 
   /**
    * helper pour l'ajout d'un point sur la carte
-   * @param latlong / description
+   * @param latlng / description
+   * @param name
    */
-  addPoint(latlong: [number, number], description: string) {
-    const point = L.marker(latlong, {icon: pointIcon}).setOpacity(0.8);
-    const popupText = description + '<br> <button (click)="goToPoint(' + latlong + ')">Aller ici</button>';
-    const popup = L.popup().setContent(popupText);
+  addPoint(latlng: [number, number], name: string, description: string, id: number) {
+    const point = L.marker(latlng, {icon: pointIcon}).setOpacity(0.8);
+    let popupContent = name;
+    popupContent += '<br> <p>' + description + '</p>';
+    popupContent += '<br> <button class="btn btn-dark btn-sm" type="button" (click)="moreInfo('+ id +')" ">Info</button>';
+    popupContent += '<br> <button class="btn btn-dark btn-sm" type="button" (click)="goToPoint('+ latlng + ')">Aller ici</button>';
+    const popup = L.popup().setContent(popupContent);
     point.bindPopup(popup);
     point.addTo(this.map);
   }
 
   /**
-   * lancement routing vers le point selectioné
-   * @param latlong
+   * redirection vers la page des info du point
+   * @param id
    */
-  goToPoint(latlong: [number, number]) {
-    this.pointToGoLatlong = latlong;
-    console.log('lunching routing');
-    this.lunchRouting();
+  moreInfo(id: number){
+
   }
 
   /**
-   * when one point is clicked set pointToGoLatlong to position
+   * lancement routing vers le point selectioné
+   * @param latlng
    */
-  private clickOnPoint(latlong: [number, number]) {
-    this.pointToGoLatlong = latlong;
-    console.log('on your way from your position to : ' + this.pointToGoLatlong);
+  goToPoint(latLng: [number, number]) {
+    console.log('lunching routing');
+    this.pointToGolatlng = latLng;
+    this.lunchRouting();
   }
 
   /**
    * ajout des points depuis la base de donnée
    */
   private addPointsFromDb() {
-    console.log('adding point from database with');
+    console.log('adding points from database with');
     console.log(this.pointList);
-    for (const point in this.pointList) {
-      console.log(point);
-      if (this.pointList[point]) {
-        console.log(this.pointList[point]);
-        console.log(this.pointList[point].lat);
-        this.addPoint([this.pointList[point].lat, this.pointList[point].long], this.pointList[point].description);
-      }
-    }
-    console.log('print from db added');
+    this.pointList.forEach(point => {
+      this.addPoint([point.latitudePoint, point.latitudePoint], point.namePoint, point.descriptionPoint, point.idPoint);
+    });
+    console.log('points from db added');
   }
 
   /**
@@ -170,6 +216,7 @@ export class MapComponent implements AfterViewInit, OnInit {
     }))
       .on('locationfound', (e) => {
       console.log (' your are at '+  e.latlng + ' with in '+ e.accuracy + 'm');
+      this.currentlatlng = [e.latlng.lat, e.latlng.lng];
       this.setPositionMarker(e);
       this.map.panTo([e.latlng.lat, e.latlng.lng]);
     });
@@ -187,8 +234,8 @@ export class MapComponent implements AfterViewInit, OnInit {
         polylinePrecision: 6
       }),
       waypoints: [
-        L.latLng([this.currentLatlong[0], this.currentLatlong[1]]),
-        L.latLng([this.pointToGoLatlong[0], this.pointToGoLatlong[1]])
+        L.latLng([this.currentlatlng[0], this.currentlatlng[1]]),
+        L.latLng([this.pointToGolatlng[0], this.pointToGolatlng[1]])
       ],
       fitSelectedRoutes : false,
       routeWhileDragging: false,
