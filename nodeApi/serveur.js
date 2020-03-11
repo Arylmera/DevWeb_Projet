@@ -2,8 +2,11 @@ var http = require('http');
 var mysql = require('mysql');
 var express = require('express');
 var ejs = require('ejs');
+var cors = require('cors');
 
 var app = express();
+
+app.use(cors());
 
 var con = mysql.createConnection({
   host: "localhost",

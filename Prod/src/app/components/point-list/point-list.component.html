@@ -1,21 +1,19 @@
-
-
 <div class="container">
   <div class="row">
     <div class="col-sm-3">
       <form class="form">
         <label>Type de points souhaité</label>
-        <div *ngFor="let caract of CategList" class="form-inline">
-          <input class="form-check" type="checkbox" id="{{caract.id}}" value="{{caract.id}}" name="categList" (change)="selectPointsFromCaract()">
-          <label class="form-check-label" >{{caract.name}}</label>
+        <div *ngFor="let categorie of categList" class="form-inline">
+          <input class="form-check" type="checkbox" id="{{categorie.id}}" value="{{categorie.name}}" name="categList" (change)="selectPointsFromCategorie()">
+          <label class="form-check-label">{{categorie.name}}</label>
         </div>
       </form>
     </div>
     <div class="col-sm-4">
-        <div *ngFor="let p of pointListSelected" class="text-center bg-dark text-white" [routerLink]="['/pointInfo', p.id]">
+        <div *ngFor="let p of pointListSelected"  class="text-center bg-dark text-white"  [routerLink]="['/pointInfo', p.id]">
           <p>{{p.name}}</p>
           <p>{{p.description}}</p>
-          <p>Caractérisique : {{p.categ}}</p>
+          <p>Catégorie : {{p.categ}}</p>
           <p>Localisation : {{p.long}} / {{p.lat}}</p>
         </div>
     </div>

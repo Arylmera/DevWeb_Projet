@@ -13,45 +13,41 @@ export class PointListComponent implements OnInit {
 
   pointList: any[] = []; // liste total des points depuis la db
   pointListSelected: any[] = []; // liste des points selectionnés
-  CategList: any[] = []; // liste total des caractérisitques
-  CategListSelected: any[] = []; // liste des caractérisitues selectionnés
+  categList: any[] = []; // liste total des caractérisitques
+  categListSelected: any[] = []; // liste des caractérisitues selectionnés
 
   ngOnInit(): void {
     // récupération des points du serveur
-    this.pointList = this.pointsService.getPointsList();
+    // this.pointList = this.pointsService.getPointsList();
     // récupération des caractéristiques du serveur
-    this.CategList = this.pointsService.getCaratList();
+    this.categList = this.pointsService.getCaratList();
+    this.pointListSelected = this.pointsService.getPointsList();
   }
 
   /**
    * affichage des points en fonction de la catégorie sélectionnée dans les checkbox
    */
-  selectPointsFromCaract() {
-    this.CategListSelected = [];
+  selectPointsFromCategorie() {
+    this.categListSelected = [];
     const categSelected = document.getElementsByName('categList') as any;
     for ( let i = 0; i < categSelected.length; i ++) {
       if (categSelected[i].checked) {
-        this.CategListSelected.push(categSelected[i].value);
+        this.categListSelected.push(categSelected[i].value);
       }
     }
-    if (this.CategListSelected.length === 0) {
-      this.CategListSelected = [...this.CategList];
+    if (this.categListSelected.length === 0) {
+      this.categListSelected = [...this.categList];
     }
 
     this.pointListSelected = [];
-    for (let i = 0; i < this.pointList.length; i++) {
-      for (let j = 0; j < this.pointList[i].categ.length; j++) {
-        for (let x = 0; x < this.CategListSelected.length; x++) {
-          if (this.pointList[i].categ[j] === Number(this.CategListSelected[x])) {
-            this.pointListSelected.push(this.pointList[i]);
-          }
-        }
-      }
+
+    for (let categorie of this.categListSelected) {
+      this.pointListSelected = this.pointsService.getPointsCategorieList(categorie);
     }
   }
 
   /**
-   * renvois d'un point par sont id
+   * On renvoit un point par son id
    * @param id
    * @return point
    */
