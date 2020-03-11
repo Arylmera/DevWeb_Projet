@@ -5,7 +5,6 @@ import * as L from 'leaflet';
 import 'leaflet-easybutton';
 import 'leaflet-routing-machine';
 import 'leaflet-gps';
-import {forEach} from "ol/geom/flat/segments";
 
 
 const mapboxAPI = 'pk.eyJ1IjoiYXJ5bG1lcmEiLCJhIjoiY2s3aGZ1OW0zMDk1bzNubW5ya2twdDZxcSJ9.IVUHXKtgN21QPirw0ZVWpQ';
@@ -109,8 +108,8 @@ export class MapComponent implements AfterViewInit, OnInit {
     // geolocation
     this.map.on('load', this.locate()); // lancement de la géolocalisation
     // ajout des points de test
-    this.addPoint([50.668351, 4.611746], 'Louvain La Neuve', 'point de test');
-    this.addPoint([50.67, 4.6118], 'Test add point', 'point de test');
+    this.addPoint([50.668351, 4.611746], 'Louvain La Neuve', 'point de test', -1);
+    this.addPoint([50.67, 4.6118], 'Test add point', 'point de test', -1);
   }
 
   /**
@@ -167,8 +166,8 @@ export class MapComponent implements AfterViewInit, OnInit {
     const point = L.marker(latlng, {icon: pointIcon}).setOpacity(0.8);
     let popupContent = name;
     popupContent += '<br> <p>' + description + '</p>';
-    popupContent += '<br> <button class="btn btn-dark btn-sm" type="button" (click)="moreInfo('+ id +')" ">Info</button>';
-    popupContent += '<br> <button class="btn btn-dark btn-sm" type="button" (click)="goToPoint('+ latlng + ')">Aller ici</button>';
+    popupContent += '<br> <button class="infoBtn btn btn-dark btn-sm" type="button" ng-click="' + this.moreInfo() +'">Info</button>';
+    popupContent += '<br> <button class="goToBtn btn btn-dark btn-sm" type="button" ng-click="' + this.goToPoint(latlng) + '">Aller ici</button>';
     const popup = L.popup().setContent(popupContent);
     point.bindPopup(popup);
     point.addTo(this.map);
@@ -178,8 +177,8 @@ export class MapComponent implements AfterViewInit, OnInit {
    * redirection vers la page des info du point
    * @param id
    */
-  moreInfo(id: number){
-
+  moreInfo(){
+    console.log('test');
   }
 
   /**
@@ -187,9 +186,9 @@ export class MapComponent implements AfterViewInit, OnInit {
    * @param latlng
    */
   goToPoint(latLng: [number, number]) {
-    console.log('lunching routing');
+    console.log('lunching routing to :' + latLng);
     this.pointToGolatlng = latLng;
-    this.lunchRouting();
+    //this.lunchRouting();
   }
 
   /**
