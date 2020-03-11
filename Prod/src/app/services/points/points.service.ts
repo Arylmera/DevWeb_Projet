@@ -36,7 +36,7 @@ class Categ {
 export class PointsService {
 
   private pointList: Point[] = []; // liste total des points depuis la db
-  private categList: Categ[] = []; // liste total des caractérisitques
+  private categList: Categ[] = []; // liste total des catégories
 
   constructor(private http: HttpClient) { }
 
@@ -65,7 +65,7 @@ export class PointsService {
    * @param categ
    */
   recupPointsByCategorie(categ: string) {
-    return this.http.get('http://localhost:8080/api/pPoints/Categorie/' + categ );
+    return this.http.get('http://localhost:8080/api/Points/Categorie/' + categ );
   }
 
   /**
@@ -88,15 +88,33 @@ export class PointsService {
    ******************************************************/
 
   /**
-   * récupération de la liste des points sur la base de donnée
+   * récupération de la liste des points sur la base de données
    */
   refreshPointList() {
+    this.pointList = [];
     this.recupPoints().subscribe(data => {
       for (const key in data) {
         if (data[key]) {
           const tmpPoint = new Point(data[key].idPoint, data[key].namePoint, data[key].descriptionPoint,
             data[key].latitudePoint, data[key].longitudePoint, [1]);
           this.pointList.push(tmpPoint);
+        }
+      }
+    });
+  }
+
+  /**
+   * récupération de la liste des points d'une catégorie sur la base de données
+   */
+  refreshPointCategorie(categorie) {
+    this.pointList = [];
+    this.recupPointsByCategorie(categorie).subscribe(data => {
+      for (const key in data) {
+        if (data[key]) {
+          const tmpPoint = new Point(data[key].idPoint, data[key].namePoint, data[key].descriptionPoint,
+            data[key].latitudePoint, data[key].longitudePoint, [1]);
+          this.pointList.push(tmpPoint);
+          console.log(this.pointList);
         }
       }
     });
@@ -121,6 +139,14 @@ export class PointsService {
    */
   getPointsList() {
     this.refreshPointList();
+    return this.pointList;
+  }
+
+  /**
+   * fonction accès a la liste des points d'une catégorie
+   */
+  getPointsCategorieList(categorie) {
+    this.refreshPointCategorie(categorie);
     return this.pointList;
   }
 
