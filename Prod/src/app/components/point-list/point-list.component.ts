@@ -17,6 +17,8 @@ export class PointListComponent implements OnInit {
   categListSelected: any[] = []; // liste des caractérisitues selectionnés
 
   ngOnInit(): void {
+    this.pointList = [];
+    this.categList = [];
     // récupération des points du serveur
     // this.pointList = this.pointsService.getPointsList();
     // récupération des caractéristiques du serveur
