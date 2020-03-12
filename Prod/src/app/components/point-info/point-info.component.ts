@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterContentInit, Component, OnInit} from '@angular/core';
 import {PointListComponent} from '../point-list/point-list.component';
 import {ActivatedRoute} from '@angular/router';
-
+import {PointsService} from '../../services/points/points.service';
 @Component({
   selector: 'app-point-info',
   providers: [PointListComponent],
@@ -10,26 +10,16 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class PointInfoComponent implements OnInit {
 
-  id: number;
-  name: string;
-  description: string;
-  long: number;
-  lat: number;
-  caract: number[];
-
+  private point;
 
   constructor(private pointList: PointListComponent,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute, private pointsService: PointsService) { }
 
   ngOnInit(): void {
-    this.id = Number(this.route.snapshot.params['id']);
-    console.log(this.id);
-    console.log(this.pointList.getPointById(this.id));
-    this.name = this.pointList.getPointById(this.id).name;
-    this.description = this.pointList.getPointById(this.id).description;
-    this.long = this.pointList.getPointById(this.id).long;
-    this.lat = this.pointList.getPointById(this.id).lat;
-    this.caract = this.pointList.getPointById(this.id).caract;
+    this.pointsService.recupPointById(Number(this.route.snapshot.params['id'])).subscribe( data => {
+      this.point = data[0];
+      console.log(this.point);
+    });
   }
 
 }

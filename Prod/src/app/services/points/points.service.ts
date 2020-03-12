@@ -29,6 +29,7 @@ class Categ {
   }
 }
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -37,6 +38,7 @@ export class PointsService {
 
   private pointList: Point[] = []; // liste total des points depuis la db
   private categList: Categ[] = []; // liste total des catégories
+  public point: Point;
 
   constructor(private http: HttpClient) { }
 
@@ -98,8 +100,20 @@ export class PointsService {
           const tmpPoint = new Point(data[key].idPoint, data[key].namePoint, data[key].descriptionPoint,
             data[key].latitudePoint, data[key].longitudePoint, [1]);
           this.pointList.push(tmpPoint);
+
         }
       }
+    });
+  }
+
+  /**
+   * récupération d'un point sur la base de données en fonction de son id
+   */
+   refreshPointId(id) {
+    this.pointList = [];
+    this.recupPointById(id).subscribe(data => {
+      return new Point(data[0].idPoint, data[0].namePoint, data[0].descriptionPoint,
+          data[0].latitudePoint, data[0].longitudePoint, [1]);
     });
   }
 
@@ -114,7 +128,6 @@ export class PointsService {
           const tmpPoint = new Point(data[key].idPoint, data[key].namePoint, data[key].descriptionPoint,
             data[key].latitudePoint, data[key].longitudePoint, [1]);
           this.pointList.push(tmpPoint);
-          console.log(this.pointList);
         }
       }
     });
