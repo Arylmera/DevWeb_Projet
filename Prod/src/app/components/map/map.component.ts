@@ -5,6 +5,7 @@ import * as L from 'leaflet';
 import 'leaflet-easybutton';
 import 'leaflet-routing-machine';
 import 'leaflet-gps';
+import * as $ from 'jquery';
 
 
 const mapboxAPI = 'pk.eyJ1IjoiYXJ5bG1lcmEiLCJhIjoiY2s3aGZ1OW0zMDk1bzNubW5ya2twdDZxcSJ9.IVUHXKtgN21QPirw0ZVWpQ';
@@ -82,10 +83,11 @@ const routingIcon = blueIcon;
 export class MapComponent implements AfterViewInit, OnInit {
   private map;
   private pointList;
-  private currentlatlng = [50.67, 4.61];
-  private pointToGolatlng = [50.78, 4.62];
   private positionMarker;
   private positionCircle;
+  private mapRouter;
+
+  private currentlatlng = [50.67, 4.61];
 
   constructor(private mapsService: MapsService, private pointsService: PointsService) { }
 
@@ -107,6 +109,7 @@ export class MapComponent implements AfterViewInit, OnInit {
   ngAfterViewInit() {
     // geolocation
     this.map.on('load', this.locate()); // lancement de la géolocalisation
+    this.setUpRouting(); // setup layer routing
     // ajout des points de test
     this.addPoint([50.668351, 4.611746], 'Louvain La Neuve', 'point de test', -1);
     this.addPoint([50.67, 4.6118], 'Test add point', 'point de test', -1);
@@ -118,7 +121,10 @@ export class MapComponent implements AfterViewInit, OnInit {
   private initMap(): void {
     // ajout des tuiles de carte
     const mapLayer = L.tileLayer( mapboxStyle, { // 'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png'
-      attribution: '© <a href=\'https://www.mapbox.com/about/maps/\'>Mapbox</a> © <a href=\'http://www.openstreetmap.org/copyright\'>OpenStreetMap</a> <strong><a href=\'https://www.mapbox.com/map-feedback/\' target=\'_blank\'>Improve this map</a></strong>'
+      attribution: '© <a href=\'https://www.mapbox.com/about/maps/\'>Mapbox</a>' +
+        '© <a href=\'http://www.openstreetmap.org/copyright\'>OpenStreetMap</a>' +
+        '<strong><a href=\'https://www.mapbox.com/map-feedback/\' target=\'_blank\'>' +
+        'Improve this map</a></strong>'
     });
     // création de la map
     this.map = L.map('map', {
@@ -126,7 +132,8 @@ export class MapComponent implements AfterViewInit, OnInit {
       zoom: 18
     })
     .addLayer(mapLayer);
-    L.easyButton('<img src="../../../assets/Map/target.png" width="10" height="10" class="img-resposive">', ((btn, map) => {
+    L.easyButton('<img src="../../../assets/Map/target.png" width="10" height="10" class="img-resposive">',
+      ((btn, map) => {
       map.panTo([this.currentlatlng[0], this.currentlatlng[1]]);
     })).addTo(this.map);
   }
@@ -164,13 +171,21 @@ export class MapComponent implements AfterViewInit, OnInit {
    */
   addPoint(latlng: [number, number], name: string, description: string, id: number) {
     const point = L.marker(latlng, {icon: pointIcon}).setOpacity(0.8);
-    let popupContent = name;
-    popupContent += '<br> <p>' + description + '</p>';
-    popupContent += '<br> <button class="infoBtn btn btn-dark btn-sm" type="button" ng-click="' + this.moreInfo() +'">Info</button>';
-    popupContent += '<br> <button class="goToBtn btn btn-dark btn-sm" type="button" ng-click="' + this.goToPoint(latlng) + '">Aller ici</button>';
+    let popupContent = name + '<br> <p>' + description + '</p> '+
+      '<br> <div class="infoBtn btn btn-dark btn-sm">Info</div>' +
+      '<br> <div class="goToBtn btn btn-dark btn-sm">Aller ici</div>';
     const popup = L.popup().setContent(popupContent);
     point.bindPopup(popup);
     point.addTo(this.map);
+
+    point.on('mouseover', function (e) {
+      this.openPopup();
+    });
+    /*
+    point.on('mouseout', function (e) {
+      this.closePopup();
+    });
+     */
   }
 
   /**
@@ -178,7 +193,7 @@ export class MapComponent implements AfterViewInit, OnInit {
    * @param id
    */
   moreInfo(){
-    console.log('test');
+    console.log('here goes the redirection to the info of the point');
   }
 
   /**
@@ -187,8 +202,7 @@ export class MapComponent implements AfterViewInit, OnInit {
    */
   goToPoint(latLng: [number, number]) {
     console.log('lunching routing to :' + latLng);
-    this.pointToGolatlng = latLng;
-    //this.lunchRouting();
+    this.lunchRouting(latLng);
   }
 
   /**
@@ -223,19 +237,15 @@ export class MapComponent implements AfterViewInit, OnInit {
   }
 
   /**
-   * calculate the route between 2 points
+   * setup du modul de routing
    */
-  lunchRouting() {
-    const mapRouter = L.Routing.control({
+  setUpRouting() {
+    this.mapRouter = L.Routing.control({
       router: (L.Routing as any).mapbox( mapboxAPI, {
         profile: 'mapbox/walking',
         language: 'fr',
         polylinePrecision: 6
       }),
-      waypoints: [
-        L.latLng([this.currentlatlng[0], this.currentlatlng[1]]),
-        L.latLng([this.pointToGolatlng[0], this.pointToGolatlng[1]])
-      ],
       fitSelectedRoutes : false,
       routeWhileDragging: false,
       showAlternatives: false,
@@ -247,8 +257,17 @@ export class MapComponent implements AfterViewInit, OnInit {
           weight: 3
         }]
       },
-    });
-    mapRouter.addTo(this.map);
+    }).addTo(this.map);
+  }
+
+  /**
+   * calculate the route between 2 points
+   */
+  lunchRouting(latLng: [number, number]) {
+    this.mapRouter.getPlan().setWaypoints([
+      L.latLng([this.currentlatlng[0], this.currentlatlng[1]]),
+      L.latLng(latLng)
+      ]);
   }
 
 }
