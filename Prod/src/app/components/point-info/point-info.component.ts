@@ -10,7 +10,7 @@ import {PointsService} from '../../services/points/points.service';
 })
 export class PointInfoComponent implements OnInit {
 
-  private point;
+  public point;
 
   constructor(private pointList: PointListComponent,
               private route: ActivatedRoute, private pointsService: PointsService) { }
