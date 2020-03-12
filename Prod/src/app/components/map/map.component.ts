@@ -178,12 +178,9 @@ export class MapComponent implements AfterViewInit, OnInit {
     point.bindPopup(popup);
     point.addTo(this.map);
 
+    /*
     point.on('mouseover', function (e) {
       this.openPopup();
-    });
-    /*
-    point.on('mouseout', function (e) {
-      this.closePopup();
     });
      */
   }
@@ -212,7 +209,7 @@ export class MapComponent implements AfterViewInit, OnInit {
     console.log('adding points from database with');
     console.log(this.pointList);
     this.pointList.forEach(point => {
-      this.addPoint([point.latitudePoint, point.latitudePoint], point.namePoint, point.descriptionPoint, point.idPoint);
+      this.addPoint([point.latitudePoint, point.longitudePoint], point.namePoint, point.descriptionPoint, point.idPoint);
     });
     console.log('points from db added');
   }
