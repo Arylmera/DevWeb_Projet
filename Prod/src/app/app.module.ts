@@ -18,11 +18,13 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NewAccountComponent } from './components/new-account/new-account.component';
 import { PointListComponent } from './components/point-list/point-list.component';
 import { PointInfoComponent } from './components/point-info/point-info.component';
-import {MapComponent} from "./components/map/map.component";
-import {PointsService} from "./services/points/points.service";
-import {HttpClientModule} from "@angular/common/http";
-import {MatMenuModule} from "@angular/material/menu";
-import {MatButtonModule} from "@angular/material/button";
+import {MapComponent} from './components/map/map.component';
+import {PointsService} from './services/points/points.service';
+import {HttpClientModule} from '@angular/common/http';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonModule} from '@angular/material/button';
+import { CamComponent } from './components/cam/cam.component';
+import {ZXingScannerModule} from "@zxing/ngx-scanner";
 
 
 const routes: Routes = [
@@ -34,9 +36,11 @@ const routes: Routes = [
   { path: 'map', component: MapComponent},
   { path: '', component: HomeComponent },
   { path: 'not-found', component: FourthOFourthComponent },
+  { path: 'cam', component: CamComponent},
   { path: '**', redirectTo: 'not-found' }
 ];
 
+// @ts-ignore
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,6 +52,7 @@ const routes: Routes = [
     PointListComponent,
     PointInfoComponent,
     MapComponent,
+    CamComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,7 +69,8 @@ const routes: Routes = [
     FontAwesomeModule,
     HttpClientModule,
     MatMenuModule,
-    MatButtonModule
+    MatButtonModule,
+    ZXingScannerModule
   ],
   providers: [
     PointsService
