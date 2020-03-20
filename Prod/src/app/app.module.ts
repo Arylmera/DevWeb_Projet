@@ -23,6 +23,7 @@ import {PointsService} from "./services/points/points.service";
 import {HttpClientModule} from "@angular/common/http";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatButtonModule} from "@angular/material/button";
+import { CamComponent } from './components/cam/cam.component';
 
 
 const routes: Routes = [
@@ -34,6 +35,7 @@ const routes: Routes = [
   { path: 'map', component: MapComponent},
   { path: '', component: HomeComponent },
   { path: 'not-found', component: FourthOFourthComponent },
+  { path: 'cam', component: CamComponent},
   { path: '**', redirectTo: 'not-found' }
 ];
 
@@ -48,6 +50,7 @@ const routes: Routes = [
     PointListComponent,
     PointInfoComponent,
     MapComponent,
+    CamComponent,
   ],
   imports: [
     BrowserModule,
