@@ -136,6 +136,10 @@ export class MapComponent implements AfterViewInit, OnInit {
       ((btn, map) => {
       map.panTo([this.currentlatlng[0], this.currentlatlng[1]]);
     })).addTo(this.map);
+
+    // for older browsers
+    //$("#map").height($(window).height()).width($(window).width());
+    //this.map.invalidateSize();
   }
 
   /**
