@@ -25,6 +25,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import { CamComponent } from './components/cam/cam.component';
 import {ZXingScannerModule} from "@zxing/ngx-scanner";
+import { ParcoursSelectComponent } from './components/parcours-select/parcours-select.component';
 
 
 const routes: Routes = [
@@ -33,6 +34,7 @@ const routes: Routes = [
   { path: 'newAccount', component: NewAccountComponent},
   { path: 'pointList', component: PointListComponent},
   { path: 'pointInfo/:id', component: PointInfoComponent},
+  { path: 'parcours-select', component: ParcoursSelectComponent},
   { path: 'map', component: MapComponent},
   { path: '', component: HomeComponent },
   { path: 'not-found', component: FourthOFourthComponent },
@@ -53,6 +55,7 @@ const routes: Routes = [
     PointInfoComponent,
     MapComponent,
     CamComponent,
+    ParcoursSelectComponent,
   ],
   imports: [
     BrowserModule,
