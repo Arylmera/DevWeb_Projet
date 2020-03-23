@@ -74,6 +74,8 @@ const positionIcon = greenIcon;
 const pointIcon = redIcon;
 const routingIcon = blueIcon;
 
+const projection = L.CRS.EPSG3857;
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -213,7 +215,10 @@ export class MapComponent implements AfterViewInit, OnInit {
     console.log('adding points from database with');
     console.log(this.pointList);
     this.pointList.forEach(point => {
-      this.addPoint([point.latitudePoint, point.longitudePoint], point.namePoint, point.descriptionPoint, point.idPoint);
+      // @ts-ignore
+      let coord = projection.unproject(new L.point(point.latitudePoint, point.longitudePoint));
+      console.log(point.latitudePoint +'/'+ point.longitudePoint + 'to ' + coord);
+      this.addPoint([coord.lat, coord.lng], point.namePoint, point.descriptionPoint, point.idPoint);
     });
     console.log('points from db added');
   }
