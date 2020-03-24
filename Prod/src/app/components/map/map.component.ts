@@ -74,8 +74,6 @@ const positionIcon = greenIcon;
 const pointIcon = redIcon;
 const routingIcon = blueIcon;
 
-const projection = L.CRS.EPSG3857;
-
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -113,8 +111,8 @@ export class MapComponent implements AfterViewInit, OnInit {
     this.map.on('load', this.locate()); // lancement de la géolocalisation
     this.setUpRouting(); // setup layer routing
     // ajout des points de test
-    this.addPoint([50.668351, 4.611746], 'Louvain La Neuve', 'point de test', -1);
-    this.addPoint([50.67, 4.6118], 'Test add point', 'point de test', -1);
+    this.addPoint([50.668351, 4.611746], 'abemous papam','Point A', 'point de test A', -1);
+    this.addPoint([50.67, 4.6118], 'abemis papoum','Point B', 'point de test B', -1);
   }
 
   /**
@@ -173,13 +171,20 @@ export class MapComponent implements AfterViewInit, OnInit {
   /**
    * helper pour l'ajout d'un point sur la carte
    * @param latlng / description
+   * @param vernaculaire
    * @param name
+   * @param description
+   * @param id
    */
-  addPoint(latlng: [number, number], name: string, description: string, id: number) {
+  addPoint(latlng: [number, number],vernaculaire: string , name: string, description: string, id: number) {
     const point = L.marker(latlng, {icon: pointIcon}).setOpacity(0.8);
-    let popupContent = name + '<br> <p>' + description + '</p> '+
-      '<br> <div class="infoBtn btn btn-dark btn-sm">Info</div>' +
-      '<br> <div class="goToBtn btn btn-dark btn-sm">Aller ici</div>';
+    let popupContent = '';
+    if (vernaculaire) {
+      popupContent += '<b>'+vernaculaire+'</b> <br>';
+    }
+    popupContent += '<i>' + name + '</i><br> <p>' + description + '</p> '+
+      '<br> <div class="infoBtn btn btn-dark btn-sm" (click)="moreInfo()">Info</div>' +
+      '<br> <div class="goToBtn btn btn-dark btn-sm" (click)="goToPoint()">Aller ici</div>';
     const popup = L.popup().setContent(popupContent);
     point.bindPopup(popup);
     point.addTo(this.map);
@@ -215,10 +220,10 @@ export class MapComponent implements AfterViewInit, OnInit {
     console.log('adding points from database with');
     console.log(this.pointList);
     this.pointList.forEach(point => {
-      // @ts-ignore
-      let coord = projection.unproject(new L.point(point.latitudePoint, point.longitudePoint));
-      console.log(point.latitudePoint +'/'+ point.longitudePoint + 'to ' + coord);
-      this.addPoint([coord.lat, coord.lng], point.namePoint, point.descriptionPoint, point.idPoint);
+      let pXY = L.point(point.latitudePoint, point.longitudePoint);
+      let pLatLng = this.map.layerPointToLatLng(pXY);
+      this.addPoint([pLatLng.lat, pLatLng.lng], point.vernaculairePoint,point.namePoint, point.descriptionPoint, point.idPoint);
+      console.log(pLatLng);
     });
     console.log('points from db added');
   }
