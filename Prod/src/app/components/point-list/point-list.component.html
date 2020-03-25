@@ -4,7 +4,7 @@
       <form class="form">
         <label>Type de points souhaité</label>
         <div *ngFor="let categorie of categList" class="form-inline">
-          <input class="form-check" type="checkbox" id="{{categorie.id}}" value="{{categorie.name}}" name="categList" (change)="selectPointsFromCategorie()">
+          <input class="form-check" type="checkbox" id="{{categorie.id}}" value="{{categorie.id}}" name="categList" (change)="selectPointsFromCategorie()">
           <label class="form-check-label">{{categorie.name}}</label>
         </div>
       </form>

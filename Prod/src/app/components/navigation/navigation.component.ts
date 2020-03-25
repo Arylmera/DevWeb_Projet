@@ -4,6 +4,7 @@ import {faHome} from "@fortawesome/free-solid-svg-icons";
 import {faSignInAlt} from "@fortawesome/free-solid-svg-icons";
 import {faMapPin} from "@fortawesome/free-solid-svg-icons/faMapPin";
 import {faMapMarkedAlt} from "@fortawesome/free-solid-svg-icons/faMapMarkedAlt";
+import {faRoute} from "@fortawesome/free-solid-svg-icons/faRoute";
 
 @Component({
   selector: 'app-navigation',
@@ -17,6 +18,7 @@ export class NavigationComponent implements OnInit {
   faSignInAlt = faSignInAlt;
   faMapPin = faMapPin;
   faMapMarkedAlt = faMapMarkedAlt;
+  faRoute = faRoute;
 
   constructor() { }
 
