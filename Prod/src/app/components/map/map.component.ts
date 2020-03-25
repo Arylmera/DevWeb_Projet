@@ -88,8 +88,10 @@ export class MapComponent implements AfterViewInit, OnInit {
   private positionCircle;
   private mapRouter;
   private parcoursId = 0;
+  private parcoursName;
 
   private currentlatlng = [50.67, 4.61];
+  mapTitle = 'Carte de tout les points';
 
   constructor(private mapsService: MapsService,
               private route: ActivatedRoute,
@@ -106,6 +108,10 @@ export class MapComponent implements AfterViewInit, OnInit {
     if (this.parcoursId) {
       this.pointsService.recupParcoursPointsById(this.parcoursId).subscribe( data => {
         let pointIdList = data;
+        this.pointsService.recupParcoursById(this.parcoursId).subscribe( data => {
+          this.parcoursName = data[0].nameParcours;
+          this.setTitle();
+        });
         for (let id in pointIdList) {
          this.pointsService.recupPointById(Number(id)).subscribe( data => {
            if (!this.pointList[0]){
@@ -129,7 +135,6 @@ export class MapComponent implements AfterViewInit, OnInit {
         this.addPointsFromDb();
       });
     }
-    console.log(this.pointList);
     this.initMap();
     this.initPositionMaker();
   }
@@ -167,10 +172,6 @@ export class MapComponent implements AfterViewInit, OnInit {
       ((btn, map) => {
         map.panTo([this.currentlatlng[0], this.currentlatlng[1]]);
       })).addTo(this.map);
-
-    // for older browsers
-    //$("#map").height($(window).height()).width($(window).width());
-    //this.map.invalidateSize();
   }
 
   /**
@@ -310,5 +311,9 @@ export class MapComponent implements AfterViewInit, OnInit {
       L.latLng([this.currentlatlng[0], this.currentlatlng[1]]),
       L.latLng(latLng)
     ]);
+  }
+
+  private setTitle() {
+    this.mapTitle = 'Carte du '+ this.parcoursName;
   }
 }

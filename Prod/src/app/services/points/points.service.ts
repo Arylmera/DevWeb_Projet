@@ -45,6 +45,14 @@ export class PointsService {
   }
 
   /**
+   * récupération des info d'un parcours par sont id
+   * @param id
+   */
+  recupParcoursById(id: number){
+    return this.http.get('http://localhost:3000/api/Parcours?idParcours=' + id);
+  }
+
+  /**
    * récupération des info d'un point par sont id
    * @param id
    */
