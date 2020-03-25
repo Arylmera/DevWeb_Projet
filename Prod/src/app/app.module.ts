@@ -40,6 +40,7 @@ const routes: Routes = [
   { path: 'pointInfo/:id', component: PointInfoComponent},
   { path: 'parcours-select', component: ParcoursSelectComponent},
   { path: 'map', component: MapComponent},
+  { path: 'map/:id', component: MapComponent},
   { path: '', component: HomeComponent },
   { path: 'not-found', component: FourthOFourthComponent },
   { path: 'cam', component: CamComponent},

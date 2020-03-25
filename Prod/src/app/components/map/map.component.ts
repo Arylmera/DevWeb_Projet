@@ -6,6 +6,7 @@ import 'leaflet-easybutton';
 import 'leaflet-routing-machine';
 import 'leaflet-gps';
 import * as $ from 'jquery';
+import {ActivatedRoute} from "@angular/router";
 
 
 const mapboxAPI = 'pk.eyJ1IjoiYXJ5bG1lcmEiLCJhIjoiY2s3aGZ1OW0zMDk1bzNubW5ya2twdDZxcSJ9.IVUHXKtgN21QPirw0ZVWpQ';
@@ -82,24 +83,53 @@ const routingIcon = blueIcon;
 
 export class MapComponent implements AfterViewInit, OnInit {
   private map;
-  private pointList;
+  private pointList: any = [];
   private positionMarker;
   private positionCircle;
   private mapRouter;
+  private parcoursId = 0;
 
   private currentlatlng = [50.67, 4.61];
 
-  constructor(private mapsService: MapsService, private pointsService: PointsService) { }
+  constructor(private mapsService: MapsService,
+              private route: ActivatedRoute,
+              private pointsService: PointsService) { }
 
   /**
    * chargement de la page
    */
   ngOnInit(): void {
     // add de tout les points
-    this.pointsService.recupPoints().subscribe( data => {
-      this.pointList = data;
-      this.addPointsFromDb();
-    });
+    this.parcoursId = Number(this.route.snapshot.params['id']);
+    if (typeof this.parcoursId != "number"){ this.parcoursId = 0}
+    console.log('chargement de la carte avec le parcours : '+ this.parcoursId);
+    if (this.parcoursId) {
+      this.pointsService.recupParcoursPointsById(this.parcoursId).subscribe( data => {
+        let pointIdList = data;
+        for (let id in pointIdList) {
+         this.pointsService.recupPointById(Number(id)).subscribe( data => {
+           if (!this.pointList[0]){
+             this.pointList = [data[0]];
+           }
+           else {
+             this.pointList.push(data[0]);
+           }
+           console.log(Object.keys(this.pointList).length);
+           console.log(Object.keys(pointIdList).length);
+           if(Object.keys(this.pointList).length +1 == Object.keys(pointIdList).length){
+             this.addPointsFromDb();
+           }
+         })
+        }
+      });
+    }
+    else {
+      this.pointsService.recupPoints().subscribe(data => {
+        this.pointList = data;
+        this.addPointsFromDb();
+      });
+    }
+    console.log(this.pointList);
     this.initMap();
     this.initPositionMaker();
   }
@@ -132,11 +162,11 @@ export class MapComponent implements AfterViewInit, OnInit {
       center: ([50.67, 4.61]),
       zoom: 16
     })
-    .addLayer(mapLayer);
+      .addLayer(mapLayer);
     L.easyButton('<img src="../../../assets/Map/target.png" width="10" height="10" class="img-resposive">',
       ((btn, map) => {
-      map.panTo([this.currentlatlng[0], this.currentlatlng[1]]);
-    })).addTo(this.map);
+        map.panTo([this.currentlatlng[0], this.currentlatlng[1]]);
+      })).addTo(this.map);
 
     // for older browsers
     //$("#map").height($(window).height()).width($(window).width());
@@ -240,11 +270,11 @@ export class MapComponent implements AfterViewInit, OnInit {
       enableHighAccuracy : true
     }))
       .on('locationfound', (e) => {
-      console.log (' your are at '+  e.latlng + ' with in '+ e.accuracy + 'm');
-      this.currentlatlng = [e.latlng.lat, e.latlng.lng];
-      this.setPositionMarker(e);
-      this.map.panTo([e.latlng.lat, e.latlng.lng]);
-    });
+        console.log (' your are at '+  e.latlng + ' with in '+ e.accuracy + 'm');
+        this.currentlatlng = [e.latlng.lat, e.latlng.lng];
+        this.setPositionMarker(e);
+        this.map.panTo([e.latlng.lat, e.latlng.lng]);
+      });
     //this.map.setZoom(18);
   }
 
@@ -279,7 +309,6 @@ export class MapComponent implements AfterViewInit, OnInit {
     this.mapRouter.getPlan().setWaypoints([
       L.latLng([this.currentlatlng[0], this.currentlatlng[1]]),
       L.latLng(latLng)
-      ]);
+    ]);
   }
-
 }
