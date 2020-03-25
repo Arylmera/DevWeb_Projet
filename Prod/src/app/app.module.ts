@@ -26,6 +26,9 @@ import {MatButtonModule} from '@angular/material/button';
 import { CamComponent } from './components/cam/cam.component';
 import {ZXingScannerModule} from "@zxing/ngx-scanner";
 import { ParcoursSelectComponent } from './components/parcours-select/parcours-select.component';
+import {MatRadioModule} from "@angular/material/radio";
+import {MatCardModule} from "@angular/material/card";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
 
 const routes: Routes = [
@@ -73,7 +76,10 @@ const routes: Routes = [
     HttpClientModule,
     MatMenuModule,
     MatButtonModule,
-    ZXingScannerModule
+    ZXingScannerModule,
+    MatRadioModule,
+    MatCardModule,
+    MatSlideToggleModule
   ],
   providers: [
     PointsService

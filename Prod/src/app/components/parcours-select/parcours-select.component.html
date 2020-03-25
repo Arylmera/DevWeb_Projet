@@ -1,12 +1,25 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>Liste des Parcours diponnibles</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-3">
+      <div *ngFor="let parcours of this.parcoursList" class="form-inline">
+        <mat-radio-button>{{parcours.nameParcours}}</mat-radio-button>
+      </div>
+    </div>
+    <div class="col-sm-9">
 
-<h1>Liste des Parcours diponnibles</h1>
-
-
+    </div>
+  </div>
+</div>
 
 <footer class="footer green">
 <div class="container-fluid text-center text-md-left text-muted">
   <div class="col-sm-12">Envie d'une version papier ? la version pdf complète
-    <a href="../../../assets/Parcours%20arbre%20remarquable.pdf" download="Paroucours_Arbres_Remarquables">
+    <a mat-flat-button href="../../../assets/Parcours%20arbre%20remarquable.pdf" download="Paroucours_Arbres_Remarquables">
       ici
       <fa-icon [icon]="faDownload"></fa-icon>
     </a>

@@ -165,19 +165,19 @@ $mat-primary: (
 $theme-primary: mat-palette($mat-primary, main, lighter, darker);
 
 body {
-  --accent-color: #2a642c;
+  --accent-color: #2b662d;
   --accent-lighter-color: #bfd1c0;
-  --accent-darker-color: #19481b;
+  --accent-darker-color: #1a491c;
   --text-accent-color: #{$light-primary-text};
   --text-accent-lighter-color: #{$dark-primary-text};
   --text-accent-darker-color: #{$light-primary-text};
 }
 
 $mat-accent: (
-  main: #2a642c,
+  main: #2b662d,
   lighter: #bfd1c0,
-  darker: #19481b,
-  200: #2a642c, // For slide toggle,
+  darker: #1a491c,
+  200: #2b662d, // For slide toggle,
   contrast : (
     main: $light-primary-text,
     lighter: $dark-primary-text,
@@ -187,29 +187,29 @@ $mat-accent: (
 $theme-accent: mat-palette($mat-accent, main, lighter, darker);
 
 body {
-  --warn-color: #00ffed;
-  --warn-lighter-color: #b3fffa;
-  --warn-darker-color: #00ffe5;
-  --text-warn-color: #{$dark-primary-text};
+  --warn-color: #ff00f4;
+  --warn-lighter-color: #ffb3fc;
+  --warn-darker-color: #ff00ef;
+  --text-warn-color: #{$light-primary-text};
   --text-warn-lighter-color: #{$dark-primary-text};
-  --text-warn-darker-color: #{$dark-primary-text};
+  --text-warn-darker-color: #{$light-primary-text};
 }
 
 $mat-warn: (
-  main: #00ffed,
-  lighter: #b3fffa,
-  darker: #00ffe5,
-  200: #00ffed, // For slide toggle,
+  main: #ff00f4,
+  lighter: #ffb3fc,
+  darker: #ff00ef,
+  200: #ff00f4, // For slide toggle,
   contrast : (
-    main: $dark-primary-text,
+    main: $light-primary-text,
     lighter: $dark-primary-text,
-    darker: $dark-primary-text,
+    darker: $light-primary-text,
   )
 );
 $theme-warn: mat-palette($mat-warn, main, lighter, darker);;
 
-$theme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
-$altTheme: mat-light-theme($theme-primary, $theme-accent, $theme-warn);
+$theme: mat-light-theme($theme-primary, $theme-accent, $theme-warn);
+$altTheme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
 
 // Theme Init
 @include angular-material-theme($theme);

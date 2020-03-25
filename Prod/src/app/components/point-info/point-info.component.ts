@@ -10,10 +10,11 @@ import {PointsService} from '../../services/points/points.service';
 })
 export class PointInfoComponent implements OnInit {
 
-  public point;
+  public point: any;
 
   constructor(private pointList: PointListComponent,
-              private route: ActivatedRoute, private pointsService: PointsService) { }
+              private route: ActivatedRoute,
+              private pointsService: PointsService) { }
 
   ngOnInit(): void {
     this.pointsService.recupPointById(Number(this.route.snapshot.params['id'])).subscribe( data => {

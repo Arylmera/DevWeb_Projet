@@ -95,6 +95,7 @@ export class MapComponent implements AfterViewInit, OnInit {
    * chargement de la page
    */
   ngOnInit(): void {
+    // add de tout les points
     this.pointsService.recupPoints().subscribe( data => {
       this.pointList = data;
       this.addPointsFromDb();
@@ -129,7 +130,7 @@ export class MapComponent implements AfterViewInit, OnInit {
     // création de la map
     this.map = L.map('map', {
       center: ([50.67, 4.61]),
-      zoom: 18
+      zoom: 16
     })
     .addLayer(mapLayer);
     L.easyButton('<img src="../../../assets/Map/target.png" width="10" height="10" class="img-resposive">',
