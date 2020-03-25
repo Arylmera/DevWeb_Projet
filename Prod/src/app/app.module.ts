@@ -29,6 +29,7 @@ import { ParcoursSelectComponent } from './components/parcours-select/parcours-s
 import {MatRadioModule} from "@angular/material/radio";
 import {MatCardModule} from "@angular/material/card";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {ScrollingModule} from "@angular/cdk/scrolling";
 
 
 const routes: Routes = [
@@ -79,7 +80,8 @@ const routes: Routes = [
     ZXingScannerModule,
     MatRadioModule,
     MatCardModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    ScrollingModule
   ],
   providers: [
     PointsService
