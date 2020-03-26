@@ -17,7 +17,10 @@ export class ParcoursSelectComponent implements OnInit {
   parcoursList: any;
   parcoursPointList: any;
   parcoursNum: number;
-  currentParcoursPoints: any[] = [];
+  parcoursName: String;
+
+  parcours;
+  parcours_points;
 
   ngOnInit(): void {
     this.pointsService.recupParcours().subscribe( data => {
@@ -29,18 +32,13 @@ export class ParcoursSelectComponent implements OnInit {
     console.log(this.parcoursNum);
     this.pointsService.recupParcoursPointsById(this.parcoursNum).subscribe( data => {
       this.parcoursPointList = data;
-      this.loadPoints();
     });
-  }
-
-  loadPoints() {
-    this.currentParcoursPoints = [];
-    for (let pointParcours of this.parcoursPointList) {
-      this.pointsService.recupPointById(pointParcours.idPoint).subscribe( data => {
-        let point = data[0];
-        this.currentParcoursPoints.push(point);
-      })
-    }
+    this.pointsService.recupParcoursById(this.parcoursNum).subscribe( data => {
+      this.parcoursName = data[0].nameParcours;
+      console.log(this.parcoursName);
+      this.parcours = '../../assets/Parcours/'+this.parcoursName+'.png';
+      this.parcours_points = '../../assets/Parcours/'+this.parcoursName+'-Points.png';
+    });
   }
 
   numberOfPoints() {
