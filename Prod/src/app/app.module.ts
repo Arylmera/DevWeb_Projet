@@ -30,6 +30,8 @@ import {MatRadioModule} from "@angular/material/radio";
 import {MatCardModule} from "@angular/material/card";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {ScrollingModule} from "@angular/cdk/scrolling";
+import {MatDialogModule} from "@angular/material/dialog";
+
 
 
 const routes: Routes = [
@@ -82,11 +84,17 @@ const routes: Routes = [
     MatRadioModule,
     MatCardModule,
     MatSlideToggleModule,
-    ScrollingModule
+    ScrollingModule,
+    FontAwesomeModule,
+    MatDialogModule,
+  ],
+  entryComponents: [
   ],
   providers: [
-    PointsService
+    PointsService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [
+    AppComponent,
+  ]
 })
-export class AppModule { }
+export class AppModule {}
