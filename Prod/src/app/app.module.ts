@@ -33,6 +33,8 @@ import {ScrollingModule} from "@angular/cdk/scrolling";
 import { PointSheetComponent } from './components/point-sheet/point-sheet.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -88,7 +90,9 @@ const routes: Routes = [
     ScrollingModule,
     FontAwesomeModule,
     MatDialogModule,
-    MatBottomSheetModule
+    MatBottomSheetModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   entryComponents: [
     PointSheetComponent
