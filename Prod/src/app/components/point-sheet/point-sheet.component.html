@@ -1,0 +1,11 @@
+<mat-card class="point-card" *ngIf="ready">
+  <mat-card-header>
+    <mat-card-title>{{point.namePoint}}</mat-card-title>
+    <mat-card-subtitle *ngIf="point.vernaculairePoint">{{point.vernaculairePoint}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <p>
+      {{point.descriptionPoint}}
+    </p>
+  </mat-card-content>
+</mat-card>
