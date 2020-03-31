@@ -30,8 +30,8 @@ export class NavigationComponent implements OnInit {
 
   openCam(): void {
     this.dialog.open(CamComponent, {
-      height: '80%',
-      width: '70%',
+      height: '90%',
+      width: '90%',
     });
   }
 
