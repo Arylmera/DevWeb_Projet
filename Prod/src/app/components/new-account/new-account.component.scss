@@ -11,3 +11,16 @@
 .field {
   width: 100%;
 }
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  color: #4CAF50;
+}
+
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: #4CAF50;
+}
+
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-label {
+  color: #4CAF50;
+}
+
