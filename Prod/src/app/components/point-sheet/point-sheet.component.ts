@@ -3,6 +3,7 @@ import {MAT_BOTTOM_SHEET_DATA} from "@angular/material/bottom-sheet";
 import {PointsService} from "../../services/points/points.service";
 import {MapComponent} from "../map/map.component";
 import {HttpClient} from "@angular/common/http";
+import {MapsService} from "../../services/maps/maps.service";
 
 @Component({
   selector: 'app-point-sheet',
@@ -17,7 +18,9 @@ export class PointSheetComponent implements OnInit {
 
   constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
               private pointsService: PointsService,
-              private http: HttpClient) { }
+              private mapsService: MapsService,
+              private http: HttpClient) {}
+
   ngOnInit(): void {
     this.ready = false;
     this.pointsService.recupPointById(this.data).subscribe( pointData => {
@@ -26,6 +29,10 @@ export class PointSheetComponent implements OnInit {
     })
   }
 
+  /**
+   * ouvertre page wiki du point
+   * @param name
+   */
   goToWiki(name: any) {
     let nameURI = encodeURIComponent(name.trim());
     this.http.get('https://fr.wikipedia.org/w/api.php?action=opensearch&search='+nameURI+'&limit=1&format=json').subscribe( data => {
@@ -34,5 +41,13 @@ export class PointSheetComponent implements OnInit {
         window.open(data[0][3], '_bank');
       }
     });
+  }
+
+  /**
+   * lancement de la route vers le point
+   * @param latLng
+   */
+  setRoute(latLng: [number, number]){
+    this.mapsService.SetRoutingCoord(latLng);
   }
 }

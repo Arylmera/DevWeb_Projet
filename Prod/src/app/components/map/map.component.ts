@@ -1,4 +1,4 @@
-import {Component, AfterViewInit, OnInit} from '@angular/core';
+import {Component, AfterViewInit, OnInit, Inject, Injectable} from '@angular/core';
 import {MapsService} from '../../services/maps/maps.service';
 import {PointsService} from '../../services/points/points.service';
 import * as L from 'leaflet';
@@ -298,9 +298,11 @@ export class MapComponent implements AfterViewInit, OnInit {
    * calculate the route between 2 points
    */
   lunchRouting(latLng: [number, number]) {
+    let pXY = L.point(latLng[0],latLng[1]);
+    let pLatLng = this.map.layerPointToLatLng(pXY);
     this.mapRouter.getPlan().setWaypoints([
       L.latLng([this.currentlatlng[0], this.currentlatlng[1]]),
-      L.latLng(latLng)
+      L.latLng(pLatLng)
     ]);
   }
 
