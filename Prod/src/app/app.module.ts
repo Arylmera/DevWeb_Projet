@@ -48,7 +48,7 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'not-found', component: FourthOFourthComponent },
   { path: 'cam', component: CamComponent},
-  { path: '**', redirectTo: 'not-found' }
+  //{ path: '**', redirectTo: 'not-found' }
 ];
 
 // @ts-ignore

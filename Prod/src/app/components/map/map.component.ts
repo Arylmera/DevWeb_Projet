@@ -87,7 +87,6 @@ export class MapComponent implements AfterViewInit, OnInit {
   private pointList: any = [];
   private positionMarker;
   private positionCircle;
-  private mapRouter;
   private parcoursId = 0;
   private parcoursName;
 
@@ -123,8 +122,6 @@ export class MapComponent implements AfterViewInit, OnInit {
             else {
               this.pointList.push(data[0]);
             }
-            console.log(Object.keys(this.pointList).length);
-            console.log(Object.keys(pointIdList).length);
             if(Object.keys(this.pointList).length +1 == Object.keys(pointIdList).length){
               this.addPointsFromDb();
             }
@@ -148,7 +145,6 @@ export class MapComponent implements AfterViewInit, OnInit {
   ngAfterViewInit() {
     // geolocation
     this.map.on('load', this.locate()); // lancement de la géolocalisation
-    this.setUpRouting(); // setup layer routing
   }
 
   /**
@@ -228,25 +224,14 @@ export class MapComponent implements AfterViewInit, OnInit {
   }
 
   /**
-   * lancement routing vers le point selectioné
-   * @param latlng
-   */
-  goToPoint(latLng: [number, number]) {
-    console.log('lunching routing to :' + latLng);
-    this.lunchRouting(latLng);
-  }
-
-  /**
    * ajout des points depuis la base de donnée
    */
   private addPointsFromDb() {
     console.log('adding points from database with');
-    console.log(this.pointList);
     this.pointList.forEach(point => {
-      let pXY = L.point(point.latitudePoint, point.longitudePoint);
-      let pLatLng = this.map.layerPointToLatLng(pXY);
+      let pLatLng = this.parsPointXYLatLng([point.latitudePoint, point.longitudePoint]);
       this.addPoint([pLatLng.lat, pLatLng.lng], point.idPoint);
-      console.log(pLatLng);
+      //console.log(pLatLng);
     });
     console.log('points from db added');
   }
@@ -271,45 +256,18 @@ export class MapComponent implements AfterViewInit, OnInit {
   }
 
   /**
-   * setup du modul de routing
-   */
-  setUpRouting() {
-    this.mapRouter = L.Routing.control({
-      router: (L.Routing as any).mapbox( mapboxAPI, {
-        profile: 'mapbox/walking',
-        language: 'fr',
-        polylinePrecision: 6
-      }),
-      fitSelectedRoutes : false,
-      routeWhileDragging: false,
-      showAlternatives: false,
-      collapsible: true,
-      lineOptions: {
-        styles: [{
-          color: 'green',
-          opacity: 1,
-          weight: 3
-        }]
-      },
-    }).addTo(this.map);
-  }
-
-  /**
-   * calculate the route between 2 points
-   */
-  lunchRouting(latLng: [number, number]) {
-    let pXY = L.point(latLng[0],latLng[1]);
-    let pLatLng = this.map.layerPointToLatLng(pXY);
-    this.mapRouter.getPlan().setWaypoints([
-      L.latLng([this.currentlatlng[0], this.currentlatlng[1]]),
-      L.latLng(pLatLng)
-    ]);
-  }
-
-  /**
    * définition dynamique du titre de la carte
    */
   private setTitle() {
     this.mapTitle = 'Carte du '+ this.parcoursName;
+  }
+
+  /**
+   * parsing de la coordonée depuis XY vers latLong
+   * @param pointXY
+   */
+  parsPointXYLatLng(pointXY: [number, number]){
+    let point = L.point(pointXY);
+    return this.map.layerPointToLatLng(point);
   }
 }

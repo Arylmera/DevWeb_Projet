@@ -4,6 +4,7 @@ import {PointsService} from "../../services/points/points.service";
 import {MapComponent} from "../map/map.component";
 import {HttpClient} from "@angular/common/http";
 import {MapsService} from "../../services/maps/maps.service";
+import {forEach} from "ol/geom/flat/segments";
 
 @Component({
   selector: 'app-point-sheet',
@@ -15,6 +16,7 @@ export class PointSheetComponent implements OnInit {
   point: any;
   html: any;
   ready = false;
+  imgURL: any;
 
   constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
               private pointsService: PointsService,
@@ -26,7 +28,8 @@ export class PointSheetComponent implements OnInit {
     this.pointsService.recupPointById(this.data).subscribe( pointData => {
       this.point = pointData[0];
       this.ready = true;
-    })
+      this.getImageFromWiki(this.point.namePoint);
+    });
   }
 
   /**
@@ -35,19 +38,29 @@ export class PointSheetComponent implements OnInit {
    */
   goToWiki(name: any) {
     let nameURI = encodeURIComponent(name.trim());
-    this.http.get('https://fr.wikipedia.org/w/api.php?action=opensearch&search='+nameURI+'&limit=1&format=json').subscribe( data => {
-      console.log(data[0]);
-      if(data[0][3]){
-        window.open(data[0][3], '_bank');
+    let url = "https://en.wikipedia.org//w/api.php?action=opensearch&format=json&origin=*&search="+nameURI+"&limit=1&format=json";
+    this.http.get(url).subscribe( data => {
+      if(data[3]){
+        let wikiUrl = data[3];
+        window.open(wikiUrl, '_bank');
       }
     });
   }
 
-  /**
-   * lancement de la route vers le point
-   * @param latLng
-   */
-  setRoute(latLng: [number, number]){
-    this.mapsService.SetRoutingCoord(latLng);
+  getImageFromWiki(name: any){
+    let nameURI = encodeURIComponent(name.trim());
+    console.log(nameURI);
+    let urlImage = "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&formatversion=2&prop=pageimages|pageterms&piprop=original&titles="+nameURI;
+    this.http.get(urlImage).subscribe( data => {
+      // @ts-ignore
+      data = data.query.pages[0];
+      // @ts-ignore
+      if( data.original){
+        // @ts-ignore
+        data = data.original.source;
+        console.log(data);
+      }
+      this.imgURL = data;
+    });
   }
 }

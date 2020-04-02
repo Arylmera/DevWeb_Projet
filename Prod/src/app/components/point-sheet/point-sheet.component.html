@@ -3,13 +3,14 @@
     <mat-card-title>{{point.namePoint}}</mat-card-title>
     <mat-card-subtitle *ngIf="point.vernaculairePoint">{{point.vernaculairePoint}}</mat-card-subtitle>
   </mat-card-header>
+  <img mat-card-image id="image" *ngIf="this.imgURL" [src]="this.imgURL">
   <mat-card-content>
     <p>
       {{point.descriptionPoint}}
     </p>
+    <p id="wiki"></p>
   </mat-card-content>
   <mat-card-actions>
     <button mat-stroked-button (click)="goToWiki(point.namePoint)">Page Wikipedia</button>
-    <button mat-stroked-button (click)="setRoute([point.latitudePoint,point.longitudePoint])">Aller ici</button>
   </mat-card-actions>
 </mat-card>
