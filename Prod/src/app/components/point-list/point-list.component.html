@@ -4,17 +4,22 @@
       <form class="form">
         <label>Type de points souhaité</label>
         <div *ngFor="let categorie of categList" class="form-inline">
-          <input class="form-check" type="checkbox" id="{{categorie.id}}" value="{{categorie.name}}" name="categList" (change)="selectPointsFromCategorie()">
-          <label class="form-check-label">{{categorie.name}}</label>
+          <mat-checkbox id="{{categorie.idCategorie}}" value="{{categorie.idCategorie}}" name="categList" (change)="selectPointsFromCategorie()">
+            {{categorie.nameCategorie}}
+          </mat-checkbox>
         </div>
       </form>
     </div>
     <div class="col-sm-4">
-        <div *ngFor="let p of pointListSelected"  class="text-center bg-dark text-white"  [routerLink]="['/pointInfo', p.id]">
-          <p>{{p.name}}</p>
-          <p>{{p.description}}</p>
-          <p>Catégorie : {{p.categ}}</p>
-          <p>Localisation : {{p.long}} / {{p.lat}}</p>
+        <div *ngFor="let p of pointListSelected"  class="text-center bg-dark text-white">
+          <mat-card>
+            <mat-card-title>{{p.namePoint}}</mat-card-title>
+            <mat-card-subtitle *ngIf="this.p.vernaculairePoint">{{this.p.vernaculairePoint}}</mat-card-subtitle>
+            <mat-card-content>{{p.descriptionPoint}}</mat-card-content>
+            <mat-card-actions>
+              <button mat-flat-button [routerLink]="['/pointInfo', p.idPoint]">Info</button>
+            </mat-card-actions>
+          </mat-card>
         </div>
     </div>
   </div>

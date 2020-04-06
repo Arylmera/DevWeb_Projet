@@ -1,10 +1,30 @@
-<div class="login-page">
-  <div class="form">
-    <form class="login-form">
-      <input type="text" placeholder="nom d'utilisateur"/>
-      <input type="password" placeholder="mot de passe"/>
-      <button>login</button>
-      <p class="message">Pas encore enregistrer ? <a routerLink="/newAccount">Créer un compte</a></p>
+<mat-toolbar>
+  <span>Connexion</span>
+</mat-toolbar>
+
+<mat-card class="connexion-card">
+  <mat-card-content>
+    <form class="connexion-form">
+
+      <mat-form-field class="field" appearance="outline">
+        <mat-label>
+          Nom d'utilisateur
+        </mat-label>
+        <input type="text" matInput placeholder="example@gmail.com">
+      </mat-form-field>
+
+      <mat-form-field class="field" appearance="outline">
+        <mat-label>
+          Mot de passe
+        </mat-label>
+        <input type="password" matInput>
+      </mat-form-field>
+
+      <mat-card-actions>
+        <button mat-raised-button style="background-color: #4CAF50; color: white;">Connexion</button>
+        <button mat-raised-button routerLink="/newAccount">Créer un compte</button>
+      </mat-card-actions>
+
     </form>
-  </div>
-</div>
+  </mat-card-content>
+</mat-card>

@@ -11,19 +11,20 @@ export class PointListComponent implements OnInit {
 
   constructor(private pointsService: PointsService) { }
 
-  pointList: any[] = []; // liste total des points depuis la db
-  pointListSelected: any[] = []; // liste des points selectionnés
-  categList: any[] = []; // liste total des caractérisitques
-  categListSelected: any[] = []; // liste des caractérisitues selectionnés
+  pointList: any;
+  pointListSelected: any;
+  categList: any;
+  categListSelected: any;
 
   ngOnInit(): void {
-    this.pointList = [];
-    this.categList = [];
     // récupération des points du serveur
-    // this.pointList = this.pointsService.getPointsList();
+    this.pointsService.recupCategories().subscribe( data => {
+      this.categList = data;
+    });
     // récupération des caractéristiques du serveur
-    this.categList = this.pointsService.getCaratList();
-    this.pointListSelected = this.pointsService.getPointsList();
+    this.pointsService.recupPoints().subscribe( data => {
+      this.pointList = data;
+    });
   }
 
   /**
@@ -44,7 +45,9 @@ export class PointListComponent implements OnInit {
     this.pointListSelected = [];
 
     for (let categorie of this.categListSelected) {
-      this.pointListSelected = this.pointsService.getPointsCategorieList(categorie);
+       this.pointsService.recupPointsByCategorie(categorie).subscribe(data => {
+         this.pointListSelected = data;
+      });
     }
   }
 

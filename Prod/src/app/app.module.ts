@@ -26,7 +26,15 @@ import {MatButtonModule} from '@angular/material/button';
 import { CamComponent } from './components/cam/cam.component';
 import {ZXingScannerModule} from "@zxing/ngx-scanner";
 import { ParcoursSelectComponent } from './components/parcours-select/parcours-select.component';
-
+import {MatRadioModule} from "@angular/material/radio";
+import {MatCardModule} from "@angular/material/card";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {ScrollingModule} from "@angular/cdk/scrolling";
+import { PointSheetComponent } from './components/point-sheet/point-sheet.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -36,10 +44,11 @@ const routes: Routes = [
   { path: 'pointInfo/:id', component: PointInfoComponent},
   { path: 'parcours-select', component: ParcoursSelectComponent},
   { path: 'map', component: MapComponent},
+  { path: 'map/:id', component: MapComponent},
   { path: '', component: HomeComponent },
   { path: 'not-found', component: FourthOFourthComponent },
   { path: 'cam', component: CamComponent},
-  { path: '**', redirectTo: 'not-found' }
+  //{ path: '**', redirectTo: 'not-found' }
 ];
 
 // @ts-ignore
@@ -56,6 +65,7 @@ const routes: Routes = [
     MapComponent,
     CamComponent,
     ParcoursSelectComponent,
+    PointSheetComponent
   ],
   imports: [
     BrowserModule,
@@ -73,11 +83,25 @@ const routes: Routes = [
     HttpClientModule,
     MatMenuModule,
     MatButtonModule,
-    ZXingScannerModule
+    ZXingScannerModule,
+    MatRadioModule,
+    MatCardModule,
+    MatSlideToggleModule,
+    ScrollingModule,
+    FontAwesomeModule,
+    MatDialogModule,
+    MatBottomSheetModule,
+    MatFormFieldModule,
+    MatInputModule
+  ],
+  entryComponents: [
+    PointSheetComponent
   ],
   providers: [
-    PointsService
+    PointsService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [
+    AppComponent,
+  ]
 })
-export class AppModule { }
+export class AppModule {}

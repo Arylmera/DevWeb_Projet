@@ -1,4 +1,4 @@
-import {Component, AfterViewInit, OnInit} from '@angular/core';
+import {Component, AfterViewInit, OnInit, Inject, Injectable} from '@angular/core';
 import {MapsService} from '../../services/maps/maps.service';
 import {PointsService} from '../../services/points/points.service';
 import * as L from 'leaflet';
@@ -6,7 +6,9 @@ import 'leaflet-easybutton';
 import 'leaflet-routing-machine';
 import 'leaflet-gps';
 import * as $ from 'jquery';
-
+import {ActivatedRoute} from "@angular/router";
+import {MatBottomSheet} from "@angular/material/bottom-sheet";
+import {PointSheetComponent} from "../point-sheet/point-sheet.component";
 
 const mapboxAPI = 'pk.eyJ1IjoiYXJ5bG1lcmEiLCJhIjoiY2s3aGZ1OW0zMDk1bzNubW5ya2twdDZxcSJ9.IVUHXKtgN21QPirw0ZVWpQ';
 const mapboxStyle = 'https://api.mapbox.com/styles/v1/arylmera/ck7ix7bma010g1io6aa528sla/tiles/256/{z}/{x}/{y}@2x?access_token='+ mapboxAPI;
@@ -82,23 +84,57 @@ const routingIcon = blueIcon;
 
 export class MapComponent implements AfterViewInit, OnInit {
   private map;
-  private pointList;
+  private pointList: any = [];
   private positionMarker;
   private positionCircle;
-  private mapRouter;
+  private parcoursId = 0;
+  private parcoursName;
 
   private currentlatlng = [50.67, 4.61];
+  mapTitle = 'Carte des Arbres';
 
-  constructor(private mapsService: MapsService, private pointsService: PointsService) { }
+  constructor(private mapsService: MapsService,
+              private route: ActivatedRoute,
+              private pointsService: PointsService,
+              private pointSheet: MatBottomSheet
+              ) { }
 
   /**
    * chargement de la page
    */
   ngOnInit(): void {
-    this.pointsService.recupPoints().subscribe( data => {
-      this.pointList = data;
-      this.addPointsFromDb();
-    });
+    // add de tout les points
+    this.parcoursId = Number(this.route.snapshot.params['id']);
+    if (typeof this.parcoursId != "number"){ this.parcoursId = 0}
+    console.log('chargement de la carte avec le parcours : '+ this.parcoursId);
+    if (this.parcoursId) {
+      this.pointsService.recupParcoursPointsById(this.parcoursId).subscribe( data => {
+        let pointIdList = data;
+        this.pointsService.recupParcoursById(this.parcoursId).subscribe( data => {
+          this.parcoursName = data[0].nameParcours;
+          this.setTitle();
+        });
+        for (let id in pointIdList) {
+          this.pointsService.recupPointById(Number(id)).subscribe( data => {
+            if (!this.pointList[0]){
+              this.pointList = [data[0]];
+            }
+            else {
+              this.pointList.push(data[0]);
+            }
+            if(Object.keys(this.pointList).length +1 == Object.keys(pointIdList).length){
+              this.addPointsFromDb();
+            }
+          })
+        }
+      });
+    }
+    else {
+      this.pointsService.recupPoints().subscribe(data => {
+        this.pointList = data;
+        this.addPointsFromDb();
+      });
+    }
     this.initMap();
     this.initPositionMaker();
   }
@@ -109,10 +145,6 @@ export class MapComponent implements AfterViewInit, OnInit {
   ngAfterViewInit() {
     // geolocation
     this.map.on('load', this.locate()); // lancement de la géolocalisation
-    this.setUpRouting(); // setup layer routing
-    // ajout des points de test
-    this.addPoint([50.668351, 4.611746], 'Louvain La Neuve', 'point de test', -1);
-    this.addPoint([50.67, 4.6118], 'Test add point', 'point de test', -1);
   }
 
   /**
@@ -129,17 +161,13 @@ export class MapComponent implements AfterViewInit, OnInit {
     // création de la map
     this.map = L.map('map', {
       center: ([50.67, 4.61]),
-      zoom: 18
+      zoom: 16
     })
-    .addLayer(mapLayer);
+      .addLayer(mapLayer);
     L.easyButton('<img src="../../../assets/Map/target.png" width="10" height="10" class="img-resposive">',
       ((btn, map) => {
-      map.panTo([this.currentlatlng[0], this.currentlatlng[1]]);
-    })).addTo(this.map);
-
-    // for older browsers
-    //$("#map").height($(window).height()).width($(window).width());
-    //this.map.invalidateSize();
+        map.panTo([this.currentlatlng[0], this.currentlatlng[1]]);
+      })).addTo(this.map);
   }
 
   /**
@@ -171,39 +199,28 @@ export class MapComponent implements AfterViewInit, OnInit {
   /**
    * helper pour l'ajout d'un point sur la carte
    * @param latlng / description
+   * @param vernaculaire
    * @param name
-   */
-  addPoint(latlng: [number, number], name: string, description: string, id: number) {
-    const point = L.marker(latlng, {icon: pointIcon}).setOpacity(0.8);
-    let popupContent = name + '<br> <p>' + description + '</p> '+
-      '<br> <div class="infoBtn btn btn-dark btn-sm">Info</div>' +
-      '<br> <div class="goToBtn btn btn-dark btn-sm">Aller ici</div>';
-    const popup = L.popup().setContent(popupContent);
-    point.bindPopup(popup);
-    point.addTo(this.map);
-
-    /*
-    point.on('mouseover', function (e) {
-      this.openPopup();
-    });
-     */
-  }
-
-  /**
-   * redirection vers la page des info du point
+   * @param description
    * @param id
    */
-  moreInfo(){
-    console.log('here goes the redirection to the info of the point');
+  addPoint(latlng: [number, number], id: number) {
+    const point = L.marker(latlng, {icon: pointIcon}).setOpacity(0.8);
+    point.on('click', () => {
+      this.openSheet(id);
+    });
+    point.addTo(this.map);
   }
 
   /**
-   * lancement routing vers le point selectioné
-   * @param latlng
+   * open BottomSheet based on point
    */
-  goToPoint(latLng: [number, number]) {
-    console.log('lunching routing to :' + latLng);
-    this.lunchRouting(latLng);
+  openSheet(id: number){
+    console.log('open popup from point');
+    console.log(id);
+    this.pointSheet.open(PointSheetComponent, {
+      data: id
+    });
   }
 
   /**
@@ -211,9 +228,10 @@ export class MapComponent implements AfterViewInit, OnInit {
    */
   private addPointsFromDb() {
     console.log('adding points from database with');
-    console.log(this.pointList);
     this.pointList.forEach(point => {
-      this.addPoint([point.latitudePoint, point.longitudePoint], point.namePoint, point.descriptionPoint, point.idPoint);
+      let pLatLng = this.parsPointXYLatLng([point.latitudePoint, point.longitudePoint]);
+      this.addPoint([pLatLng.lat, pLatLng.lng], point.idPoint);
+      //console.log(pLatLng);
     });
     console.log('points from db added');
   }
@@ -229,46 +247,27 @@ export class MapComponent implements AfterViewInit, OnInit {
       enableHighAccuracy : true
     }))
       .on('locationfound', (e) => {
-      console.log (' your are at '+  e.latlng + ' with in '+ e.accuracy + 'm');
-      this.currentlatlng = [e.latlng.lat, e.latlng.lng];
-      this.setPositionMarker(e);
-      this.map.panTo([e.latlng.lat, e.latlng.lng]);
-    });
+        console.log (' your are at '+  e.latlng + ' with in '+ e.accuracy + 'm');
+        this.currentlatlng = [e.latlng.lat, e.latlng.lng];
+        this.setPositionMarker(e);
+        this.map.panTo([e.latlng.lat, e.latlng.lng]);
+      });
     //this.map.setZoom(18);
   }
 
   /**
-   * setup du modul de routing
+   * définition dynamique du titre de la carte
    */
-  setUpRouting() {
-    this.mapRouter = L.Routing.control({
-      router: (L.Routing as any).mapbox( mapboxAPI, {
-        profile: 'mapbox/walking',
-        language: 'fr',
-        polylinePrecision: 6
-      }),
-      fitSelectedRoutes : false,
-      routeWhileDragging: false,
-      showAlternatives: false,
-      collapsible: true,
-      lineOptions: {
-        styles: [{
-          color: 'green',
-          opacity: 1,
-          weight: 3
-        }]
-      },
-    }).addTo(this.map);
+  private setTitle() {
+    this.mapTitle = 'Carte du '+ this.parcoursName;
   }
 
   /**
-   * calculate the route between 2 points
+   * parsing de la coordonée depuis XY vers latLong
+   * @param pointXY
    */
-  lunchRouting(latLng: [number, number]) {
-    this.mapRouter.getPlan().setWaypoints([
-      L.latLng([this.currentlatlng[0], this.currentlatlng[1]]),
-      L.latLng(latLng)
-      ]);
+  parsPointXYLatLng(pointXY: [number, number]){
+    let point = L.point(pointXY);
+    return this.map.layerPointToLatLng(point);
   }
-
 }

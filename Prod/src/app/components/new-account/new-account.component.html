@@ -1,11 +1,43 @@
-<div class="login-page">
-  <div class="form">
-    <form class="register-form">
-      <input type="email" placeholder="email"/>
-      <input type="text" placeholder="nom d'utilisateur"/>
-      <input type="password" placeholder="mot de passe"/>
-      <input type="password" placeholder="mot de passe"/>
-      <button>Créer</button>
-    </form>
-  </div>
-</div>
+<mat-toolbar>
+  <span>Inscription</span>
+</mat-toolbar>
+
+<mat-card class="registration-card">
+ <mat-card-content>
+   <form class="register-form">
+
+     <mat-form-field class="field" appearance="outline">
+       <mat-label>
+         Mail
+       </mat-label>
+       <input type="email" matInput placeholder="example@gmail.com">
+     </mat-form-field>
+
+     <mat-form-field class="field" appearance="outline">
+       <mat-label>
+         Nom d'utilisateur
+       </mat-label>
+       <input type="text" matInput>
+     </mat-form-field>
+
+     <mat-form-field class="field" appearance="outline">
+       <mat-label>
+         Mot de passe
+       </mat-label>
+       <input type="password" matInput>
+     </mat-form-field>
+
+     <mat-form-field class="field" appearance="outline">
+       <mat-label>
+         Vérification du mot de passe
+       </mat-label>
+       <input type="password" matInput>
+     </mat-form-field>
+
+     <mat-card-actions>
+       <button mat-raised-button style="background-color: #4CAF50; color: white;">Créer compte</button>
+     </mat-card-actions>
+
+   </form>
+ </mat-card-content>
+</mat-card>
