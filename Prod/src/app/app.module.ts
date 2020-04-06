@@ -35,6 +35,7 @@ import {MatDialogModule} from "@angular/material/dialog";
 import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
+import { AdminComponent } from './components/admin/admin.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -65,7 +66,8 @@ const routes: Routes = [
     MapComponent,
     CamComponent,
     ParcoursSelectComponent,
-    PointSheetComponent
+    PointSheetComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,

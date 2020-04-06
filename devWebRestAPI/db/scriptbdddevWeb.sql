@@ -1,3 +1,13 @@
+create table Admins
+(
+    adminId     int(5) auto_increment
+        primary key,
+    adminPseudo varchar(25) not null,
+    adminMdp    varchar(64) not null,
+    constraint Admins_adminPseudo_uindex
+        unique (adminPseudo)
+);
+
 create table Categories
 (
     idCategorie   int(3) auto_increment
@@ -62,6 +72,8 @@ create table ParcoursPoints
         foreign key (idPoint) references Points (idPoint)
             on update cascade on delete cascade
 );
+
+INSERT INTO devWeb_Project_Bdd.Admins (adminId, adminPseudo, adminMdp) VALUES (1, 'admin1', 'user1234');
 
 INSERT INTO devWeb_Project_Bdd.Points (idPoint, namePoint, descriptionPoint, latitudePoint, longitudePoint, vernaculairePoint) VALUES (1, 'Salix alba cv. tristis', null, 167823.3803000003, 150998.59340000153, null);
 INSERT INTO devWeb_Project_Bdd.Points (idPoint, namePoint, descriptionPoint, latitudePoint, longitudePoint, vernaculairePoint) VALUES (2, 'Acer pensylvanicum', null, 167822.26730000228, 150982.63280000165, null);
