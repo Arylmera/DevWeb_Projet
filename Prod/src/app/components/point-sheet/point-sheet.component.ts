@@ -1,10 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_BOTTOM_SHEET_DATA} from "@angular/material/bottom-sheet";
 import {PointsService} from "../../services/points/points.service";
-import {MapComponent} from "../map/map.component";
 import {HttpClient} from "@angular/common/http";
 import {MapsService} from "../../services/maps/maps.service";
-import {forEach} from "ol/geom/flat/segments";
 
 @Component({
   selector: 'app-point-sheet',
@@ -17,6 +15,8 @@ export class PointSheetComponent implements OnInit {
   html: any;
   ready = false;
   imgURL: any;
+  wikiDesc: any = null;
+  wikiDescImg: any = null;
 
   constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
               private pointsService: PointsService,
@@ -28,17 +28,16 @@ export class PointSheetComponent implements OnInit {
     this.pointsService.recupPointById(this.data).subscribe( pointData => {
       this.point = pointData[0];
       this.ready = true;
-      this.getImageFromWiki(this.point.namePoint);
+      this.getDescriptionWiki(this.point.namePoint)
     });
   }
 
   /**
-   * ouvertre page wiki du point
+   * ouverture page wiki du point
    * @param name
    */
   goToWiki(name: any) {
-    let nameURI = encodeURIComponent(name.trim());
-    let url = "https://en.wikipedia.org//w/api.php?action=opensearch&format=json&origin=*&search="+nameURI+"&limit=1&format=json";
+    let url = "https://fr.wikipedia.org//w/api.php?action=opensearch&format=json&origin=*&search="+this.nameParser(name)+"&limit=1&format=json";
     this.http.get(url).subscribe( data => {
       if(data[3]){
         let wikiUrl = data[3];
@@ -47,20 +46,35 @@ export class PointSheetComponent implements OnInit {
     });
   }
 
-  getImageFromWiki(name: any){
-    let nameURI = encodeURIComponent(name.trim());
-    console.log(nameURI);
-    let urlImage = "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&formatversion=2&prop=pageimages|pageterms&piprop=original&titles="+nameURI;
-    this.http.get(urlImage).subscribe( data => {
-      // @ts-ignore
-      data = data.query.pages[0];
-      // @ts-ignore
-      if( data.original){
+  /**
+   * récupération de la description depuis le site wikipedia FR et sont image
+   * @param name
+   */
+  getDescriptionWiki(name: any){
+    let urlDesc = "https://fr.wikipedia.org/api/rest_v1/page/summary/"+this.nameParser(name);
+    this.http.get(urlDesc).subscribe(
+      data => {
         // @ts-ignore
-        data = data.original.source;
-        console.log(data);
-      }
-      this.imgURL = data;
-    });
+        this.wikiDesc = data.extract;
+        // @ts-ignore
+        this.wikiDescImg = data.thumbnail.source;
+        console.log(this.wikiDescImg);
+      },
+      error => {
+        console.log(error.status + " no page found");
+        this.wikiDesc = "Désolé nous n'avons pas trouvé de page wikipedia"
+      },
+    () => {
+
+    }
+      );
+  }
+
+  /**
+   * parsing du nom pour le rendre utilisable avec un URL
+   * @param name
+   */
+  nameParser(name: any){
+    return encodeURIComponent(name.trim());
   }
 }

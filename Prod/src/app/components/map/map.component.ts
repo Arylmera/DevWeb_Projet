@@ -268,6 +268,7 @@ export class MapComponent implements AfterViewInit, OnInit {
    */
   parsPointXYLatLng(pointXY: [number, number]){
     let point = L.point(pointXY);
-    return this.map.layerPointToLatLng(point);
+    //return this.map.layerPointToLatLng(point);
+    return this.map.containerPointToLatLng(point);
   }
 }

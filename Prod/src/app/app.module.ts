@@ -36,6 +36,7 @@ import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import { AdminComponent } from './components/admin/admin.component';
+import {DeferLoadModule} from "@trademe/ng-defer-load";
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -94,7 +95,8 @@ const routes: Routes = [
     MatDialogModule,
     MatBottomSheetModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    DeferLoadModule,
   ],
   entryComponents: [
     PointSheetComponent

@@ -3,10 +3,14 @@
     <mat-card-title>{{point.namePoint}}</mat-card-title>
     <mat-card-subtitle *ngIf="point.vernaculairePoint">{{point.vernaculairePoint}}</mat-card-subtitle>
   </mat-card-header>
-  <img mat-card-image id="image" *ngIf="this.imgURL" [src]="this.imgURL">
+  <img mat-card-image id="imageHeader" [src]="this.wikiDescImg">
   <mat-card-content>
     <p>
       {{point.descriptionPoint}}
+    </p>
+    <p *ngIf="this.wikiDesc">
+      <u>Description Wikipedia : </u><br>
+      {{wikiDesc}}
     </p>
     <p id="wiki"></p>
   </mat-card-content>
