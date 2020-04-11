@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {PointsService} from '../../services/points/points.service';
+import {faTree} from "@fortawesome/free-solid-svg-icons/faTree";
 
 @Component({
   selector: 'app-point-list',
@@ -9,12 +10,19 @@ import {PointsService} from '../../services/points/points.service';
 
 export class PointListComponent implements OnInit {
 
-  constructor(private pointsService: PointsService) { }
+  constructor(private pointsService: PointsService) {
+    this.getScreenSize();
+    $(".viewport").width(this.screenWidth).height(this.screenHeight - (20% this.screenHeight / 100 ));
+    console.log(this.screenHeight, this.screenWidth);
+  }
 
+  faTree = faTree;
   pointList: any;
   pointListSelected: any;
   categList: any;
   categListSelected: any;
+  screenHeight: number;
+  screenWidth: number;
 
   ngOnInit(): void {
     // récupération des points du serveur
@@ -63,5 +71,11 @@ export class PointListComponent implements OnInit {
         return this.pointList[i];
       }
     }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  getScreenSize(event?) {
+    this.screenHeight = window.innerHeight;
+    this.screenWidth = window.innerWidth;
   }
 }

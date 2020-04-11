@@ -1,26 +1,24 @@
-<div class="container">
-  <div class="row">
-    <div class="col-sm-3">
-      <form class="form">
-        <label>Type de points souhaité</label>
-        <div *ngFor="let categorie of categList" class="form-inline">
-          <mat-checkbox id="{{categorie.idCategorie}}" value="{{categorie.idCategorie}}" name="categList" (change)="selectPointsFromCategorie()">
-            {{categorie.nameCategorie}}
-          </mat-checkbox>
-        </div>
-      </form>
+
+<mat-card>
+  <mat-card-title>Type de points souhaité</mat-card-title>
+  <mat-list class="list-horizontal" >
+    <mat-list-item *ngFor="let categorie of categList" class="form-inline">
+      <mat-checkbox id="{{categorie.idCategorie}}" value="{{categorie.idCategorie}}" name="categList" (change)="selectPointsFromCategorie()">
+        <fa-icon [icon]="faTree"></fa-icon> {{categorie.nameCategorie}}
+      </mat-checkbox>
+    </mat-list-item>
+  </mat-list>
+
+  <cdk-virtual-scroll-viewport itemSize="10" class="viewport">
+    <div *cdkVirtualFor="let p of pointListSelected"  class="text-center text-white">
+      <mat-card>
+        <mat-card-title class="mat-body-strong">{{p.namePoint}}</mat-card-title>
+        <mat-card-subtitle *ngIf="this.p.vernaculairePoint">{{this.p.vernaculairePoint}}</mat-card-subtitle>
+        <mat-card-content>{{p.descriptionPoint}}</mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button [routerLink]="['/pointInfo', p.idPoint]">Info</button>
+        </mat-card-actions>
+      </mat-card>
     </div>
-    <div class="col-sm-4">
-        <div *ngFor="let p of pointListSelected"  class="text-center bg-dark text-white">
-          <mat-card>
-            <mat-card-title>{{p.namePoint}}</mat-card-title>
-            <mat-card-subtitle *ngIf="this.p.vernaculairePoint">{{this.p.vernaculairePoint}}</mat-card-subtitle>
-            <mat-card-content>{{p.descriptionPoint}}</mat-card-content>
-            <mat-card-actions>
-              <button mat-flat-button [routerLink]="['/pointInfo', p.idPoint]">Info</button>
-            </mat-card-actions>
-          </mat-card>
-        </div>
-    </div>
-  </div>
-</div>
+  </cdk-virtual-scroll-viewport>
+</mat-card>

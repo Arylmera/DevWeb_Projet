@@ -3,6 +3,7 @@ import {MAT_BOTTOM_SHEET_DATA} from "@angular/material/bottom-sheet";
 import {PointsService} from "../../services/points/points.service";
 import {HttpClient} from "@angular/common/http";
 import {MapsService} from "../../services/maps/maps.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-point-sheet',
@@ -14,13 +15,13 @@ export class PointSheetComponent implements OnInit {
   point: any;
   html: any;
   ready = false;
-  imgURL: any;
   wikiDesc: any = null;
   wikiDescImg: any = null;
 
   constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
               private pointsService: PointsService,
               private mapsService: MapsService,
+              private router: Router,
               private http: HttpClient) {}
 
   ngOnInit(): void {
@@ -47,7 +48,7 @@ export class PointSheetComponent implements OnInit {
   }
 
   /**
-   * récupération de la description depuis le site wikipedia FR et sont image
+   * récupération de la description depuis le site wikipedia FR et de sont image
    * @param name
    */
   getDescriptionWiki(name: any){
@@ -59,15 +60,16 @@ export class PointSheetComponent implements OnInit {
         // @ts-ignore
         this.wikiDescImg = data.thumbnail.source;
         console.log(this.wikiDescImg);
+        this.router.navigate(['/map']);
       },
       error => {
         console.log(error.status + " no page found");
         this.wikiDesc = "Désolé nous n'avons pas trouvé de page wikipedia"
       },
-    () => {
-
-    }
-      );
+      () => {
+        this.router.navigate(['/map']);
+      }
+    );
   }
 
   /**

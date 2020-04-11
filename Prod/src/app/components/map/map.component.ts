@@ -160,8 +160,8 @@ export class MapComponent implements AfterViewInit, OnInit {
     });
     // création de la map
     this.map = L.map('map', {
-      center: ([50.67, 4.61]),
-      zoom: 16
+      center: ([51.674,2.826]),
+      zoom: 17
     })
       .addLayer(mapLayer);
     L.easyButton('<img src="../../../assets/Map/target.png" width="10" height="10" class="img-resposive">',
@@ -268,7 +268,7 @@ export class MapComponent implements AfterViewInit, OnInit {
    */
   parsPointXYLatLng(pointXY: [number, number]){
     let point = L.point(pointXY);
-    //return this.map.layerPointToLatLng(point);
-    return this.map.containerPointToLatLng(point);
+    return this.map.layerPointToLatLng(point);
+    //return this.map.containerPointToLatLng(point);
   }
 }

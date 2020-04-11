@@ -25,7 +25,7 @@ export class ParcoursSelectComponent implements OnInit {
   ngOnInit(): void {
     this.pointsService.recupParcours().subscribe( data => {
       this.parcoursList = data;
-    })
+    });
   }
 
   loadParcours() {
