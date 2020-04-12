@@ -36,6 +36,8 @@ import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import { AdminComponent } from './components/admin/admin.component';
+import {MatTableModule} from "@angular/material/table";
+import { AdminDialogComponent } from './components/admin-dialog/admin-dialog.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -49,6 +51,7 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'not-found', component: FourthOFourthComponent },
   { path: 'cam', component: CamComponent},
+  { path: 'admin', component: AdminComponent },
   //{ path: '**', redirectTo: 'not-found' }
 ];
 
@@ -67,7 +70,8 @@ const routes: Routes = [
     CamComponent,
     ParcoursSelectComponent,
     PointSheetComponent,
-    AdminComponent
+    AdminComponent,
+    AdminDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -94,7 +98,8 @@ const routes: Routes = [
     MatDialogModule,
     MatBottomSheetModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatTableModule
   ],
   entryComponents: [
     PointSheetComponent

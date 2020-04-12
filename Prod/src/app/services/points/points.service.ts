@@ -74,6 +74,10 @@ export class PointsService {
    */
   recupCategoriesById(id: number) {
     return this.http.get('http://localhost:3000/api/Categories?idCategorie=' + id);
-  }xz
+  }
+
+  updatePoint(id, body) {
+    return this.http.put('http://localhost:3000/api/Points?idPoint=' + id, JSON.parse(body));
+  }
 
 }
