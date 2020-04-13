@@ -1,6 +1,30 @@
-<link rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-      crossorigin=""/>
-<div class="text-center mat-title">{{mapTitle}}</div>
-<div id="map"></div>
+
+<mat-sidenav-container autosize>
+
+  <mat-sidenav #sidenav mode="push" position="end">
+    <div class="mat-subheader"><u>Liste des arrêts du trajet</u></div>
+    <mat-list class="rightSide" id="waypointRouteList">
+      <div *ngFor="let routePoint of routingWaypointsList">
+        <mat-list-item> {{routePoint[0]}} </mat-list-item>
+      </div>
+    </mat-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+          integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+          crossorigin=""/>
+    <div class="text-center">
+      <span class="mat-title">{{mapTitle}}</span>
+    </div>
+    <div id="map">
+      <mat-slide-toggle class="rightSide" id="toogleCenter" (toggleChange)="switchLocalisationCenter()">Centrer</mat-slide-toggle>
+      <button mat-stroked-button class="rightSide" id="routingButton" (click)="lunchRouting()">
+        <img src="../../../assets/Map/route-solid.svg" width="12em" height="auto">
+        Lancer le trajet
+      </button>
+      <button mat-stroked-button class="rightSide" id="sideOpenner" (click)="sidenav.toggle(); sidenavOpen()">Montrer la route</button>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -9,9 +9,11 @@ import * as $ from 'jquery';
 import {ActivatedRoute} from "@angular/router";
 import {MatBottomSheet} from "@angular/material/bottom-sheet";
 import {PointSheetComponent} from "../point-sheet/point-sheet.component";
+import {forEach} from "ol/geom/flat/segments";
 
 const mapboxAPI = 'pk.eyJ1IjoiYXJ5bG1lcmEiLCJhIjoiY2s3aGZ1OW0zMDk1bzNubW5ya2twdDZxcSJ9.IVUHXKtgN21QPirw0ZVWpQ';
 const mapboxStyle = 'https://api.mapbox.com/styles/v1/arylmera/ck7ix7bma010g1io6aa528sla/tiles/256/{z}/{x}/{y}@2x?access_token='+ mapboxAPI;
+const routingOptions = {profile: "mapbox/walking", polylinePrecision: 6};
 
 // lln = [50.668351,4.611746];
 // iconMap
@@ -89,9 +91,12 @@ export class MapComponent implements AfterViewInit, OnInit {
   private positionCircle;
   private parcoursId = 0;
   private parcoursName;
+  private localisationCenter = false;
 
   private currentlatlng = [50.67, 4.61];
   mapTitle = 'Carte des Arbres';
+  routingWaypointsList: any = [];
+  routingWaypoints: any = [];
 
   constructor(private mapsService: MapsService,
               private route: ActivatedRoute,
@@ -103,6 +108,8 @@ export class MapComponent implements AfterViewInit, OnInit {
    * chargement de la page
    */
   ngOnInit(): void {
+    this.routingWaypointsList = [];
+    this.routingWaypoints = [];
     // add de tout les points
     this.parcoursId = Number(this.route.snapshot.params['id']);
     if (typeof this.parcoursId != "number"){ this.parcoursId = 0}
@@ -164,10 +171,11 @@ export class MapComponent implements AfterViewInit, OnInit {
       zoom: 17
     })
       .addLayer(mapLayer);
-    L.easyButton('<img src="../../../assets/Map/target.png" width="10" height="10" class="img-resposive">',
+    L.easyButton('<img src="../../../assets/Map/target.png" width="12em" height="auto">',
       ((btn, map) => {
         map.panTo([this.currentlatlng[0], this.currentlatlng[1]]);
-      })).addTo(this.map);
+      }),
+      'Centrer sur moi').addTo(this.map);
   }
 
   /**
@@ -243,7 +251,7 @@ export class MapComponent implements AfterViewInit, OnInit {
     this.map.locate(({
       setView : false,
       maxZoom: 120,
-      watch : true, // localisation en continu
+      watch : false, // localisation en continu
       enableHighAccuracy : true
     }))
       .on('locationfound', (e) => {
@@ -253,6 +261,23 @@ export class MapComponent implements AfterViewInit, OnInit {
         this.map.panTo([e.latlng.lat, e.latlng.lng]);
       });
     //this.map.setZoom(18);
+  }
+
+  /**
+   * help au switch de la valeur de centre de localisation sur géolocalisation
+   */
+  switchLocalisationCenter() {
+    if( this.localisationCenter) {
+      this.localisationCenter = false;
+      console.log("follow is now false");
+    }
+    else {
+      this.localisationCenter = true;
+      this.map.panTo([this.currentlatlng[0], this.currentlatlng[1]]);
+      console.log("follow is now true");
+    }
+    this.map.locate.watch = this.localisationCenter;
+    this.map.locate.setView = this.localisationCenter;
   }
 
   /**
@@ -270,5 +295,65 @@ export class MapComponent implements AfterViewInit, OnInit {
     let point = L.point(pointXY);
     return this.map.layerPointToLatLng(point);
     //return this.map.containerPointToLatLng(point);
+  }
+
+  /**
+   * parsing waypoint XY list to latlng list for routing
+   */
+  parsingRoutingWaypoints(){
+    this.routingWaypoints = [];
+    for(let i = 0; i < this.routingWaypointsList.length ; i++){
+      console.log("parsing point :" + this.routingWaypointsList[i][1]);
+      this.routingWaypoints.push(
+        L.latLng(
+          this.parsPointXYLatLng(
+            [this.routingWaypointsList[i][1][0],this.routingWaypointsList[i][1][1]])
+        )
+      );
+    }
+    console.log(this.routingWaypoints);
+  }
+
+  /**
+   * lancement du routing sur base de la liste des waypoints
+   */
+  lunchRouting(){
+    console.log("lunch List : "+ this.routingWaypointsList);
+    this.parsingRoutingWaypoints();
+    console.log("lunch parsed Wp : "+ this.routingWaypoints);
+    L.Routing.control({
+      router : (L.Routing as any).mapbox(mapboxAPI, routingOptions),
+      waypoints : this.routingWaypoints,
+      routeWhileDragging : false,
+    })
+      .on('routesfound', (e) => {
+        let route = e.routes;
+        console.log(' routing with :' + route + " routes");
+      })
+      .on('routingerror', () => console.log("error in routing"))
+      .addTo(this.map);
+  }
+
+  /**
+   * ajout d'un point dans la liste des waypoint pour la route
+   * @param name
+   * @param XY
+   */
+  addRoutingPoint(name: string, XY: [number, number]){
+    let point = [name, XY];
+    console.log('adding : ' + point + ' to the route');
+    this.routingWaypointsList.push(point);
+    console.log("current route : ")
+    console.log(this.routingWaypointsList);
+
+    this.parsingRoutingWaypoints();
+    console.log(this.routingWaypoints);
+  }
+
+  /**
+   * actions a effectuer lors de l'ouverture de la liste de navigation
+   */
+  sidenavOpen() {
+    console.log(this.routingWaypointsList);
   }
 }

@@ -99,10 +99,12 @@ const routes: Routes = [
     DeferLoadModule,
   ],
   entryComponents: [
-    PointSheetComponent
+    PointSheetComponent,
+    MapComponent
   ],
   providers: [
     PointsService,
+    MapComponent
   ],
   bootstrap: [
     AppComponent,
