@@ -22,7 +22,6 @@ export class PointSheetComponent implements OnInit {
   constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
               private pointsService: PointsService,
               private mapsService: MapsService,
-              private mapComponent: MapComponent,
               private router: Router,
               private http: HttpClient) {}
 
@@ -86,6 +85,6 @@ export class PointSheetComponent implements OnInit {
    * ajout du point dans la liste des points de route
    */
   addToRoute() {
-    this.mapComponent.addRoutingPoint(this.point.namePoint,[this.point.latitudePoint, this.point.longitudePoint]);
+    this.mapsService.addRoutingPoint(this.point.idPoint);
   }
 }

@@ -2,24 +2,60 @@
   height: 85vh;
 }
 
-.rightSide {
+.leftSide {
+  bottom: 1em;
   position: absolute;
   z-index: 1000;
+  left: 1%;
+}
+
+.rightSide {
+  bottom: 1em;
+  position: absolute;
+  z-index: 1000;
+  right: 1%;
+}
+
+.routingButton {
+  width: 10em;
 }
 
 #toogleCenter {
-  margin-top: 1em;
-  right: 1%;
+  margin-bottom: 2em;
+}
+
+#toogleLegendRoute {
+  margin-bottom: 5em;
 }
 
 #routingButton {
   background-color: white;
-  margin-top: 3em;
-  right: 1%;
+  margin-bottom: 2em;
+}
+
+#routingButtonStop {
+  background-color: white;
+  margin-bottom: 2em;
 }
 
 #sideOpenner {
   background-color: white;
-  margin-top: 6em;
-  right: 1%;
+  margin-bottom: 5em;
+}
+
+#AddAllPoints{
+  background-color: white;
+  margin-bottom: 8em;
+}
+
+#AddSecondPart{
+  background-color: white;
+  margin-bottom: 8em;
+}
+
+#clearRouteBtn{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: white;
 }

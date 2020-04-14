@@ -3,11 +3,12 @@
 
   <mat-sidenav #sidenav mode="push" position="end">
     <div class="mat-subheader"><u>Liste des arrêts du trajet</u></div>
-    <mat-list class="rightSide" id="waypointRouteList">
-      <div *ngFor="let routePoint of routingWaypointsList">
-        <mat-list-item> {{routePoint[0]}} </mat-list-item>
+    <mat-list id="waypointRouteList">
+      <div *ngFor="let routePoint of routingWaypoints">
+        <mat-list-item> {{routePoint.namePoint}} </mat-list-item>
       </div>
     </mat-list>
+    <button mat-stroked-button id="clearRouteBtn" (click)="clearRoute()">Supprimer mon trajet</button>
   </mat-sidenav>
 
   <mat-sidenav-content>
@@ -19,12 +20,19 @@
       <span class="mat-title">{{mapTitle}}</span>
     </div>
     <div id="map">
-      <mat-slide-toggle class="rightSide" id="toogleCenter" (toggleChange)="switchLocalisationCenter()">Centrer</mat-slide-toggle>
-      <button mat-stroked-button class="rightSide" id="routingButton" (click)="lunchRouting()">
+      <mat-slide-toggle class="leftSide" id="toogleCenter" (toggleChange)="switchLocalisationCenter()">Centrer</mat-slide-toggle>
+      <mat-slide-toggle class="leftSide" checked *ngIf="this.showRoutingBtn" id="toogleLegendRoute" (toggleChange)="showRoutingLegend()">Info Route</mat-slide-toggle>
+      <button mat-stroked-button *ngIf="!this.routing" class="rightSide routingButton" id="routingButton" (click)="lunchRouting()">
         <img src="../../../assets/Map/route-solid.svg" width="12em" height="auto">
         Lancer le trajet
       </button>
-      <button mat-stroked-button class="rightSide" id="sideOpenner" (click)="sidenav.toggle(); sidenavOpen()">Montrer la route</button>
+      <button mat-stroked-button  class="rightSide routingButton routingButton" *ngIf="this.routing" id="routingButtonStop" (click)="clearRoute()">
+        <img src="../../../assets/Map/route-solid.svg" width="12em" height="auto">
+        Arreter le trajet
+      </button>
+      <button mat-stroked-button class="rightSide routingButton" *ngIf="this.twoPartRouting" id="AddSecondPart" (click)="addSecondPart()">2e partie</button>
+      <button mat-stroked-button class="rightSide routingButton" *ngIf="this.parcoursId && !this.twoPartRouting" id="AddAllPoints" (click)="addAllRoutingPoint()">Trajet complet</button>
+      <button mat-stroked-button class="rightSide routingButton" id="sideOpenner" (click)="sidenav.toggle(); sidenavOpen()">Montrer la route</button>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

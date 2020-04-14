@@ -10,10 +10,11 @@ import {ActivatedRoute} from "@angular/router";
 import {MatBottomSheet} from "@angular/material/bottom-sheet";
 import {PointSheetComponent} from "../point-sheet/point-sheet.component";
 import {forEach} from "ol/geom/flat/segments";
+import {getSortHeaderNotContainedWithinSortError} from "@angular/material/sort/sort-errors";
 
 const mapboxAPI = 'pk.eyJ1IjoiYXJ5bG1lcmEiLCJhIjoiY2s3aGZ1OW0zMDk1bzNubW5ya2twdDZxcSJ9.IVUHXKtgN21QPirw0ZVWpQ';
 const mapboxStyle = 'https://api.mapbox.com/styles/v1/arylmera/ck7ix7bma010g1io6aa528sla/tiles/256/{z}/{x}/{y}@2x?access_token='+ mapboxAPI;
-const routingOptions = {profile: "mapbox/walking", polylinePrecision: 6};
+const routingOptions = {profile: "mapbox/walking", polylinePrecision: 0};
 
 // lln = [50.668351,4.611746];
 // iconMap
@@ -89,27 +90,34 @@ export class MapComponent implements AfterViewInit, OnInit {
   private pointList: any = [];
   private positionMarker;
   private positionCircle;
-  private parcoursId = 0;
+  parcoursId = 0;
   private parcoursName;
   private localisationCenter = false;
 
+  // init map variables
   private currentlatlng = [50.67, 4.61];
   mapTitle = 'Carte des Arbres';
-  routingWaypointsList: any = [];
+
+  // routing variables
   routingWaypoints: any = [];
+  routingWayPointsSecondPart: any = [];
+  twoPartRouting = false;
+  routingWaypointsCoord: any = [];
+  routingControl: any;
+  showRouting = true;
+  showRoutingBtn = false;
+  routing = false;
 
   constructor(private mapsService: MapsService,
               private route: ActivatedRoute,
               private pointsService: PointsService,
               private pointSheet: MatBottomSheet
-              ) { }
+  ) { }
 
   /**
    * chargement de la page
    */
   ngOnInit(): void {
-    this.routingWaypointsList = [];
-    this.routingWaypoints = [];
     // add de tout les points
     this.parcoursId = Number(this.route.snapshot.params['id']);
     if (typeof this.parcoursId != "number"){ this.parcoursId = 0}
@@ -144,6 +152,7 @@ export class MapComponent implements AfterViewInit, OnInit {
     }
     this.initMap();
     this.initPositionMaker();
+    this.initRouting();
   }
 
   /**
@@ -239,10 +248,21 @@ export class MapComponent implements AfterViewInit, OnInit {
     this.pointList.forEach(point => {
       let pLatLng = this.parsPointXYLatLng([point.latitudePoint, point.longitudePoint]);
       this.addPoint([pLatLng.lat, pLatLng.lng], point.idPoint);
-      //console.log(pLatLng);
+      point.latitudePoint = pLatLng.lat;
+      point.longitudePoint = pLatLng.lng;
     });
     console.log('points from db added');
   }
+
+  /**
+   * parsing de la coordonée depuis XY vers latLong
+   * @param pointXY
+   */
+  parsPointXYLatLng(pointXY: [number, number]){
+    let point = L.point(pointXY);
+    return this.map.layerPointToLatLng(point);
+  }
+
 
   /**
    * localisation
@@ -288,44 +308,30 @@ export class MapComponent implements AfterViewInit, OnInit {
   }
 
   /**
-   * parsing de la coordonée depuis XY vers latLong
-   * @param pointXY
+   * initalisation du module de routing
    */
-  parsPointXYLatLng(pointXY: [number, number]){
-    let point = L.point(pointXY);
-    return this.map.layerPointToLatLng(point);
-    //return this.map.containerPointToLatLng(point);
-  }
+  initRouting() {
+    this.routingControl = L.Routing.control({
+      router: (L.Routing as any).mapbox(mapboxAPI, routingOptions),
+      waypoints: [],
+      // @ts-ignore
+      createMarker : () => {return null}, // suppression de la création du markeur propre au routing
+      routeWhileDragging: false,
+      fitSelectedRoutes: 'smart',
+      autoRoute: false,
+      lineOptions: {
+        addWaypoints : false,
+        styles: [{
+          color: '#43A047',
+          opacity: 0.8,
+          weight: 3
+        }]
+      },
 
-  /**
-   * parsing waypoint XY list to latlng list for routing
-   */
-  parsingRoutingWaypoints(){
-    this.routingWaypoints = [];
-    for(let i = 0; i < this.routingWaypointsList.length ; i++){
-      console.log("parsing point :" + this.routingWaypointsList[i][1]);
-      this.routingWaypoints.push(
-        L.latLng(
-          this.parsPointXYLatLng(
-            [this.routingWaypointsList[i][1][0],this.routingWaypointsList[i][1][1]])
-        )
-      );
-    }
-    console.log(this.routingWaypoints);
-  }
-
-  /**
-   * lancement du routing sur base de la liste des waypoints
-   */
-  lunchRouting(){
-    console.log("lunch List : "+ this.routingWaypointsList);
-    this.parsingRoutingWaypoints();
-    console.log("lunch parsed Wp : "+ this.routingWaypoints);
-    L.Routing.control({
-      router : (L.Routing as any).mapbox(mapboxAPI, routingOptions),
-      waypoints : this.routingWaypoints,
-      routeWhileDragging : false,
     })
+      .on('routingstart', () => {
+        console.log('plotting routes ...');
+      })
       .on('routesfound', (e) => {
         let route = e.routes;
         console.log(' routing with :' + route + " routes");
@@ -335,25 +341,111 @@ export class MapComponent implements AfterViewInit, OnInit {
   }
 
   /**
-   * ajout d'un point dans la liste des waypoint pour la route
-   * @param name
-   * @param XY
+   * lancement du routing sur base de la liste des waypoints
    */
-  addRoutingPoint(name: string, XY: [number, number]){
-    let point = [name, XY];
-    console.log('adding : ' + point + ' to the route');
-    this.routingWaypointsList.push(point);
-    console.log("current route : ")
-    console.log(this.routingWaypointsList);
-
-    this.parsingRoutingWaypoints();
+  lunchRouting(){
+    this.addRoutingPoint();
     console.log(this.routingWaypoints);
+    this.routingWaypointsCoord = [];
+    this.routingWaypointsCoord.push(L.latLng(this.currentlatlng[0],this.currentlatlng[1]));
+    this.routingWaypoints.forEach( point => {
+      this.routingWaypointsCoord.push([point.latitudePoint, point.longitudePoint]);
+    })
+    this.routingControl.setWaypoints(this.routingWaypointsCoord);
+    this.routingControl.route(); // lancement du routing
+    this.showRoutingBtn = true;
+    this.routing = true;
+  }
+
+  /**
+   * définition de parcours ou custom
+   */
+  addRoutingPoint(){
+    if(!this.parcoursId){
+      this.addCustomPoint();
+    }
+  }
+
+  /**
+   * ajout des points customs pour le routing
+   */
+  addCustomPoint(){
+    let numberList = this.mapsService.getRoutingPoint();
+    this.routingWaypoints = [];
+    for(let number of numberList) {
+      for(let point of this.pointList){
+        if( number == point.idPoint) {
+          this.routingWaypoints.push(point);
+          break;
+        }
+      }
+    }
+  }
+
+  /**
+   * ajout de tout les points chargé pour création de route
+   */
+  addAllRoutingPoint(){
+    if(this.pointList.length > 24){ // plus de 24 points => en 2 parties
+      this.twoPartRouting = true;
+      this.mapTitle = 'Carte du '+ this.parcoursName + ' 1er partie';
+      for (let i = 0; i < 24; i++){
+        this.routingWaypoints.push(this.pointList[i]);
+      }
+      for(let i = 24; i < 49; i++){
+        if(this.pointList[i]) {
+          this.routingWayPointsSecondPart.push(this.pointList[i]);
+        }
+        else{
+          break;
+        }
+      }
+    }
+    else {
+      this.routingWaypoints = this.pointList;
+    }
+  }
+
+  /**
+   * lanchement de la 2e partie de points du parcours
+   */
+  addSecondPart(){
+    this.mapTitle = 'Carte du '+ this.parcoursName + ' 2e partie';
+    this.routingWaypoints = this.routingWayPointsSecondPart;
+    console.log('second part');
+    console.log(this.routingWayPointsSecondPart);
+    console.log(this.routingWaypoints);
+    this.twoPartRouting = false;
   }
 
   /**
    * actions a effectuer lors de l'ouverture de la liste de navigation
    */
   sidenavOpen() {
-    console.log(this.routingWaypointsList);
+    this.addRoutingPoint();
+  }
+
+  /**
+   * suppression de l'ensembles des routes acutelles et des waypoints
+   */
+  clearRoute(){
+    this.routingWaypoints = [];
+    this.mapsService.clearRoutingPoint();
+    this.routingControl.setWaypoints([]);
+    this.showRoutingBtn = false;
+    this.routing = false;
+  }
+
+  /**
+   * switch affichage de la legende de route
+   */
+  showRoutingLegend(){
+    if( this.showRouting ){
+      this.routingControl.hide();
+    }
+    else {
+      this.routingControl.show();
+    }
+    this.showRouting = !this.showRouting;
   }
 }
