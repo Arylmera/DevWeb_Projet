@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {PointsService} from '../../services/points/points.service';
 import {MatTableDataSource} from '@angular/material/table';
-import {AdminDialogComponent} from "../admin-dialog/admin-dialog.component";
+import {AdminDialogComponent} from '../admin-dialog/admin-dialog.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 
@@ -29,6 +29,10 @@ export class AdminComponent implements OnInit {
   constructor(private pointsService: PointsService, public dialog: MatDialog) { }
 
   ngOnInit(): void {
+    this.actualiserListe();
+  }
+
+  actualiserListe(): void {
     this.pointsService.recupPoints().subscribe((data) => {
       Object.keys(data[0]).forEach((e) => {
         this.colonnesList.push(e);
@@ -48,15 +52,13 @@ export class AdminComponent implements OnInit {
 
   toggleAccessibilite(id, etat) {
     const body = '{"disponiblePoint" : ' + etat + '}';
-    this.pointsService.updatePoint(id, body).subscribe((data) => {
-      console.log(data);
-    });
+    this.pointsService.updatePoint(id, body).subscribe((res) => console.log(res));
   }
 
   modifPointPopUp(point) {
-    console.log(point);
     this.dialog.open(AdminDialogComponent, {
-      data: point
+      data: point,
+      width: '100%'
     });
   }
 
