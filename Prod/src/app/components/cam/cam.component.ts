@@ -14,4 +14,8 @@ export class CamComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  handleQr(site: string) {
+    window.open(site);
+  }
+
 }
