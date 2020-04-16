@@ -1,1 +1,0 @@
-INSERT INTO devWeb_Project_Bdd.Admins (adminId, adminPseudo, adminMdp) VALUES (1, 'admin1', 'user1234');

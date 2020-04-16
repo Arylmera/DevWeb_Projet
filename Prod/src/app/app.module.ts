@@ -37,6 +37,8 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import { AdminComponent } from './components/admin/admin.component';
 import {DeferLoadModule} from "@trademe/ng-defer-load";
+import {MatTableModule} from "@angular/material/table";
+import { AdminDialogComponent } from './components/admin-dialog/admin-dialog.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -50,6 +52,7 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'not-found', component: FourthOFourthComponent },
   { path: 'cam', component: CamComponent},
+  { path: 'admin', component: AdminComponent },
   //{ path: '**', redirectTo: 'not-found' }
 ];
 
@@ -68,7 +71,8 @@ const routes: Routes = [
     CamComponent,
     ParcoursSelectComponent,
     PointSheetComponent,
-    AdminComponent
+    AdminComponent,
+    AdminDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -97,6 +101,7 @@ const routes: Routes = [
     MatFormFieldModule,
     MatInputModule,
     DeferLoadModule,
+    MatTableModule
   ],
   entryComponents: [
     PointSheetComponent,

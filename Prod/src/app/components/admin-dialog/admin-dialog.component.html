@@ -1,0 +1,27 @@
+<h2>Modifier le point : {{data.idPoint}}</h2>
+<mat-form-field>
+  <mat-label>Nom</mat-label>
+  <input matInput [value]="data.namePoint">
+</mat-form-field>
+<br>
+<mat-form-field>
+  <mat-label>Nom vernaculaire</mat-label>
+  <input matInput [(ngModel)]="data.vernaculairePoint">
+</mat-form-field>
+<br>
+<mat-form-field>
+  <mat-label>Description</mat-label>
+  <textarea matInput>{{data.descriptionPoint}}</textarea>
+</mat-form-field>
+<br>
+<mat-form-field>
+  <mat-label>Latitude</mat-label>
+  <input matInput [value]="data.latitudePoint">
+</mat-form-field>
+<br>
+<mat-form-field>
+  <mat-label>Longitude</mat-label>
+  <input matInput [value]="data.longitudePoint">
+</mat-form-field>
+<br>
+<button mat-raised-button style="width: 100%" color="primary">Valider</button>
