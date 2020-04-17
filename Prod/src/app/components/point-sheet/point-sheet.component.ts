@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_BOTTOM_SHEET_DATA} from "@angular/material/bottom-sheet";
+import {MAT_BOTTOM_SHEET_DATA, MatBottomSheet, MatBottomSheetModule} from "@angular/material/bottom-sheet";
 import {PointsService} from "../../services/points/points.service";
 import {HttpClient} from "@angular/common/http";
 import {MapsService} from "../../services/maps/maps.service";
@@ -86,5 +86,12 @@ export class PointSheetComponent implements OnInit {
    */
   addToRoute() {
     this.mapsService.addRoutingPoint(this.point.idPoint);
+  }
+
+  /**
+   * fermeture de la sheet
+   */
+  dissmissSheet() {
+    this.mapsService.dismissSheet();
   }
 }

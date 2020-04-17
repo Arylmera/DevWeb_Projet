@@ -99,19 +99,19 @@ const reqDb = {
     },
     update: function (req, res) {
         if (Object.keys(req.query).length > 0){
-            let reqSql = "update " + req.params.table + " set ";
+            let reqSql = 'update ' + req.params.table + ' set ';
             Object.keys(req.body).forEach((e, i, a) =>{
                 if (isNaN(req.body[e])){
-                    reqSql += e + " = '" + req.body[e] + "'";
+                    reqSql += e + ' = "' + req.body[e] + '"';
                 }
                 else{
-                    reqSql += e + " = " + req.body[e];
+                    reqSql += e + ' = ' + req.body[e];
                 }
                 if(i < a.length - 1){
-                    reqSql += ", ";
+                    reqSql += ', ';
                 }
             });
-            reqSql += " where " + Object.keys(req.query)[0]  + " = " + Object.values(req.query)[0] + ";";
+            reqSql += ' where ' + Object.keys(req.query)[0]  + ' = ' + Object.values(req.query)[0] + ';';
             connection.query(reqSql, function(err, results){
                 if (err){
                     res.status(500).send(err);

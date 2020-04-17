@@ -176,7 +176,7 @@ export class MapComponent implements AfterViewInit, OnInit {
     });
     // création de la map
     this.map = L.map('map', {
-      center: ([51.674,2.826]),
+      center: ([51.673,2.826]),
       zoom: 17
     })
       .addLayer(mapLayer);
@@ -238,6 +238,7 @@ export class MapComponent implements AfterViewInit, OnInit {
     this.pointSheet.open(PointSheetComponent, {
       data: id
     });
+    this.mapsService.getCurrentSheet(this.pointSheet); // passage au service
   }
 
   /**
@@ -246,10 +247,15 @@ export class MapComponent implements AfterViewInit, OnInit {
   private addPointsFromDb() {
     console.log('adding points from database with');
     this.pointList.forEach(point => {
-      let pLatLng = this.parsPointXYLatLng([point.latitudePoint, point.longitudePoint]);
-      this.addPoint([pLatLng.lat, pLatLng.lng], point.idPoint);
-      point.latitudePoint = pLatLng.lat;
-      point.longitudePoint = pLatLng.lng;
+      if(point.disponiblePoint) {
+        let pLatLng = this.parsPointXYLatLng([point.latitudePoint, point.longitudePoint]);
+        this.addPoint([pLatLng.lat, pLatLng.lng], point.idPoint);
+        point.latitudePoint = pLatLng.lat;
+        point.longitudePoint = pLatLng.lng;
+      }
+      else {
+        console.log("Point :" + point.idPoint + "/" + point.namePoint +" non dispoible");
+      }
     });
     console.log('points from db added');
   }

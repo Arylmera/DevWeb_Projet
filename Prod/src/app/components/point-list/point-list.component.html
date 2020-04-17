@@ -12,7 +12,7 @@
   <cdk-virtual-scroll-viewport itemSize="10" class="viewport">
     <div *cdkVirtualFor="let p of pointListSelected"  class="text-center text-white">
       <mat-card>
-        <mat-card-title class="mat-body-strong">{{p.namePoint}}</mat-card-title>
+        <mat-card-title class="mat-body-strong">{{p.namePoint}} <span *ngIf="!p.disponiblePoint" style="color: red"> Non accessible </span> </mat-card-title>
         <mat-card-subtitle *ngIf="this.p.vernaculairePoint">{{this.p.vernaculairePoint}}</mat-card-subtitle>
         <mat-card-content>{{p.descriptionPoint}}</mat-card-content>
         <mat-card-actions>
