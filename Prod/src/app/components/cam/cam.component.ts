@@ -15,6 +15,7 @@ export class CamComponent implements OnInit {
   }
 
   handleQr(site: string) {
-
+    alert('Attention vous allez être redirigé vers: ' + site);
+    window.open(site);
   }
 }
