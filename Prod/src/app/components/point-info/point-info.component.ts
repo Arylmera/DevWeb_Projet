@@ -15,6 +15,7 @@ export class PointInfoComponent implements OnInit {
   wikiDesc: any = null;
   wikiDescImg: any = null;
   numPoint: number= null;
+  wiki: boolean= false;
 
   constructor(private pointList: PointListComponent,
               private route: ActivatedRoute,
@@ -53,6 +54,7 @@ export class PointInfoComponent implements OnInit {
     let urlDesc = "https://fr.wikipedia.org/api/rest_v1/page/summary/"+this.nameParser(name);
     this.http.get(urlDesc).subscribe(
       data => {
+        this.wiki = true;
         // @ts-ignore
         this.wikiDesc = data.extract;
         // @ts-ignore

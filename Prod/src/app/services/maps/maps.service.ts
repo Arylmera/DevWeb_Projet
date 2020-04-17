@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class MapsService {
 
   private routingWaypointsList: any = [];
+  private pointSheet: any;
 
   constructor() { }
 
@@ -31,4 +32,20 @@ export class MapsService {
   clearRoutingPoint(){
     this.routingWaypointsList = [];
   }
+
+  /**
+   * récupération de la sheet
+   * @param sheet
+   */
+  getCurrentSheet(sheet){
+    this.pointSheet = sheet;
+  }
+
+  /**
+   * fermeture de la sheet actuelle
+   */
+  dismissSheet(){
+    this.pointSheet.dismiss();
+  }
+
 }

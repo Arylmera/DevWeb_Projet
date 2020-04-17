@@ -1,6 +1,6 @@
 <mat-card class="point-card">
   <mat-card-header>
-    <mat-card-title><u>{{point.namePoint}}</u></mat-card-title>
+    <mat-card-title><u>{{point.namePoint}}</u> <span *ngIf="!point.disponiblePoint" style="color: red"> Non accessible </span> </mat-card-title>
     <mat-card-subtitle *ngIf="point.vernaculairePoint">{{point.vernaculairePoint}}</mat-card-subtitle>
   </mat-card-header>
   <img mat-card-image id="imageHeader" [src]="this.wikiDescImg">
@@ -16,6 +16,6 @@
   </mat-card-content>
   <mat-card-actions>
     <button mat-raised-button class="previous" [routerLink]="['/pointList']" >Retour</button>
-    <button mat-raised-button (click)="goToWiki(point.namePoint)">Page Wikipedia</button>
+    <button mat-raised-button (click)="goToWiki(point.namePoint)" *ngIf="this.wiki">Page Wikipedia</button>
   </mat-card-actions>
 </mat-card>

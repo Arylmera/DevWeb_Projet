@@ -5,6 +5,7 @@
 <mat-label>Filter</mat-label>
 <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" style="horiz-align: center">
 </mat-form-field>
+<cdk-virtual-scroll-viewport itemSize="10" class="viewport">
 <table mat-table [dataSource]="pointsList" style="width: 100%">
   <ng-container matColumnDef="idPoint">
     <th mat-header-cell *matHeaderCellDef> No. </th>
@@ -54,3 +55,4 @@
   <tr mat-header-row *matHeaderRowDef="colonnesList"></tr>
   <tr mat-row *matRowDef="let row; columns: colonnesList;"></tr>
 </table>
+</cdk-virtual-scroll-viewport>
