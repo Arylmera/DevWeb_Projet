@@ -2,43 +2,43 @@
   <span>Administration du site</span>
 </mat-toolbar>
 <mat-form-field style="width: 80%; left: 10% ">
-<mat-label>Filter</mat-label>
-<input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" style="horiz-align: center">
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" style="horiz-align: center">
 </mat-form-field>
 <table mat-table [dataSource]="pointsList" style="width: 100%">
   <ng-container matColumnDef="idPoint">
     <th mat-header-cell *matHeaderCellDef> No. </th>
-    <td mat-cell *matCellDef="let point"> {{point.idPoint}} </td>
+    <td mat-cell *matCellDef="let point" style="padding: 1em 2em 1em ;"> {{point.idPoint}} </td>
   </ng-container>
 
   <ng-container matColumnDef="namePoint">
     <th mat-header-cell *matHeaderCellDef> Nom </th>
-    <td mat-cell *matCellDef="let point"> {{point.namePoint}} </td>
+    <td mat-cell *matCellDef="let point" style="padding: 1em 1em 1em 0;"> {{point.namePoint}} </td>
   </ng-container>
 
   <ng-container matColumnDef="vernaculairePoint">
     <th mat-header-cell *matHeaderCellDef> Nom Vern. </th>
-    <td mat-cell *matCellDef="let point"> {{point.vernaculairePoint}} </td>
+    <td mat-cell *matCellDef="let point" style="padding: 1em 1em 1em 0;"> {{point.vernaculairePoint}} </td>
   </ng-container>
 
-  <ng-container matColumnDef="descriptionPoint">
-    <th mat-header-cell *matHeaderCellDef> Description </th>
-    <td mat-cell *matCellDef="let point"> {{point.descriptionPoint}} </td>
+  <ng-container matColumnDef="descriptionPoint" >
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let point" style="padding: 0 0 0 0;"></td>
   </ng-container>
 
   <ng-container matColumnDef="latitudePoint">
   <th mat-header-cell *matHeaderCellDef> Latitude </th>
-  <td mat-cell *matCellDef="let point"> {{point.latitudePoint}} </td>
+  <td mat-cell *matCellDef="let point" style="padding: 1em 1em 1em 0;"> {{point.latitudePoint}} </td>
   </ng-container>
 
   <ng-container matColumnDef="longitudePoint">
     <th mat-header-cell *matHeaderCellDef> Longitude </th>
-    <td mat-cell *matCellDef="let point"> {{point.longitudePoint}} </td>
+    <td mat-cell *matCellDef="let point" style="padding: 1em 2em 1em 0;"> {{point.longitudePoint}} </td>
   </ng-container>
 
   <ng-container matColumnDef="disponiblePoint">
     <th mat-header-cell *matHeaderCellDef> Accessible </th>
-    <td mat-cell *matCellDef="let point">
+    <td mat-cell *matCellDef="let point" style="padding: 1em 2em 1em 0;">
       <mat-slide-toggle [checked]="!!point.disponiblePoint" (toggleChange)="point.disponiblePoint = !point.disponiblePoint; toggleAccessibilite(point.idPoint, point.disponiblePoint)">
       </mat-slide-toggle>
     </td>
@@ -46,11 +46,13 @@
 
   <ng-container matColumnDef="buttons">
     <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let point">
-      <button mat-raised-button (click)="modifPointPopUp(point)">Modifier</button>
-      <button mat-button color="warn">Supprimer</button>
+    <td mat-cell *matCellDef="let point; let i = index" style="width: 15%">
+      <button mat-raised-button color="primary" (click)="modifPointPopUp(point)">Modifier</button>
+      <button mat-icon-button color="warn" aria-label="Delete" (click)="supprimerPoint(point.idPoint, i)">
+        <mat-icon>delete</mat-icon>
+      </button>
     </td>
   </ng-container>
   <tr mat-header-row *matHeaderRowDef="colonnesList"></tr>
-  <tr mat-row *matRowDef="let row; columns: colonnesList;"></tr>
+  <tr mat-row *matRowDef="let row; columns: colonnesList;" style="height: 3em"></tr>
 </table>
