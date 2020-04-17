@@ -15,7 +15,6 @@ export class CamComponent implements OnInit {
   }
 
   handleQr(site: string) {
-    window.open(site);
-  }
 
+  }
 }
