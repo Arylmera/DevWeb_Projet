@@ -62,4 +62,17 @@ export class AdminComponent implements OnInit {
     });
   }
 
+  supprimerPoint(id: number, index: any): void {
+    if (confirm('Voulez-vous vraiment supprimer le point ' + id + ' ?')) {
+      this.pointsService.deletePoint(id).subscribe((res) => {
+        if (Object.keys(res).includes('status')) {
+          console.log(res);
+        } else {
+          this.pointsList.data.splice(index, 1);
+          this.pointsList._updateChangeSubscription();
+        }
+      });
+    }
+  }
+
   }
