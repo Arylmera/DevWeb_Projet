@@ -80,4 +80,8 @@ export class PointsService {
     return this.http.put('http://localhost:3000/api/Points?idPoint=' + id, JSON.parse(body));
   }
 
+  deletePoint(id) {
+    return this.http.delete('http://localhost:3000/api/Points?idPoint=' + id);
+  }
+
 }

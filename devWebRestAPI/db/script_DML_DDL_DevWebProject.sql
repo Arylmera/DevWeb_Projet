@@ -28,11 +28,11 @@ create table Points
 (
 	idPoint int(5) auto_increment
 		primary key,
-	namePoint varchar(45) not null,
-	descriptionPoint varchar(200) null,
+	namePoint varchar(100) not null,
+	descriptionPoint varchar(2000) null,
 	latitudePoint double not null,
 	longitudePoint double not null,
-	vernaculairePoint varchar(45) null,
+	vernaculairePoint varchar(100) null,
 	disponiblePoint tinyint(1) default 1 not null
 );
 
