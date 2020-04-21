@@ -31,7 +31,7 @@ import {MatCardModule} from "@angular/material/card";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {ScrollingModule} from "@angular/cdk/scrolling";
 import { PointSheetComponent } from './components/point-sheet/point-sheet.component';
-import {MatDialogModule} from "@angular/material/dialog";
+import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
@@ -56,7 +56,7 @@ const routes: Routes = [
   //{ path: '**', redirectTo: 'not-found' }
 ];
 
-// @ts-ignore
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -78,7 +78,6 @@ const routes: Routes = [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    BrowserModule,
     RouterModule.forRoot(routes),
     MatSidenavModule,
     FormsModule,
@@ -95,13 +94,12 @@ const routes: Routes = [
     MatCardModule,
     MatSlideToggleModule,
     ScrollingModule,
-    FontAwesomeModule,
     MatDialogModule,
     MatBottomSheetModule,
     MatFormFieldModule,
     MatInputModule,
     DeferLoadModule,
-    MatTableModule
+    MatTableModule,
   ],
   entryComponents: [
     PointSheetComponent,

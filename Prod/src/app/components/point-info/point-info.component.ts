@@ -1,4 +1,4 @@
-import {AfterContentInit, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PointListComponent} from '../point-list/point-list.component';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PointsService} from '../../services/points/points.service';

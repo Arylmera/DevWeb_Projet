@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ParcoursSelectComponent } from './parcours-select.component';
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('ParcoursSelectComponent', () => {
   let component: ParcoursSelectComponent;
@@ -8,7 +9,8 @@ describe('ParcoursSelectComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ParcoursSelectComponent ]
+      declarations: [ ParcoursSelectComponent ],
+      imports : [HttpClientTestingModule]
     })
     .compileComponents();
   }));

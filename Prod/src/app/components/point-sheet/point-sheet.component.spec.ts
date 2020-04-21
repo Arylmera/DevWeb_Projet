@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { PointSheetComponent } from './point-sheet.component';
+import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
 
 describe('PointSheetComponent', () => {
   let component: PointSheetComponent;
@@ -8,7 +8,8 @@ describe('PointSheetComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PointSheetComponent ]
+      declarations: [ PointSheetComponent ],
+      imports: [MatBottomSheetModule]
     })
     .compileComponents();
   }));

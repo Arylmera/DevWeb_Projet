@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AdminDialogComponent } from './admin-dialog.component';
+import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {MatDialogRef} from "@angular/material/dialog";
 
 describe('AdminDialogComponent', () => {
   let component: AdminDialogComponent;
@@ -8,7 +9,8 @@ describe('AdminDialogComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdminDialogComponent ]
+      declarations: [ AdminDialogComponent ],
+      imports: [HttpClientTestingModule, MatDialogRef]
     })
     .compileComponents();
   }));
