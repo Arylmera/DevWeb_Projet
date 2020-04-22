@@ -8,14 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CamComponent implements OnInit {
 
+  site: string;
 
   constructor() {}
 
   ngOnInit(): void {
   }
 
-  handleQr(site: string) {
-    alert('Attention vous allez être redirigé vers: ' + site);
-    window.open(site);
+  handleQr(qrRes: string) {
+    this.site = qrRes;
+    document.getElementById('openButton').style.visibility = 'visible';
+  }
+
+  openSite() {
+    window.open(this.site);
   }
 }
