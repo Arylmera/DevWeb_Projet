@@ -1,4 +1,4 @@
-import {Component, AfterViewInit, OnInit, Inject, Injectable} from '@angular/core';
+import {Component, AfterViewInit, OnInit} from '@angular/core';
 import {MapsService} from '../../services/maps/maps.service';
 import {PointsService} from '../../services/points/points.service';
 import * as L from 'leaflet';
@@ -9,8 +9,6 @@ import * as $ from 'jquery';
 import {ActivatedRoute} from "@angular/router";
 import {MatBottomSheet} from "@angular/material/bottom-sheet";
 import {PointSheetComponent} from "../point-sheet/point-sheet.component";
-import {forEach} from "ol/geom/flat/segments";
-import {getSortHeaderNotContainedWithinSortError} from "@angular/material/sort/sort-errors";
 
 const mapboxAPI = 'pk.eyJ1IjoiYXJ5bG1lcmEiLCJhIjoiY2s3aGZ1OW0zMDk1bzNubW5ya2twdDZxcSJ9.IVUHXKtgN21QPirw0ZVWpQ';
 const mapboxStyle = 'https://api.mapbox.com/styles/v1/arylmera/ck7ix7bma010g1io6aa528sla/tiles/256/{z}/{x}/{y}@2x?access_token='+ mapboxAPI;

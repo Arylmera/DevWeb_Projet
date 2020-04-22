@@ -1,6 +1,7 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {PointsService} from '../../services/points/points.service';
 import {faTree} from "@fortawesome/free-solid-svg-icons/faTree";
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-point-list',

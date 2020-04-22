@@ -1,6 +1,6 @@
 
 <mat-card id="pointListCard">
-  <mat-card-title>Type de points souhaité</mat-card-title>
+  <mat-card-title> Type de points souhaité</mat-card-title>
   <mat-list class="list-horizontal" >
     <mat-list-item *ngFor="let categorie of categList" class="form-inline">
       <mat-checkbox id="{{categorie.idCategorie}}" value="{{categorie.idCategorie}}" name="categList" (change)="selectPointsFromCategorie()">

@@ -93,12 +93,4 @@ describe('PointListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('shoud have categ list', async(() => {
-    expect(component.categList).toBeTruthy();
-  }));
-
-  it('shoud have point list', async(() => {
-    expect(component.pointList).toBeTruthy();
-  }));
-
 });
