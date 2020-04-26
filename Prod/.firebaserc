@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "biodiversite-lln": {
+      "hosting": {
+        "Prod": [
+          "biodiversite-lln"
+        ]
+      }
+    }
+  }
+}
