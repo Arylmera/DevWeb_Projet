@@ -148,7 +148,9 @@ export class MapComponent implements AfterViewInit, OnInit {
         this.addPointsFromDb();
       });
     }
-    this.initMap();
+    if (!this.map) {
+      this.initMap();
+    }
     this.initPositionMaker();
     this.initRouting();
   }
@@ -404,10 +406,12 @@ export class MapComponent implements AfterViewInit, OnInit {
           break;
         }
       }
+      this.routing = false;
     }
     else {
       this.routingWaypoints = this.pointList;
     }
+    this.lunchRouting();
   }
 
   /**
@@ -420,6 +424,7 @@ export class MapComponent implements AfterViewInit, OnInit {
     console.log(this.routingWayPointsSecondPart);
     console.log(this.routingWaypoints);
     this.twoPartRouting = false;
+    this.lunchRouting();
   }
 
   /**
