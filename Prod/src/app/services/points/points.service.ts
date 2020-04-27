@@ -18,21 +18,21 @@ export class PointsService {
    * récupération de l'ensemble de la liste des points
    */
   recupPoints() {
-    return this.http.get('http://51.178.40.148:3000/api/Points');
+    return this.http.get('https://51.178.40.148:3000/api/Points');
   }
 
   /**
    * récupération de l'ensemble de la liste des catégories
    */
   recupCategories() {
-    return this.http.get('http://51.178.40.148:3000/api/Categories');
+    return this.http.get('https://51.178.40.148:3000/api/Categories');
   }
 
   /**
    * récupération de l'ensemble de la liste des parcours
    */
   recupParcours() {
-    return this.http.get('http://51.178.40.148:3000/api/Parcours');
+    return this.http.get('https://51.178.40.148:3000/api/Parcours');
   }
 
   /**
