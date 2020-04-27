@@ -3,9 +3,9 @@
   <mat-card-title> Type de points souhaité</mat-card-title>
   <mat-list class="list-horizontal" >
     <mat-list-item *ngFor="let categorie of categList" class="form-inline">
-      <mat-checkbox id="{{categorie.idCategorie}}" value="{{categorie.idCategorie}}" name="categList" (change)="selectPointsFromCategorie()">
+      <mat-radio-button id="{{categorie.idCategorie}}" value="{{categorie.idCategorie}}" name="categList" (change)="selectPointsFromCategorie()">
         <fa-icon [icon]="faTree"></fa-icon> {{categorie.nameCategorie}}
-      </mat-checkbox>
+      </mat-radio-button>
     </mat-list-item>
   </mat-list>
 

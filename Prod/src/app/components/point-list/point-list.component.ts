@@ -12,9 +12,6 @@ import * as $ from 'jquery';
 export class PointListComponent implements OnInit {
 
   constructor(private pointsService: PointsService) {
-    this.getScreenSize();
-    $(".viewport").width(this.screenWidth).height(this.screenHeight - (20% this.screenHeight / 100 ));
-    console.log(this.screenHeight, this.screenWidth);
   }
 
   faTree = faTree;
@@ -22,8 +19,6 @@ export class PointListComponent implements OnInit {
   pointListSelected: any;
   categList: any;
   categListSelected: any;
-  screenHeight: number;
-  screenWidth: number;
 
   ngOnInit(): void {
     // récupération des points du serveur
@@ -47,7 +42,8 @@ export class PointListComponent implements OnInit {
       if (categSelected[i].checked) {
         this.categListSelected.push(categSelected[i].value);
         this.pointsService.recupPointsByCategorie(categSelected[i].value).subscribe( data => {
-          this.pointListSelected += data;
+          this.pointListSelected = data;
+          console.log(this.pointListSelected[0]);
         })
       }
     }
@@ -68,11 +64,5 @@ export class PointListComponent implements OnInit {
         return this.pointList[i];
       }
     }
-  }
-
-  @HostListener('window:resize', ['$event'])
-  getScreenSize(event?) {
-    this.screenHeight = window.innerHeight;
-    this.screenWidth = window.innerWidth;
   }
 }
