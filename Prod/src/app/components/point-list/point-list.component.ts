@@ -41,22 +41,18 @@ export class PointListComponent implements OnInit {
    */
   selectPointsFromCategorie() {
     this.categListSelected = [];
+    this.pointListSelected = [];
     const categSelected = document.getElementsByName('categList') as any;
     for ( let i = 0; i < categSelected.length; i ++) {
       if (categSelected[i].checked) {
         this.categListSelected.push(categSelected[i].value);
+        this.pointsService.recupPointsByCategorie(categSelected[i].value).subscribe( data => {
+          this.pointListSelected += data;
+        })
       }
     }
     if (this.categListSelected.length === 0) {
       this.categListSelected = [...this.categList];
-    }
-
-    this.pointListSelected = [];
-
-    for (let categorie of this.categListSelected) {
-       this.pointsService.recupPointsByCategorie(categorie).subscribe(data => {
-         this.pointListSelected = data;
-      });
     }
   }
 
