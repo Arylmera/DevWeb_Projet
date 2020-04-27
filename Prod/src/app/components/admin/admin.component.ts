@@ -63,6 +63,8 @@ export class AdminComponent implements OnInit {
   }
 
   supprimerPoint(id: number, index: any): void {
+    console.log( "vous venez de supprimer le point :" + id + " a l'index " + index);
+    /*
     if (confirm('Voulez-vous vraiment supprimer le point ' + id + ' ?')) {
       this.pointsService.deletePoint(id).subscribe((res) => {
         if (Object.keys(res).includes('status')) {
@@ -73,6 +75,7 @@ export class AdminComponent implements OnInit {
         }
       });
     }
+    */
   }
 
   }
