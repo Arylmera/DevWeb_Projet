@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {PointsService} from '../../services/points/points.service';
 import {MatTableDataSource} from '@angular/material/table';
 import {AdminDialogComponent} from '../admin-dialog/admin-dialog.component';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 
 
 export interface Point {

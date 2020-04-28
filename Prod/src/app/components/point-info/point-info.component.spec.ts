@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 import { PointInfoComponent } from './point-info.component';
+import {RouterModule} from "@angular/router";
 
 describe('PointInfoComponent', () => {
   let component: PointInfoComponent;
@@ -8,7 +9,11 @@ describe('PointInfoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PointInfoComponent ]
+      declarations: [ PointInfoComponent ],
+      imports: [HttpClientTestingModule, RouterModule.forRoot([])],
+      providers: [
+
+      ]
     })
     .compileComponents();
   }));
