@@ -31,4 +31,8 @@ describe('MapComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it( 'should render title', () => {
+    expect(fixture.nativeElement.querySelector('.mat-title').textContent).toBeTruthy();
+  });
 });
