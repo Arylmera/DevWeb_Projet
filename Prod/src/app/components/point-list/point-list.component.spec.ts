@@ -24,4 +24,12 @@ describe('PointListComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it( 'should load Categ List', () => {
+    expect(component.categList).not.toBeNull();
+  });
+
+  it('should load Point List', () => {
+    expect(component.pointList).not.toBeNull();
+  });
+
 });

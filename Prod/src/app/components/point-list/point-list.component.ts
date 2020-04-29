@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PointsService} from '../../services/points/points.service';
 import {faTree} from "@fortawesome/free-solid-svg-icons/faTree";
 import * as $ from 'jquery';
@@ -49,20 +49,6 @@ export class PointListComponent implements OnInit {
     }
     if (this.categListSelected.length === 0) {
       this.categListSelected = [...this.categList];
-    }
-  }
-
-  /**
-   * On renvoit un point par son id
-   * @param id
-   * @return point
-   */
-  getPointById(id: number) {
-    for (let i = 0; i < this.pointList.length; i++) {
-      if (this.pointList[i].id === id) {
-        console.log('returned point :' + this.pointList[i]);
-        return this.pointList[i];
-      }
     }
   }
 }

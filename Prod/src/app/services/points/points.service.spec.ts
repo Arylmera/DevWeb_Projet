@@ -28,6 +28,12 @@ describe('PointsService', () => {
     });
   });
 
+  it('to return first 1 Points from API', () => {
+    service.recupParcoursPointsById(1).subscribe((data) => {
+      expect(data).toBeTruthy();
+    });
+  });
+
   it('to return first 5 Points from API', () => {
     service.recupParcoursPointsById(1).subscribe( (data) => {
       expect(data).toBeTruthy();
@@ -54,7 +60,7 @@ describe('PointsService', () => {
 
   it('to return the 2 first Parcours from API', () => {
     service.recupParcoursById(1).subscribe( (data) => {
-      expect(data).toBeTruthy();
+      expect(data).toBeTruthy();;
     });
     service.recupParcoursById(2).subscribe( (data) => {
       expect(data).toBeTruthy();
