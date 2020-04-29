@@ -38,7 +38,7 @@ describe('AdminComponent', () => {
     expect(component.pointsList).not.toBeNull();
   });
 
-  it('should make point 1 UnAccessible', (done) => {
+  it('should make point 1 UnAccessible', () => {
     inject([PointsService], (pointService) => {
       component.toggleAccessibilite(1, 0);
       pointService.recupPointById(1).subscribe( (data) => {
