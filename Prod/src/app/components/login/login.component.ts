@@ -12,4 +12,8 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  connect(form): void {
+    console.log(form.value.name);
+    console.log(form.value.password);
+  }
 }

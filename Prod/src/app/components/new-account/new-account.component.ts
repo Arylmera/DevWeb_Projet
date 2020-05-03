@@ -12,4 +12,8 @@ export class NewAccountComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  register(form): void {
+    console.log(form.value);
+  }
+
 }
