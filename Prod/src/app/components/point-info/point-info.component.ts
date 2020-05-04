@@ -1,21 +1,24 @@
 import {Component, OnInit} from '@angular/core';
 import {PointListComponent} from '../point-list/point-list.component';
 import {ActivatedRoute, Router} from '@angular/router';
-import {PointsService} from '../../services/points/points.service';
+import {Point, PointsService} from '../../services/points/points.service';
 import {HttpClient} from "@angular/common/http";
+
 @Component({
   selector: 'app-point-info',
   providers: [PointListComponent],
   templateUrl: './point-info.component.html',
   styleUrls: ['./point-info.component.scss']
 })
+
 export class PointInfoComponent implements OnInit {
 
-  point: any;
+  point: Point;
   wikiDesc: any = null;
   wikiDescImg: any = null;
   numPoint: number= null;
   wiki: boolean= false;
+  loading = true;
 
   constructor(private pointList: PointListComponent,
               private route: ActivatedRoute,
@@ -27,8 +30,8 @@ export class PointInfoComponent implements OnInit {
     this.numPoint = Number(this.route.snapshot.params['id']);
     this.pointsService.recupPointById(this.numPoint).subscribe( data => {
       this.point = data[0];
-      console.log(this.point.namePoint);
       this.getDescriptionWiki(this.point.namePoint);
+      this.loading = false;
     });
   }
 

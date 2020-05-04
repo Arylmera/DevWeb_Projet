@@ -32,4 +32,11 @@ describe('PointSheetComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should parse name', () => {
+    const spy = spyOn(component, "nameParser");
+    component.goToWiki('test');
+    expect(spy).toHaveBeenCalled();
+  });
+
 });

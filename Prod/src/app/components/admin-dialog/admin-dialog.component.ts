@@ -1,7 +1,8 @@
 import {Component, Inject} from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {PointsService} from '../../services/points/points.service';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {Point, PointsService} from '../../services/points/points.service';
 
+/*
 export interface Point {
   idPoint: number;
   namePoint: string;
@@ -11,6 +12,7 @@ export interface Point {
   longitudePoint: any;
   disponiblePoint: any;
 }
+*/
 
 @Component({
   selector: 'app-admin-dialog',

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {PointsService} from '../../services/points/points.service';
+import {Point, PointsService} from '../../services/points/points.service';
 import {faTree} from "@fortawesome/free-solid-svg-icons/faTree";
 import * as $ from 'jquery';
 
@@ -43,7 +43,6 @@ export class PointListComponent implements OnInit {
         this.categListSelected.push(categSelected[i].value);
         this.pointsService.recupPointsByCategorie(categSelected[i].value).subscribe( data => {
           this.pointListSelected = data;
-          console.log(this.pointListSelected[0]);
         })
       }
     }

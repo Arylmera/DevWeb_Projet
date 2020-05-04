@@ -1,7 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import { PointInfoComponent } from './point-info.component';
-import {RouterModule} from "@angular/router";
+import {ActivatedRoute, RouterModule} from "@angular/router";
+import {By} from "@angular/platform-browser";
 
 describe('PointInfoComponent', () => {
   let component: PointInfoComponent;
@@ -9,11 +10,12 @@ describe('PointInfoComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PointInfoComponent ],
+      declarations: [PointInfoComponent],
       imports: [HttpClientTestingModule, RouterModule.forRoot([])],
-      providers: [
-
-      ]
+      providers: [PointInfoComponent, {
+        provide: ActivatedRoute,
+        useValue: {snapshot: {params: {'id': 1}}}
+      }]
     })
     .compileComponents();
   }));
@@ -24,5 +26,10 @@ describe('PointInfoComponent', () => {
     fixture.detectChanges();
   });
 
+  it('should parse name if description Wiki called', () =>{
+    const spy = spyOn(component, "nameParser");
+    component.getDescriptionWiki('test');
+    expect(spy).toHaveBeenCalled();
+  });
 
 });

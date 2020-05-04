@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {faDownload} from "@fortawesome/free-solid-svg-icons/faDownload";
-import {PointsService} from "../../services/points/points.service";
+import {Point, PointsService} from "../../services/points/points.service";
 import {forEach} from "ol/geom/flat/segments";
 
 @Component({
@@ -31,7 +31,7 @@ export class ParcoursSelectComponent implements OnInit {
   loadParcours() {
     console.log(this.parcoursNum);
     this.pointsService.recupParcoursPointsById(this.parcoursNum).subscribe( data => {
-      this.parcoursPointList = data;
+      console.log(this.parcoursPointList);
     });
     this.pointsService.recupParcoursById(this.parcoursNum).subscribe( data => {
       this.parcoursName = data[0].nameParcours;

@@ -1,4 +1,9 @@
-<mat-card class="point-card">
+<body>
+<div class="loader" *ngIf="loading" >
+  <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+</div>
+
+<mat-card class="point-card" *ngIf="!loading">
   <mat-card-header>
     <mat-card-title><u>{{point.namePoint}}</u> <span *ngIf="!point.disponiblePoint" style="color: red"> Non accessible </span> </mat-card-title>
     <mat-card-subtitle *ngIf="point.vernaculairePoint">{{point.vernaculairePoint}}</mat-card-subtitle>
@@ -16,6 +21,7 @@
   </mat-card-content>
   <mat-card-actions>
     <button mat-raised-button class="previous" [routerLink]="['/pointList']" >Retour</button>
-    <button mat-raised-button (click)="goToWiki(point.namePoint)" *ngIf="this.wiki">Page Wikipedia</button>
+    <button mat-raised-button id="goToWiki" (click)="goToWiki(point.namePoint)" *ngIf="this.wiki">Page Wikipedia</button>
   </mat-card-actions>
 </mat-card>
+</body>

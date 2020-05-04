@@ -105,6 +105,7 @@ export class MapComponent implements AfterViewInit, OnInit {
   showRouting = true;
   showRoutingBtn = false;
   routing = false;
+  loading = true;
 
   constructor(private mapsService: MapsService,
               private route: ActivatedRoute,
@@ -285,6 +286,7 @@ export class MapComponent implements AfterViewInit, OnInit {
         this.currentlatlng = [e.latlng.lat, e.latlng.lng];
         this.setPositionMarker(e);
         this.map.panTo([e.latlng.lat, e.latlng.lng]);
+        this.loading = false;
       });
     //this.map.setZoom(18);
   }

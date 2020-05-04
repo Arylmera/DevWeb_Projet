@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {PointsService} from '../../services/points/points.service';
+import {Point, PointsService} from '../../services/points/points.service';
 import {MatTableDataSource} from '@angular/material/table';
 import {AdminDialogComponent} from '../admin-dialog/admin-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 
-
+/*
 export interface Point {
   idPoint: number;
   namePoint: string;
@@ -14,6 +14,7 @@ export interface Point {
   longitudePoint: any;
   disponiblePoint: any;
 }
+ */
 
 @Component({
   selector: 'app-admin',
@@ -64,7 +65,6 @@ export class AdminComponent implements OnInit {
 
   supprimerPoint(id: number, index: any): void {
     console.log( "vous venez de supprimer le point :" + id + " a l'index " + index);
-    /*
     if (confirm('Voulez-vous vraiment supprimer le point ' + id + ' ?')) {
       this.pointsService.deletePoint(id).subscribe((res) => {
         if (Object.keys(res).includes('status')) {
@@ -75,7 +75,6 @@ export class AdminComponent implements OnInit {
         }
       });
     }
-    */
   }
 
   }

@@ -1,10 +1,19 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
+export interface Point {
+  idPoint: number;
+  namePoint: string;
+  vernaculairePoint: string;
+  descriptionPoint: string;
+  latitudePoint: any;
+  longitudePoint: any;
+  disponiblePoint: any;
+}
+
 @Injectable({
   providedIn: 'root'
 })
-
 export class PointsService {
 
   constructor(private http: HttpClient) { }
