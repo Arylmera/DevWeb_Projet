@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./new-account.component.scss']
 })
 export class NewAccountComponent implements OnInit {
+  hide: any;
 
   constructor() { }
 
