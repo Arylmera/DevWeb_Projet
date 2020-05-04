@@ -1,6 +1,11 @@
 <mat-toolbar>
-  <span>Administration du site</span>
+  <span style="margin-right: 2em;">Administration du site</span>
+  <button mat-stroked-button routerLink="/adminPoints" color="primary" style="margin-right: 1em;">Points</button>
+  <button mat-stroked-button routerLink="/adminCategories" color="primary" style="margin-right: 1em;">Catégories</button>
+  <button mat-stroked-button routerLink="/adminParcours" color="primary" style="margin-right: 1em;">Parcours</button>
+  <button mat-stroked-button routerLink="/adminPointsParcours" color="primary" style="margin-right: 1em;">PointsParcours</button>
 </mat-toolbar>
+<<<<<<< Updated upstream
 <mat-form-field style="width: 80%; left: 10% ">
   <mat-label>Filter</mat-label>
   <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" style="horiz-align: center">
@@ -56,3 +61,6 @@
   <tr mat-header-row *matHeaderRowDef="colonnesList"></tr>
   <tr mat-row *matRowDef="let row; columns: colonnesList;" style="height: 3em"></tr>
 </table>
+=======
+
+>>>>>>> Stashed changes

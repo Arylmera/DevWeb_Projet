@@ -84,4 +84,8 @@ export class PointsService {
     return this.http.delete('http://localhost:3000/api/Points?idPoint=' + id);
   }
 
+  recupCategoriesPoints(){
+    return this.http.get('https://51.178.40.148:3000/api/CategoriesPoints');
+  }
+
 }

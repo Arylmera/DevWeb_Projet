@@ -35,9 +35,18 @@ import {MatDialogModule} from "@angular/material/dialog";
 import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
+<<<<<<< Updated upstream
 import { AdminComponent } from './components/admin/admin.component';
+=======
+import {DeferLoadModule} from "@trademe/ng-defer-load";
+>>>>>>> Stashed changes
 import {MatTableModule} from "@angular/material/table";
 import { AdminDialogComponent } from './components/admin-dialog/admin-dialog.component';
+import { AdminCategoriesComponent } from './components/admin-categories/admin-categories.component';
+import { AdminParcoursComponent } from './components/admin-parcours/admin-parcours.component';
+import { AdminPointsParcoursComponent } from './components/admin-points-parcours/admin-points-parcours.component';
+import { AdminComponent } from './components/admin/admin.component';
+import { AdminPointsComponent } from './components/admin-points/admin-points.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -52,6 +61,10 @@ const routes: Routes = [
   { path: 'not-found', component: FourthOFourthComponent },
   { path: 'cam', component: CamComponent},
   { path: 'admin', component: AdminComponent },
+  { path: 'adminPoints', component: AdminPointsComponent },
+  { path: 'adminParcours', component: AdminParcoursComponent },
+  { path: 'adminCategories', component: AdminCategoriesComponent },
+  { path: 'adminPointsParcours', component: AdminPointsParcoursComponent },
   //{ path: '**', redirectTo: 'not-found' }
 ];
 
@@ -70,8 +83,12 @@ const routes: Routes = [
     CamComponent,
     ParcoursSelectComponent,
     PointSheetComponent,
+    AdminDialogComponent,
+    AdminCategoriesComponent,
+    AdminParcoursComponent,
+    AdminPointsParcoursComponent,
     AdminComponent,
-    AdminDialogComponent
+    AdminPointsComponent
   ],
   imports: [
     BrowserModule,
