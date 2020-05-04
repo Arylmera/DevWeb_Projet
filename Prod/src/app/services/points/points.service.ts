@@ -27,21 +27,21 @@ export class PointsService {
    * récupération de l'ensemble de la liste des points
    */
   recupPoints() {
-    return this.http.get('https://51.178.40.148:3000/api/Points');
+    return this.http.get('www.wt1-2.ephec-ti.be:3000/api/Points');
   }
 
   /**
    * récupération de l'ensemble de la liste des catégories
    */
   recupCategories() {
-    return this.http.get('https://51.178.40.148:3000/api/Categories');
+    return this.http.get('www.wt1-2.ephec-ti.be:3000/api/Categories');
   }
 
   /**
    * récupération de l'ensemble de la liste des parcours
    */
   recupParcours() {
-    return this.http.get('https://51.178.40.148:3000/api/Parcours');
+    return this.http.get('www.wt1-2.ephec-ti.be:3000/api/Parcours');
   }
 
   /**
@@ -49,7 +49,7 @@ export class PointsService {
    * @param id
    */
   recupParcoursPointsById(id: number) {
-    return this.http.get('https://51.178.40.148:3000/api/ParcoursPoints?idParcours=' + id);
+    return this.http.get('www.wt1-2.ephec-ti.be:3000/api/ParcoursPoints?idParcours=' + id);
   }
 
   /**
@@ -57,7 +57,7 @@ export class PointsService {
    * @param id
    */
   recupParcoursById(id: number) {
-    return this.http.get('https://51.178.40.148:3000/api/Parcours?idParcours=' + id);
+    return this.http.get('www.wt1-2.ephec-ti.be:3000/api/Parcours?idParcours=' + id);
   }
 
   /**
@@ -65,7 +65,7 @@ export class PointsService {
    * @param id
    */
   recupPointById(id: number) {
-    return this.http.get('https://51.178.40.148:3000/api/Points?idPoint=' + id);
+    return this.http.get('www.wt1-2.ephec-ti.be:3000/api/Points?idPoint=' + id);
   }
 
   /**
@@ -73,7 +73,7 @@ export class PointsService {
    * @param categ
    */
   recupPointsByCategorie(categ: string) {
-    return this.http.get('https://51.178.40.148:3000/api/Points/Categories?idCategorie=' + categ );
+    return this.http.get('www.wt1-2.ephec-ti.be:3000/api/Points/Categories?idCategorie=' + categ );
   }
 
   /**
@@ -81,15 +81,15 @@ export class PointsService {
    * @param id
    */
   recupCategoriesById(id: number) {
-    return this.http.get('https://51.178.40.148:3000/api/Categories?idCategorie=' + id);
+    return this.http.get('www.wt1-2.ephec-ti.be:3000/api/Categories?idCategorie=' + id);
   }
 
   updatePoint(id, body) {
-    return this.http.put('https://51.178.40.148:3000/api/Points?idPoint=' + id, JSON.parse(body));
+    return this.http.put('www.wt1-2.ephec-ti.be:3000/api/Points?idPoint=' + id, JSON.parse(body));
   }
 
   deletePoint(id) {
-    return this.http.delete('https://51.178.40.148:3000/api/Points?idPoint=' + id);
+    return this.http.delete('www.wt1-2.ephec-ti.be:3000/api/Points?idPoint=' + id);
   }
 
 }
