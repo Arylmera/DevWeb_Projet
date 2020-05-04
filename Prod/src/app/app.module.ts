@@ -49,7 +49,7 @@ const routes: Routes = [
   { path: 'parcours-select', component: ParcoursSelectComponent},
   { path: 'map', component: MapComponent},
   { path: 'map/:id', component: MapComponent},
-  { path: '', component: HomeComponent },
+  { path: '', component: LoginComponent },
   { path: 'not-found', component: FourthOFourthComponent },
   { path: 'cam', component: CamComponent},
   { path: 'admin', component: AdminComponent },

@@ -6,10 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  hide: any;
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  connect(form): void {
+    console.log(form.value.name);
+    console.log(form.value.password);
+  }
 }
