@@ -1,9 +1,18 @@
 const mysql = require("mysql");
 const dbConfig = require("./db/db.config");
 const express = require("express");
+const https = require('https');
+const fs = require('fs');
 const bodyParser = require("body-parser");
 const cors = require('cors');
+const options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/www.wt1-2.ephec-ti.be/privkey.pem', 'utf8'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/www.wt1-2.ephec-ti.be/cert.pem', 'utf8'),
+    ca: fs.readFileSync('/etc/letsencrypt/live/www.wt1-2.ephec-ti.be/chain.pem', 'utf8')
+};
 const app = express();
+
+
 app.use(cors());
 app.use(express.static('medias'));
 // parse requests of content-type: application/json
@@ -128,8 +137,8 @@ const reqDb = {
     delete: function (req, res) {
         if (Object.keys(req.query).length > 0){
             let reqSql = "delete from " + req.params.table + " where ";
-            Object.keys(req.query).forEach((e, i , a) => {
-                if (isNaN(req.body[e])){
+            Object.keys(req.query).forEach((e, i, a ) => {
+                if (isNaN(req.query[e])){
                     reqSql += e + " = '" + req.query[e] + "'";
                 }
                 else{
@@ -187,9 +196,9 @@ const getMediasLvl2 = (req, res) => {
 
 const getPointsLvl2 = (req, res) => {
     if (Object.keys(req.query).length > 0){
-        let reqSql = "select * from points, " + req.params.table2
-            + "points where points.idPoint = " + req.params.table2
-            + "points.idPoint and " + Object.keys(req.query)[0]
+        let reqSql = "select * from Points, " + req.params.table2
+            + "Points where Points.idPoint = " + req.params.table2
+            + "Points.idPoint and " + Object.keys(req.query)[0]
             + " = " + req.query[Object.keys(req.query)[0]];
         reqSql += ";";
         connection.query(reqSql, function(err, results){
@@ -210,4 +219,6 @@ const getPointsLvl2 = (req, res) => {
 // fs pour supprimer les données multimédias et supprimer en bdd
 // chercher pour trouver comment rajouter un média et ajouter en bdd
 
-app.listen(3000);
+const httpsServer = https.createServer(options, app);
+
+httpsServer.listen(3000);
