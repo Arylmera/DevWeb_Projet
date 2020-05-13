@@ -240,6 +240,7 @@ export class MapComponent implements AfterViewInit, OnInit {
       data: id
     });
     this.mapsService.getCurrentSheet(this.pointSheet); // passage au service
+    return id;
   }
 
   /**

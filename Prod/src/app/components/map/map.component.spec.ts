@@ -49,7 +49,7 @@ describe('MapComponent', () => {
     expect(component.routingWaypoints).toEqual([]);
   });
 
-  it('should call showRoutingLegenf', () => {
+  it('should call showRoutingLegend', () => {
     component.loading = false;
     const spy = spyOn(component, "showRoutingLegend");
     component.showRoutingLegend();
@@ -70,11 +70,15 @@ describe('MapComponent', () => {
     expect(component.showRouting).toBeFalsy();
   });
 
-  it('shoulc call RoutingPoint', () => {
+  it('should call RoutingPoint', () => {
     component.loading = false;
     const spy = spyOn(component, 'addRoutingPoint');
     component.sidenavOpen();
     expect(spy).toHaveBeenCalled();
-  })
+  });
+
+  it( 'should pars latLong', () => {
+    expect(component.parsPointXYLatLng([0,0])).toBeTruthy();
+  });
 
 });
