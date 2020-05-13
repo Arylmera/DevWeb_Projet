@@ -4,6 +4,7 @@ import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {PointsService} from "../../services/points/points.service";
 import {Inject} from "@angular/core";
+import {FormsModule} from "@angular/forms";
 
 describe('AdminComponent', () => {
   let component: AdminComponent;
@@ -13,7 +14,7 @@ describe('AdminComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ AdminComponent ],
-      imports : [HttpClientTestingModule],
+      imports : [HttpClientTestingModule, FormsModule],
       providers : [
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: MatDialog, useValue: {} },
