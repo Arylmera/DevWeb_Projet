@@ -5,6 +5,7 @@ import {HttpClient} from "@angular/common/http";
 import {MapsService} from "../../services/maps/maps.service";
 import {Router} from "@angular/router";
 import {MapComponent} from "../map/map.component";
+import {ChangeDetectorRef} from "@angular/core";
 
 @Component({
   selector: 'app-point-sheet',
@@ -23,7 +24,8 @@ export class PointSheetComponent implements OnInit {
               private pointsService: PointsService,
               private mapsService: MapsService,
               private router: Router,
-              private http: HttpClient) {}
+              private http: HttpClient,
+              private cdr : ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.ready = false;
@@ -56,6 +58,7 @@ export class PointSheetComponent implements OnInit {
     let urlDesc = "https://fr.wikipedia.org/api/rest_v1/page/summary/"+this.nameParser(name);
     this.http.get(urlDesc).subscribe(
       data => {
+        this.cdr.markForCheck();
         // @ts-ignore
         this.wikiDesc = data.extract;
         // @ts-ignore
@@ -69,6 +72,7 @@ export class PointSheetComponent implements OnInit {
       },
       () => {
         this.router.navigate(['/map']);
+        this.cdr.markForCheck();
       }
     );
   }
