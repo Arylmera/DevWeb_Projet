@@ -39,9 +39,7 @@ export class NewAccountComponent implements OnInit {
 
   get f() { return this.registerForm.controls; }
 
-  register(event): boolean {
-
-    event.preventDefault();
+  register(): boolean {
 
     this.submitted = true;
 
