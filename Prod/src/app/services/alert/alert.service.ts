@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
+import {A} from "@angular/cdk/keycodes";
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,9 @@ export class AlertService {
     return this.subject.asObservable();
   }
 
-  success(message: string, keepAfterRouteChange = false) {
+    // @ts-ignore
+  // tslint:disable-next-line:ban-types
+  success(message: Object | A, keepAfterRouteChange = false) {
     this.keepAfterRouteChange = keepAfterRouteChange;
     this.subject.next({ type: 'success', text: message });
   }

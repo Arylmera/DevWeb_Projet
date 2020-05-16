@@ -54,7 +54,7 @@ export class NewAccountComponent implements OnInit {
       .pipe(first())
       .subscribe(
         data  => {
-          this.alertService.success('Inscription réussie.', true);
+          this.alertService.success(data);
           this.router.navigate(['/login']);
         },
         error => {

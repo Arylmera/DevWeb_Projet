@@ -44,7 +44,6 @@ import {AdminGuard} from './helpers/admin.guard';
 import {AuthGuard} from './helpers/auth.guard';
 import {JwtInterceptor} from './helpers/jwt.interceptor';
 import {ErrorInterceptor} from './helpers/error.interceptor';
-import {fakeBackendProvider} from './helpers/fake-backend';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
@@ -118,9 +117,6 @@ const routes: Routes = [
     MapComponent,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-
-    // provider used to create fake backend
-    fakeBackendProvider
   ],
   bootstrap: [
     AppComponent,

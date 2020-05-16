@@ -58,32 +58,33 @@ app.route('/api/:table') // :table est une variable pour rendre le routage dynam
 app.route('/api/points/:table2').get((req, res) => getPointsLvl2(req, res)); // Récupérer des points en fonction d'une autre table
 app.route('/api/medias/points').get((req, res) => getMediasLvl2(req, res)); // Récupérer le path des médias en fonction d'un point
 app.route('/api/utilisateurs/login').post((req, res) => login(req, res));
+app.route('/api/utilisateurs/register').post((req, res) => register(req, res));
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////// Requêtes dynamique CRUD ///////////////////////////////////////////////////////////////////////////////////////
 const reqDb = {
-    create: function (req, res){
+    create: function (req, res) {
         let reqSql = "insert into " + req.params.table + " (";
-        Object.keys(req.body).forEach((e, i, a) =>{
+        Object.keys(req.body).forEach((e, i, a) => {
             reqSql += e;
-            if(i < a.length - 1){
+            if (i < a.length - 1) {
                 reqSql += ", ";
             }
         });
         reqSql += ") values (";
-        Object.values(req.body).forEach((e, i, a) =>{
-            if (isNaN(e)){
+        Object.values(req.body).forEach((e, i, a) => {
+            if (isNaN(e)) {
                 reqSql += "'" + e + "'";
             }
-            else{
+            else {
                 reqSql += e;
             }
-            if(i < a.length - 1){
+            if (i < a.length - 1) {
                 reqSql += ", ";
             }
         });
         reqSql += ");";
-        connection.query(reqSql, function(err, results){
-            if (err){
+        connection.query(reqSql, function (err, results) {
+            if (err) {
                 res.status(500).send(err);
             }
             else {
@@ -93,23 +94,23 @@ const reqDb = {
     },
     find: function (req, res) {
         let reqSql = "select * from " + req.params.table;
-        if (Object.keys(req.query).length > 0){
+        if (Object.keys(req.query).length > 0) {
             reqSql += " where ";
-            Object.keys(req.query).forEach((e, i, a ) => {
-                if (isNaN(req.query[e])){
+            Object.keys(req.query).forEach((e, i, a) => {
+                if (isNaN(req.query[e])) {
                     reqSql += e + " = '" + req.query[e] + "'";
                 }
-                else{
+                else {
                     reqSql += e + " = " + req.query[e];
                 }
-                if(i < a.length - 1){
+                if (i < a.length - 1) {
                     reqSql += " and ";
                 }
             });
         }
         reqSql += ";";
-        connection.query(reqSql, function(err, results){
-            if (err){
+        connection.query(reqSql, function (err, results) {
+            if (err) {
                 res.status(500).send(err);
             }
             else {
@@ -118,22 +119,22 @@ const reqDb = {
         });
     },
     update: function (req, res) {
-        if (Object.keys(req.query).length > 0){
+        if (Object.keys(req.query).length > 0) {
             let reqSql = 'update ' + req.params.table + ' set ';
-            Object.keys(req.body).forEach((e, i, a) =>{
-                if (isNaN(req.body[e])){
+            Object.keys(req.body).forEach((e, i, a) => {
+                if (isNaN(req.body[e])) {
                     reqSql += e + ' = "' + req.body[e] + '"';
                 }
-                else{
+                else {
                     reqSql += e + ' = ' + req.body[e];
                 }
-                if(i < a.length - 1){
+                if (i < a.length - 1) {
                     reqSql += ', ';
                 }
             });
-            reqSql += ' where ' + Object.keys(req.query)[0]  + ' = ' + Object.values(req.query)[0] + ';';
-            connection.query(reqSql, function(err, results){
-                if (err){
+            reqSql += ' where ' + Object.keys(req.query)[0] + ' = ' + Object.values(req.query)[0] + ';';
+            connection.query(reqSql, function (err, results) {
+                if (err) {
                     res.status(500).send(err);
                 }
                 else {
@@ -141,27 +142,27 @@ const reqDb = {
                 }
             });
         }
-        else{
+        else {
             res.status(400).send("Vous devez renseigner l'id de l'objet dans les paramètres de votre requête");
         }
     },
     delete: function (req, res) {
-        if (Object.keys(req.query).length > 0){
+        if (Object.keys(req.query).length > 0) {
             let reqSql = "delete from " + req.params.table + " where ";
-            Object.keys(req.query).forEach((e, i, a ) => {
-                if (isNaN(req.query[e])){
+            Object.keys(req.query).forEach((e, i, a) => {
+                if (isNaN(req.query[e])) {
                     reqSql += e + " = '" + req.query[e] + "'";
                 }
-                else{
+                else {
                     reqSql += e + " = " + req.query[e];
                 }
-                if(i < a.length - 1){
+                if (i < a.length - 1) {
                     reqSql += " and ";
                 }
             });
             reqSql += ";";
-            connection.query(reqSql, function(err, results){
-                if (err){
+            connection.query(reqSql, function (err, results) {
+                if (err) {
                     res.status(500).send(err);
                 }
                 else {
@@ -169,7 +170,7 @@ const reqDb = {
                 }
             });
         }
-        else{
+        else {
             res.status(400).send("Vous devez renseigner des paramètres dans votre requête");
         }
     }
@@ -177,23 +178,23 @@ const reqDb = {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////// Requêtes spéciales ////////////////////////////////////////////////////////////////////////////////////////////
 const getMediasLvl2 = (req, res) => {
-    if (Object.keys(req.query).length > 0){
+    if (Object.keys(req.query).length > 0) {
         let reqSql = "select idMedia, localisationMedia from medias, points where medias.idPoint = points.idPoint and ";
         Object.keys(req.query).forEach((e, i, a) => {
-            if (isNaN(req.query[e])){
+            if (isNaN(req.query[e])) {
                 reqSql += "points." + e + " = '" + req.query[e] + "'";
             }
-            else{
+            else {
                 reqSql += "points." + e + " = " + req.query[e];
             }
-            if(i < a.length - 1){
+            if (i < a.length - 1) {
                 reqSql += " and ";
             }
         });
         reqSql += ";";
         console.log(reqSql);
-        connection.query(reqSql, function(err, results){
-            if (err){
+        connection.query(reqSql, function (err, results) {
+            if (err) {
                 res.status(500).send(err);
             }
             else {
@@ -201,19 +202,19 @@ const getMediasLvl2 = (req, res) => {
             }
         });
     }
-    else{
+    else {
         res.status(400).send("Vous devez renseigner des paramètres dans votre requête");
     }
 };
 const getPointsLvl2 = (req, res) => {
-    if (Object.keys(req.query).length > 0){
+    if (Object.keys(req.query).length > 0) {
         let reqSql = "select * from Points, " + req.params.table2
             + "Points where Points.idPoint = " + req.params.table2
             + "Points.idPoint and " + Object.keys(req.query)[0]
             + " = " + req.query[Object.keys(req.query)[0]];
         reqSql += ";";
-        connection.query(reqSql, function(err, results){
-            if (err){
+        connection.query(reqSql, function (err, results) {
+            if (err) {
                 res.status(500).send(err);
             }
             else {
@@ -221,14 +222,39 @@ const getPointsLvl2 = (req, res) => {
             }
         });
     }
-    else{
+    else {
         res.status(400).send("Vous devez renseigner des paramètres dans votre requête");
     }
 };
 
 const login = (req, res) => {
-    let reqSQL = 'SELECT * FROM Utilisateurs WHERE username = '+req.body.username;
-    console.log(reqSQL);
+    let reqSql = 'SELECT * FROM Utilisateurs WHERE username = "' + req.body.username + '";';
+    console.log(reqSql);
+    connection.query(reqSql, function (err, results) {
+        if (err) {
+            res.status(401).send(err);
+        }
+        else {
+            let user = {
+                id: results[0].id,
+                username: results[0].username,
+                token: 'fake-jwt-token'
+            };
+            res.status(200).json(user);
+        }
+    });
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+const register = (req, res) => {
+    let reqSql = 'INSERT INTO Utilisateurs(username, password) VALUES("' + req.body.username + '", "' + req.body.password + '")';
+    connection.query(reqSql, function (err, results) {
+        if (err) {
+            res.status(401).send(err);
+        }
+        else {
+            res.status(200).send('Inscription Réussie.');
+        }
+    });
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

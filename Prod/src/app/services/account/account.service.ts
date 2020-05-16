@@ -11,6 +11,6 @@ export class AccountService {
   constructor(private http: HttpClient) {}
 
   register(user: User) {
-    return this.http.post(`/users/register`, user);
+    return this.http.post(`https://www.wt1-2.ephec-ti.be:3000/api/utilisateurs/register`, user);
   }
 }
