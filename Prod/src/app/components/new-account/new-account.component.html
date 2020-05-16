@@ -27,6 +27,7 @@
        <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
          <div *ngIf="f.password.errors.required">Mot de passe requis.</div>
          <div *ngIf="f.password.errors.minlength">Votre mot de passe doit faire minimum 6 caractères.</div>
+         <div *ngIf="f.password.errors.maxlength">Votre mot de passe doit faire maximum 32 caractères.</div>
        </div>
      </mat-form-field>
 
