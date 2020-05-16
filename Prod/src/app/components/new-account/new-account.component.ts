@@ -33,7 +33,7 @@ export class NewAccountComponent implements OnInit {
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
       username: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(32)]]
     });
   }
 
@@ -54,11 +54,11 @@ export class NewAccountComponent implements OnInit {
       .pipe(first())
       .subscribe(
         data  => {
-          this.alertService.success('Inscription Réussie.');
+          this.alertService.success('Inscription Réussie.', true);
           this.router.navigate(['/login']);
         },
         error => {
-          this.alertService.error(error);
+          this.alertService.error('Votre nom d\'utilisateur éxiste déjà.');
           this.loading = false;
         });
 

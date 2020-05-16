@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate([this.returnUrl]);
         },
         error => {
-          this.alertService.error(error);
+          this.alertService.error('Mauvais nom d\'utilisateur/mot de passe. \n Ou vous n\'êtes pas inscrit.');
           this.loading = false;
         });
   }
