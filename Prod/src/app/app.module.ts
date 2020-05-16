@@ -9,7 +9,7 @@ import { FourthOFourthComponent } from './components/fourth-o-fourth/fourth-o-fo
 import { LoginComponent } from './components/login/login.component';
 import {RouterModule, Routes} from "@angular/router";
 import {MatSidenavModule} from "@angular/material/sidenav";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatListModule} from "@angular/material/list";
 import {MatIconModule} from "@angular/material/icon";
@@ -20,7 +20,7 @@ import { PointListComponent } from './components/point-list/point-list.component
 import { PointInfoComponent } from './components/point-info/point-info.component';
 import {MapComponent} from './components/map/map.component';
 import {PointsService} from './services/points/points.service';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import { CamComponent } from './components/cam/cam.component';
@@ -31,7 +31,7 @@ import {MatCardModule} from "@angular/material/card";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {ScrollingModule} from "@angular/cdk/scrolling";
 import { PointSheetComponent } from './components/point-sheet/point-sheet.component';
-import {MatDialog, MatDialogModule} from "@angular/material/dialog";
+import {MatDialogModule} from "@angular/material/dialog";
 import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
@@ -42,6 +42,9 @@ import { AdminDialogComponent } from './components/admin-dialog/admin-dialog.com
 import { AlertComponent } from './components/alert/alert.component';
 import {AdminGuard} from './helpers/admin.guard';
 import {AuthGuard} from './helpers/auth.guard';
+import {JwtInterceptor} from './helpers/jwt.interceptor';
+import {ErrorInterceptor} from './helpers/error.interceptor';
+import {fakeBackendProvider} from './helpers/fake-backend';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
@@ -56,7 +59,7 @@ const routes: Routes = [
   { path: 'not-found', component: FourthOFourthComponent },
   { path: 'cam', component: CamComponent, canActivate: [AuthGuard]},
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
-  // { path: '**', redirectTo: 'not-found' }
+  { path: '**', redirectTo: '' }
 ];
 
 
@@ -104,6 +107,7 @@ const routes: Routes = [
     MatInputModule,
     DeferLoadModule,
     MatTableModule,
+    ReactiveFormsModule,
   ],
   entryComponents: [
     PointSheetComponent,
@@ -111,7 +115,12 @@ const routes: Routes = [
   ],
   providers: [
     PointsService,
-    MapComponent
+    MapComponent,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+
+    // provider used to create fake backend
+    fakeBackendProvider
   ],
   bootstrap: [
     AppComponent,

@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-
-import {User} from '../../models/user.model';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {User} from '../../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -23,16 +22,28 @@ export class LoginService {
     return this.currentUserSubject.value;
   }
 
-  login(username: string, password: string) {
+  /*login(username: string, password: string) {
+
     return this.http.post<any>(`https://www.wt1-2.ephec-ti.be:3000/api/Utilisateurs`, { username, password })
       .pipe(map(user => {
         // login successful if there's a jwt token in the response
-        if (user /*&& user.token*/) {
+        if (user && user.token) {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('currentUser', JSON.stringify(user));
           this.currentUserSubject.next(user);
         }
 
+        return user;
+      }));
+
+  }*/
+
+  login(username, password) {
+    return this.http.post<any>(`/users/authenticate`, { username, password })
+      .pipe(map(user => {
+        // store user details and jwt token in local storage to keep user logged in between page refreshes
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        this.currentUserSubject.next(user);
         return user;
       }));
   }

@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AlertService} from '../../services/alert/alert.service';
 import {LoginService} from '../../services/login/login.service';
 import {AccountService} from '../../services/account/account.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {first} from 'rxjs/operators';
 
 @Component({
@@ -12,11 +13,12 @@ import {first} from 'rxjs/operators';
 })
 export class NewAccountComponent implements OnInit {
   hide: any;
+  registerForm: FormGroup;
   loading = false;
   submitted = false;
-  returnUrl: string;
 
   constructor(
+    private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private loginService: LoginService,
@@ -29,19 +31,26 @@ export class NewAccountComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
+    this.registerForm = this.formBuilder.group({
+      username: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
   }
 
-  register(form): void {
+  get f() { return this.registerForm.controls; }
+
+  register(): void {
 
     this.submitted = true;
 
-    // reset alerts on submit
     this.alertService.clear();
 
+    if (this.registerForm.invalid) {
+      return;
+    }
+
     this.loading = true;
-    this.accountService.register(form.value)
+    this.accountService.register(this.registerForm.value)
       .pipe(first())
       .subscribe(
         data => {

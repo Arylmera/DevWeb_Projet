@@ -1,36 +1,46 @@
+<mat-toolbar style="background-color: #43A047;"></mat-toolbar>
+
 <mat-toolbar>
   <span>Inscription</span>
 </mat-toolbar>
 
 <mat-card class="registration-card">
  <mat-card-content>
-   <form class="register-form" #f=ngForm (ngSubmit)="register(f)">
-
-     <mat-form-field class="field" appearance="outline">
-       <mat-label>
-         Mail
-       </mat-label>
-       <input type="email" name="mail" matInput placeholder="example@gmail.com" ngModel required>
-     </mat-form-field>
+   <form class="register-form" [formGroup]="registerForm" (ngSubmit)="register()">
 
      <mat-form-field class="field" appearance="outline">
        <mat-label>
          Nom d'utilisateur
        </mat-label>
-       <input type="text" name="username" matInput ngModel required>
+       <input type="text" matInput formControlName="username" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" >
+       <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+         <div *ngIf="f.username.errors.required">Nom d'utilisateur requis.</div>
+       </div>
      </mat-form-field>
 
      <mat-form-field class="field" appearance="outline">
        <mat-label>
          Mot de passe
        </mat-label>
-       <input [type]="hide ? 'text' : 'password'" name="password" matInput ngModel required>
+       <input [type]="hide ? 'text' : 'password'" matInput formControlName="password" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" >
        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+       <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+         <div *ngIf="f.password.errors.required">Mot de passe requis.</div>
+         <div *ngIf="f.password.errors.minlength">Votre mot de passe doit faire minimum 6 caractères.</div>
+       </div>
      </mat-form-field>
 
+     <app-alert></app-alert>
+
+     <div class="form-group">
      <mat-card-actions>
-       <button mat-raised-button type="submit" style="background-color: #4CAF50; color: white;">Créer compte</button>
+       <button mat-raised-button type="submit" [disabled]="loading" class="btn btn-primary" style="background-color: #4CAF50; color: white;">
+         <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1" style="color: white;"></span>
+         Créer compte
+       </button>
+       <button mat-raised-button type="button" routerLink="/login" class="btn btn-link" style="color: black;">Annuler</button>
      </mat-card-actions>
+     </div>
 
    </form>
  </mat-card-content>
