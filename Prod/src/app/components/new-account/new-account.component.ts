@@ -39,7 +39,7 @@ export class NewAccountComponent implements OnInit {
 
   get f() { return this.registerForm.controls; }
 
-  register(event): void {
+  register(event): boolean {
 
     event.preventDefault();
 
@@ -48,7 +48,7 @@ export class NewAccountComponent implements OnInit {
     this.alertService.clear();
 
     if (this.registerForm.invalid) {
-      return;
+      return false;
     }
 
     this.loading = true;
@@ -63,6 +63,8 @@ export class NewAccountComponent implements OnInit {
           this.alertService.error(error);
           this.loading = false;
         });
+
+    return false;
 
   }
 

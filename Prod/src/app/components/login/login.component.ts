@@ -15,7 +15,6 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
   submitted = false;
-  returnUrl: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -35,22 +34,18 @@ export class LoginComponent implements OnInit {
       password: ['', Validators.required]
     });
 
-    this.returnUrl = '/';
-
   }
 
   get f() { return this.loginForm.controls; }
 
-  connect(event): void {
-
-    event.preventDefault();
+  connect(): boolean {
 
     this.submitted = true;
 
     this.alertService.clear();
 
     if (this.loginForm.invalid) {
-      return;
+      return false;
     }
 
     this.loading = true;
@@ -59,12 +54,15 @@ export class LoginComponent implements OnInit {
       .subscribe(
         data => {
           this.alertService.success('Connexion réussie.');
-          this.router.navigate([this.returnUrl]);
+          this.router.navigate(['/']);
         },
         error => {
           this.alertService.error(error);
           this.loading = false;
         });
+
+    return false;
+
   }
 
 }
