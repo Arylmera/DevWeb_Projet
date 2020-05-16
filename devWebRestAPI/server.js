@@ -239,7 +239,7 @@ const login = (req, res) => {
                 id: results[0].id,
                 username: results[0].username,
                 token: 'fake-jwt-token'
-            };
+        };
             res.status(200).json(user);
         }
     });
