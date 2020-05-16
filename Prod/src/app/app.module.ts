@@ -39,21 +39,24 @@ import { AdminComponent } from './components/admin/admin.component';
 import {DeferLoadModule} from "@trademe/ng-defer-load";
 import {MatTableModule} from "@angular/material/table";
 import { AdminDialogComponent } from './components/admin-dialog/admin-dialog.component';
+import { AlertComponent } from './components/alert/alert.component';
+import {AdminGuard} from './helpers/admin.guard';
+import {AuthGuard} from './helpers/auth.guard';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent},
   { path: 'newAccount', component: NewAccountComponent},
-  { path: 'pointList', component: PointListComponent},
-  { path: 'pointInfo/:id', component: PointInfoComponent},
-  { path: 'parcours-select', component: ParcoursSelectComponent},
-  { path: 'map', component: MapComponent},
-  { path: 'map/:id', component: MapComponent},
-  { path: '', component: LoginComponent },
+  { path: 'pointList', component: PointListComponent,  canActivate: [AuthGuard]},
+  { path: 'pointInfo/:id', component: PointInfoComponent,  canActivate: [AuthGuard]},
+  { path: 'parcours-select', component: ParcoursSelectComponent,  canActivate: [AuthGuard]},
+  { path: 'map', component: MapComponent,  canActivate: [AuthGuard]},
+  { path: 'map/:id', component: MapComponent,  canActivate: [AuthGuard]},
+  { path: '', component: HomeComponent,  canActivate: [AuthGuard] },
   { path: 'not-found', component: FourthOFourthComponent },
-  { path: 'cam', component: CamComponent},
-  { path: 'admin', component: AdminComponent },
-  //{ path: '**', redirectTo: 'not-found' }
+  { path: 'cam', component: CamComponent, canActivate: [AuthGuard]},
+  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
+  // { path: '**', redirectTo: 'not-found' }
 ];
 
 
@@ -72,7 +75,8 @@ const routes: Routes = [
     ParcoursSelectComponent,
     PointSheetComponent,
     AdminComponent,
-    AdminDialogComponent
+    AdminDialogComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule,

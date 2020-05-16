@@ -17,7 +17,7 @@
        <mat-label>
          Nom d'utilisateur
        </mat-label>
-       <input type="text" name="name" matInput ngModel required>
+       <input type="text" name="username" matInput ngModel required>
      </mat-form-field>
 
      <mat-form-field class="field" appearance="outline">
@@ -25,14 +25,6 @@
          Mot de passe
        </mat-label>
        <input [type]="hide ? 'text' : 'password'" name="password" matInput ngModel required>
-       <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
-     </mat-form-field>
-
-     <mat-form-field class="field" appearance="outline">
-       <mat-label>
-         Confirmez votre mot de passe
-       </mat-label>
-       <input [type]="hide ? 'text' : 'password'" name="confirmPassword" matInput ngModel required>
        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
      </mat-form-field>
 

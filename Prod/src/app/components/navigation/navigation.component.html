@@ -5,11 +5,14 @@
     <button mat-menu-item routerLink="/map"><fa-icon [icon]="faMapMarkedAlt" style="color: #43A047"></fa-icon> Map</button>
     <button mat-menu-item routerLink="/parcours-select"><fa-icon [icon]="faRoute" style="color: #43A047"></fa-icon> Parcours</button>
     <button mat-menu-item routerLink="/login"><fa-icon [icon]="faSignInAlt" style="color: #43A047"></fa-icon> Login</button>
-    <button mat-menu-item routerLink="/admin"><fa-icon [icon]="faSignInAlt" style="color: #43A047"></fa-icon> Admin</button>
+
+
   </mat-menu>
 
   <button mat-icon-button [matMenuTriggerFor]="appMenu">
     <mat-icon >menu</mat-icon>
   </button>
   <button mat-icon-button (click)="openCam()"><fa-icon [icon]="faCamera" style="color: white"></fa-icon></button>
+  <button id="logout" mat-button (click)="logout()" style="color: white; visibility: hidden;"><fa-icon [icon]="faSignOutAlt" ></fa-icon> Logout</button>
+  <button id="admin" mat-button routerLink="/admin" style="color: white; visibility: hidden;"><fa-icon [icon]="faCog"></fa-icon> AdminPage</button>
 </mat-toolbar>
