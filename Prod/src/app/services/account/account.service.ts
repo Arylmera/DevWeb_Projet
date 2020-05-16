@@ -10,12 +10,7 @@ export class AccountService {
 
   constructor(private http: HttpClient) {}
 
-  getAll() {
-    return this.http.get<User[]>(`/users`);
-  }
-
   register(user: User) {
-    // return this.http.post(`https://www.wt1-2.ephec-ti.be:3000/api/Utilisateurs`, user);
     return this.http.post(`/users/register`, user);
   }
 }

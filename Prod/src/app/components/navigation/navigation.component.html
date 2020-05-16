@@ -4,7 +4,7 @@
     <button mat-menu-item routerLink="/pointList"><fa-icon [icon]="faMapPin" style="color: #43A047"></fa-icon> Points</button>
     <button mat-menu-item routerLink="/map"><fa-icon [icon]="faMapMarkedAlt" style="color: #43A047"></fa-icon> Map</button>
     <button mat-menu-item routerLink="/parcours-select"><fa-icon [icon]="faRoute" style="color: #43A047"></fa-icon> Parcours</button>
-    <button id="admin" mat-menu-item routerLink="/admin"><fa-icon [icon]="faCog" style="color: #43A047"></fa-icon> AdminPage</button>
+    <button id="admin" mat-menu-item routerLink="/admin" *ngIf="currentUser.username === 'admin'"><fa-icon [icon]="faCog" style="color: #43A047"></fa-icon> AdminPage</button>
     <button id="logout" mat-menu-item (click)="logout()"><fa-icon [icon]="faSignOutAlt" style="color: #43A047"></fa-icon> Logout</button>
   </mat-menu>
 

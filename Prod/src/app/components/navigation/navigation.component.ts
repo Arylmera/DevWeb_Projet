@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component } from '@angular/core';
 import {faHome} from '@fortawesome/free-solid-svg-icons';
 import {faSignOutAlt} from '@fortawesome/free-solid-svg-icons';
 import {faMapPin} from '@fortawesome/free-solid-svg-icons/faMapPin';
@@ -10,6 +10,7 @@ import {CamComponent} from '../cam/cam.component';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {LoginService} from '../../services/login/login.service';
+import {User} from '../../models/user.model';
 
 @Component({
   selector: 'app-navigation',
@@ -17,7 +18,8 @@ import {LoginService} from '../../services/login/login.service';
   styleUrls: ['./navigation.component.scss']
 })
 
-export class NavigationComponent implements OnInit {
+export class NavigationComponent  {
+  currentUser: User;
   faHome = faHome;
   faMapPin = faMapPin;
   faMapMarkedAlt = faMapMarkedAlt;
@@ -32,9 +34,7 @@ export class NavigationComponent implements OnInit {
     private router: Router,
     private loginService: LoginService
   ) {
-  }
-
-  ngOnInit(): void {
+    this.loginService.currentUser.subscribe(x => this.currentUser = x);
   }
 
   openCam(): void {
