@@ -42,7 +42,6 @@ import { AdminDialogComponent } from './components/admin-dialog/admin-dialog.com
 import { AlertComponent } from './components/alert/alert.component';
 import {AdminGuard} from './helpers/admin.guard';
 import {AuthGuard} from './helpers/auth.guard';
-import {JwtInterceptor} from './helpers/jwt.interceptor';
 import {ErrorInterceptor} from './helpers/error.interceptor';
 
 const routes: Routes = [
@@ -115,8 +114,7 @@ const routes: Routes = [
   providers: [
     PointsService,
     MapComponent,
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [
     AppComponent,
