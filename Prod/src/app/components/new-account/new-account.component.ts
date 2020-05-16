@@ -56,13 +56,13 @@ export class NewAccountComponent implements OnInit {
         data  => {
           this.alertService.success('Inscription Réussie.', true);
           this.router.navigate(['/login']);
+          return false;
         },
         error => {
           this.alertService.error(error);
           this.loading = false;
+          return false;
         });
-
-    return false;
 
   }
 

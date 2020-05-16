@@ -55,13 +55,13 @@ export class LoginComponent implements OnInit {
         data => {
           this.alertService.success('Connexion réussie.');
           this.router.navigate(['/']);
+          return false;
         },
         error => {
           this.alertService.error(error);
           this.loading = false;
+          return false;
         });
-
-    return false;
 
   }
 
