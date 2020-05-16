@@ -6,7 +6,8 @@
 
 <mat-card class="registration-card">
  <mat-card-content>
-   <form class="register-form" [formGroup]="registerForm" (ngSubmit)="register();">
+   <div class="register-form">
+   <form [formGroup]="registerForm" (ngSubmit)="register();">
 
      <mat-form-field class="field" appearance="outline">
        <mat-label>
@@ -33,16 +34,15 @@
 
      <app-alert></app-alert>
 
-     <div class="form-group">
      <mat-card-actions>
-       <button mat-raised-button type="submit" [disabled]="loading" style="background-color: #4CAF50; color: white;">
+       <button mat-raised-button [disabled]="loading" style="background-color: #4CAF50; color: white;">
          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1" style="color: white;"></span>
          S'inscrire
        </button>
        <button mat-raised-button type="button" routerLink="/login" style="color: black;">Annuler</button>
      </mat-card-actions>
-     </div>
 
    </form>
+   </div>
  </mat-card-content>
 </mat-card>
