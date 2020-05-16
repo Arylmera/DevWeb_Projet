@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AlertService} from '../../services/alert/alert.service';
 import {LoginService} from '../../services/login/login.service';
 import {AccountService} from '../../services/account/account.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {first} from 'rxjs/operators';
 
 @Component({
@@ -39,14 +39,14 @@ export class NewAccountComponent implements OnInit {
 
   get f() { return this.registerForm.controls; }
 
-  register(): boolean {
+  register(): void {
 
     this.submitted = true;
 
     this.alertService.clear();
 
     if (this.registerForm.invalid) {
-      return false;
+      return;
     }
 
     this.loading = true;
@@ -56,12 +56,10 @@ export class NewAccountComponent implements OnInit {
         data  => {
           this.alertService.success('Inscription Réussie.', true);
           this.router.navigate(['/login']);
-          return false;
         },
         error => {
           this.alertService.error(error);
           this.loading = false;
-          return false;
         });
 
   }
