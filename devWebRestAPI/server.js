@@ -242,7 +242,7 @@ const login = (req, res) => {
                 };
                 res.status(200).json(user);
             } else {
-                res.status(401).send('Mot de passe érroné.');
+                res.status(400).send('Mot de passe érroné.');
             }
         }
     });
