@@ -29,9 +29,7 @@ export class AlertService {
     return this.subject.asObservable();
   }
 
-    // @ts-ignore
-  // tslint:disable-next-line:ban-types
-  success(message: Object | A, keepAfterRouteChange = false) {
+  success(message: string, keepAfterRouteChange = false) {
     this.keepAfterRouteChange = keepAfterRouteChange;
     this.subject.next({ type: 'success', text: message });
   }

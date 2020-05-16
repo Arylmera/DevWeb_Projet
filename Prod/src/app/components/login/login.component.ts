@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
       .pipe(first())
       .subscribe(
         data => {
-          this.alertService.error('Connexion réussie.');
+          this.alertService.success('Connexion réussie.');
           this.router.navigate([this.returnUrl]);
         },
         error => {
