@@ -53,13 +53,13 @@ export class NewAccountComponent implements OnInit {
     this.accountService.register(this.registerForm.value)
       .pipe(first())
       .subscribe(
-        ()  => {
+        data  => {
+          console.log(data);
           this.alertService.success('Inscription Réussie.', true);
           this.router.navigate(['/login']);
         },
         error => {
-          this.alertService.error(error);
-          this.alertService.clear();
+          console.log(error);
           this.alertService.error('Nom d\'utilisateur éxistant.\n Veuillez en choisir un autre.', true);
           this.loading = false;
           });
