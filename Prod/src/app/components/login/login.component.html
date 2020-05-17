@@ -7,7 +7,7 @@
 <mat-card class="connexion-card">
   <mat-card-content>
     <div class="connexion-form">
-    <form [formGroup]="loginForm" (ngSubmit)="connect();">
+    <form [formGroup]="loginForm" (ngSubmit)="connect();" action="#">
 
       <mat-form-field class="field" appearance="outline">
         <mat-label>
@@ -34,7 +34,7 @@
       <app-alert></app-alert>
 
       <mat-card-actions>
-        <button mat-raised-button [disabled]="loading" style="background-color: #4CAF50; color: white;">
+        <button mat-raised-button type="submit" [disabled]="loading" style="background-color: #4CAF50; color: white;">
           <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1" style="color: white;"></span>
           Connexion
         </button>
