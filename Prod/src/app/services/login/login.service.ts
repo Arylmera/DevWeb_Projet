@@ -24,7 +24,6 @@ export class LoginService {
   }
 
   // Requete de login à l'api
-  // Par sécurité, l'api renvoie juste l'id du user et son username
   login(username, password) {
     return this.http.post<any>(`https://www.wt1-2.ephec-ti.be:3000/api/utilisateurs/login`, { username, password })
       .pipe(map(user => {
