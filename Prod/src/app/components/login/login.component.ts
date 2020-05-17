@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
     this.loginService.login(this.f.username.value, this.f.password.value)
       .pipe(first())
       .subscribe(
-        data => {
+        () => {
           this.alertService.success('Connexion réussie.');
           this.router.navigate(['/']);
         },
@@ -60,6 +60,8 @@ export class LoginComponent implements OnInit {
           console.log(error);
           this.alertService.error(error);
           this.loading = false;
+        },
+        () => {
           return;
         });
 
