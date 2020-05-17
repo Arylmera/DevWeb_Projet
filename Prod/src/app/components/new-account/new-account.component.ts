@@ -57,9 +57,11 @@ export class NewAccountComponent implements OnInit {
           this.alertService.success('Inscription Réussie.', true);
           this.router.navigate(['/login']);
         },
-        () => {
-            this.alertService.error('Nom d\'utilisateur éxistant.\n Veuillez en choisir un autre.', true);
-            this.loading = false;
+        error => {
+          this.alertService.error(error);
+          this.alertService.clear();
+          this.alertService.error('Nom d\'utilisateur éxistant.\n Veuillez en choisir un autre.', true);
+          this.loading = false;
           });
 
   }
