@@ -53,11 +53,12 @@ export class LoginComponent implements OnInit {
       .pipe(first())
       .subscribe(
         () => {
-          this.alertService.success('Connexion réussie.');
+          this.alertService.success('Connexion réussie.', true);
           this.router.navigate(['/']);
         },
-        error => {
-            this.alertService.error('Nom d\'utilisateur ou mot de passe incorrect.\n Si vous n\'êtes pas inscrit, veuillez vous inscrire.');
+        () => {
+          // tslint:disable-next-line:max-line-length
+            this.alertService.error('Nom d\'utilisateur ou mot de passe incorrect.\n Si vous n\'êtes pas inscrit, veuillez vous inscrire.', true);
             this.loading = false;
           });
 
