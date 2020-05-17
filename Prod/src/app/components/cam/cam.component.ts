@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {AlertService} from "../../services/alert/alert.service";
 
 
 @Component({
@@ -8,19 +9,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CamComponent implements OnInit {
 
-  site: string;
-
-  constructor() {}
+  constructor(
+    private alertService: AlertService
+  ) {}
 
   ngOnInit(): void {
   }
 
   handleQr(qrRes: string) {
-    this.site = qrRes;
-    document.getElementById('openButton').style.visibility = 'visible';
+    this.alertService.success('Scan réussi.', true);
+    window.open(qrRes);
   }
 
-  openSite() {
-    window.open(this.site);
+  errorQr() {
+    this.alertService.error('Une erreur est survenue, \n veuillez réessayer.', true);
+  }
+
+  failureQr() {
+    this.alertService.error('Aucun résultat trouvé, \n veuillez réessayer.', true);
+  }
+
+  cameraNotFound() {
+    this.alertService.error('Aucune caméra trouvée.', true);
   }
 }
