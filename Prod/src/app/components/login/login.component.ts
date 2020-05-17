@@ -57,13 +57,17 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/']);
         },
         error => {
-          console.log(error);
-          this.alertService.error(error);
-          this.loading = false;
-        },
-        () => {
-          return;
-        });
+
+          if (error.status === '403') {
+            this.alertService.error('Mot de passe érroné.');
+            this.loading = false;
+          } else if (error.status === '401') {
+            this.alertService.error('Nom d\'utilisateur incorrect ou inexistant,\n veuillez vous inscrire.');
+            this.loading = false;
+          } else {
+            this.alertService.error(error);
+            this.loading = false;
+          }});
 
   }
 

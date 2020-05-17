@@ -58,12 +58,14 @@ export class NewAccountComponent implements OnInit {
           this.router.navigate(['/login']);
         },
         error => {
-          this.alertService.error(error);
-          this.loading = false;
-        },
-        () => {
-          return;
-        });
+
+          if (error.status === '403') {
+            this.alertService.error('Nom d\'utilisateur déjà utilisé.\n Veuillez en choisir un autre.');
+            this.loading = false;
+          } else {
+            this.alertService.error(error);
+            this.loading = false;
+          }});
 
   }
 
