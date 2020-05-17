@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Point, PointsService} from '../../services/points/points.service';
-import {faTree} from "@fortawesome/free-solid-svg-icons/faTree";
-import * as $ from 'jquery';
+import {PointsService} from '../../services/points/points.service';
+import {faTree} from '@fortawesome/free-solid-svg-icons/faTree';
 
 @Component({
   selector: 'app-point-list',
@@ -38,12 +37,13 @@ export class PointListComponent implements OnInit {
     this.categListSelected = [];
     this.pointListSelected = [];
     const categSelected = document.getElementsByName('categList') as any;
+    // tslint:disable-next-line:prefer-for-of
     for ( let i = 0; i < categSelected.length; i ++) {
       if (categSelected[i].checked) {
         this.categListSelected.push(categSelected[i].value);
         this.pointsService.recupPointsByCategorie(categSelected[i].value).subscribe( data => {
           this.pointListSelected = data;
-        })
+        });
       }
     }
     if (this.categListSelected.length === 0) {

@@ -8,6 +8,8 @@ import {Point, PointsService} from '../../services/points/points.service';
   styleUrls: ['./admin-dialog.component.scss']
 })
 export class AdminDialogComponent {
+
+  // tslint:disable-next-line:max-line-length
   constructor(public dialogRef: MatDialogRef<AdminDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: Point, private pointsService: PointsService) { }
 
   clickValider(): void {

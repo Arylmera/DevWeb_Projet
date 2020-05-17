@@ -5,14 +5,14 @@ import * as L from 'leaflet';
 import 'leaflet-easybutton';
 import 'leaflet-routing-machine';
 import 'leaflet-gps';
-import * as $ from 'jquery';
-import {ActivatedRoute} from "@angular/router";
-import {MatBottomSheet} from "@angular/material/bottom-sheet";
-import {PointSheetComponent} from "../point-sheet/point-sheet.component";
+import {ActivatedRoute} from '@angular/router';
+import {MatBottomSheet} from '@angular/material/bottom-sheet';
+import {PointSheetComponent} from '../point-sheet/point-sheet.component';
 
 const mapboxAPI = 'pk.eyJ1IjoiYXJ5bG1lcmEiLCJhIjoiY2s3aGZ1OW0zMDk1bzNubW5ya2twdDZxcSJ9.IVUHXKtgN21QPirw0ZVWpQ';
-const mapboxStyle = 'https://api.mapbox.com/styles/v1/arylmera/ck7ix7bma010g1io6aa528sla/tiles/256/{z}/{x}/{y}@2x?access_token='+ mapboxAPI;
-const routingOptions = {profile: "mapbox/walking", polylinePrecision: 0};
+// tslint:disable-next-line:max-line-length
+const mapboxStyle = 'https://api.mapbox.com/styles/v1/arylmera/ck7ix7bma010g1io6aa528sla/tiles/256/{z}/{x}/{y}@2x?access_token=' + mapboxAPI;
+const routingOptions = {profile: 'mapbox/walking', polylinePrecision: 0};
 
 // lln = [50.668351,4.611746];
 // iconMap
@@ -118,32 +118,30 @@ export class MapComponent implements AfterViewInit, OnInit {
    */
   ngOnInit(): void {
     // add de tout les points
-    this.parcoursId = Number(this.route.snapshot.params['id']);
-    if (typeof this.parcoursId != "number"){ this.parcoursId = 0}
-    console.log('chargement de la carte avec le parcours : '+ this.parcoursId);
+    this.parcoursId = Number(this.route.snapshot.params.id);
+    if (typeof this.parcoursId != 'number') { this.parcoursId = 0; }
+    console.log('chargement de la carte avec le parcours : ' + this.parcoursId);
     if (this.parcoursId) {
       this.pointsService.recupParcoursPointsById(this.parcoursId).subscribe( data => {
-        let pointIdList = data;
+        const pointIdList = data;
         this.pointsService.recupParcoursById(this.parcoursId).subscribe( data => {
           this.parcoursName = data[0].nameParcours;
           this.setTitle();
         });
-        for (let id in pointIdList) {
+        for (const id in pointIdList) {
           this.pointsService.recupPointById(Number(id)).subscribe( data => {
-            if (!this.pointList[0]){
+            if (!this.pointList[0]) {
               this.pointList = [data[0]];
-            }
-            else {
+            } else {
               this.pointList.push(data[0]);
             }
-            if(Object.keys(this.pointList).length +1 == Object.keys(pointIdList).length){
+            if (Object.keys(this.pointList).length + 1 == Object.keys(pointIdList).length) {
               this.addPointsFromDb();
             }
-          })
+          });
         }
       });
-    }
-    else {
+    } else {
       this.pointsService.recupPoints().subscribe(data => {
         this.pointList = data;
         this.addPointsFromDb();
@@ -177,7 +175,7 @@ export class MapComponent implements AfterViewInit, OnInit {
     });
     // création de la map
     this.map = L.map('map', {
-      center: ([51.673,2.826]),
+      center: ([51.673, 2.826]),
       zoom: 17
     })
       .addLayer(mapLayer);
@@ -191,12 +189,12 @@ export class MapComponent implements AfterViewInit, OnInit {
   /**
    * initalisation du marker de position et de précision
    */
-  private initPositionMaker(){
-    this.positionMarker = L.marker([0,0], {icon: positionIcon})
+  private initPositionMaker() {
+    this.positionMarker = L.marker([0, 0], {icon: positionIcon})
       .setOpacity(0.8)
       .bindPopup(L.popup().setContent('you are here'));
     this.positionMarker.addTo(this.map);
-    this.positionCircle = L.circleMarker([0,0], {
+    this.positionCircle = L.circleMarker([0, 0], {
       opacity: 0.5,
       color: 'green'
     });
@@ -208,7 +206,7 @@ export class MapComponent implements AfterViewInit, OnInit {
    * définition de la positon du marker de position
    * @param position
    */
-  private setPositionMarker(position: any){
+  private setPositionMarker(position: any) {
     this.positionMarker.setLatLng([position.latlng.lat, position.latlng.lng]);
     this.positionCircle.setLatLng([position.latlng.lat, position.latlng.lng]);
     this.positionCircle.setRadius( position.accuracy / 2 );
@@ -233,7 +231,7 @@ export class MapComponent implements AfterViewInit, OnInit {
   /**
    * open BottomSheet based on point
    */
-  openSheet(id: number){
+  openSheet(id: number) {
     console.log('open popup from point');
     console.log(id);
     this.pointSheet.open(PointSheetComponent, {
@@ -249,14 +247,13 @@ export class MapComponent implements AfterViewInit, OnInit {
   private addPointsFromDb() {
     console.log('adding points from database with');
     this.pointList.forEach(point => {
-      if(point.disponiblePoint) {
-        let pLatLng = this.parsPointXYLatLng([point.latitudePoint, point.longitudePoint]);
+      if (point.disponiblePoint) {
+        const pLatLng = this.parsPointXYLatLng([point.latitudePoint, point.longitudePoint]);
         this.addPoint([pLatLng.lat, pLatLng.lng], point.idPoint);
         point.latitudePoint = pLatLng.lat;
         point.longitudePoint = pLatLng.lng;
-      }
-      else {
-        console.log("Point :" + point.idPoint + "/" + point.namePoint +" non dispoible");
+      } else {
+        console.log('Point :' + point.idPoint + '/' + point.namePoint + ' non dispoible');
       }
     });
     console.log('points from db added');
@@ -266,8 +263,8 @@ export class MapComponent implements AfterViewInit, OnInit {
    * parsing de la coordonée depuis XY vers latLong
    * @param pointXY
    */
-  parsPointXYLatLng(pointXY: [number, number]){
-    let point = L.point(pointXY);
+  parsPointXYLatLng(pointXY: [number, number]) {
+    const point = L.point(pointXY);
     return this.map.layerPointToLatLng(point);
   }
 
@@ -283,27 +280,26 @@ export class MapComponent implements AfterViewInit, OnInit {
       enableHighAccuracy : true
     }))
       .on('locationfound', (e) => {
-        console.log (' your are at '+  e.latlng + ' with in '+ e.accuracy + 'm');
+        console.log (' your are at ' +  e.latlng + ' with in ' + e.accuracy + 'm');
         this.currentlatlng = [e.latlng.lat, e.latlng.lng];
         this.setPositionMarker(e);
         this.map.panTo([e.latlng.lat, e.latlng.lng]);
         this.loading = false;
       });
-    //this.map.setZoom(18);
+    // this.map.setZoom(18);
   }
 
   /**
    * help au switch de la valeur de centre de localisation sur géolocalisation
    */
   switchLocalisationCenter() {
-    if( this.localisationCenter) {
+    if ( this.localisationCenter) {
       this.localisationCenter = false;
-      console.log("follow is now false");
-    }
-    else {
+      console.log('follow is now false');
+    } else {
       this.localisationCenter = true;
       this.map.panTo([this.currentlatlng[0], this.currentlatlng[1]]);
-      console.log("follow is now true");
+      console.log('follow is now true');
     }
     this.map.locate.watch = this.localisationCenter;
     this.map.locate.setView = this.localisationCenter;
@@ -313,7 +309,7 @@ export class MapComponent implements AfterViewInit, OnInit {
    * définition dynamique du titre de la carte
    */
   private setTitle() {
-    this.mapTitle = 'Carte du '+ this.parcoursName;
+    this.mapTitle = 'Carte du ' + this.parcoursName;
   }
 
   /**
@@ -324,7 +320,7 @@ export class MapComponent implements AfterViewInit, OnInit {
       router: (L.Routing as any).mapbox(mapboxAPI, routingOptions),
       waypoints: [],
       // @ts-ignore
-      createMarker : () => {return null}, // suppression de la création du markeur propre au routing
+      createMarker : () => null, // suppression de la création du markeur propre au routing
       routeWhileDragging: false,
       fitSelectedRoutes: 'smart',
       autoRoute: false,
@@ -342,24 +338,24 @@ export class MapComponent implements AfterViewInit, OnInit {
         console.log('plotting routes ...');
       })
       .on('routesfound', (e) => {
-        let route = e.routes;
-        console.log(' routing with :' + route + " routes");
+        const route = e.routes;
+        console.log(' routing with :' + route + ' routes');
       })
-      .on('routingerror', () => console.log("error in routing"))
+      .on('routingerror', () => console.log('error in routing'))
       .addTo(this.map);
   }
 
   /**
    * lancement du routing sur base de la liste des waypoints
    */
-  lunchRouting(){
+  lunchRouting() {
     this.addRoutingPoint();
     console.log(this.routingWaypoints);
     this.routingWaypointsCoord = [];
-    this.routingWaypointsCoord.push(L.latLng(this.currentlatlng[0],this.currentlatlng[1]));
+    this.routingWaypointsCoord.push(L.latLng(this.currentlatlng[0], this.currentlatlng[1]));
     this.routingWaypoints.forEach( point => {
       this.routingWaypointsCoord.push([point.latitudePoint, point.longitudePoint]);
-    })
+    });
     this.routingControl.setWaypoints(this.routingWaypointsCoord);
     this.routingControl.route(); // lancement du routing
     this.showRoutingBtn = true;
@@ -369,8 +365,8 @@ export class MapComponent implements AfterViewInit, OnInit {
   /**
    * définition de parcours ou custom
    */
-  addRoutingPoint(){
-    if(!this.parcoursId){
+  addRoutingPoint() {
+    if (!this.parcoursId) {
       this.addCustomPoint();
     }
   }
@@ -378,12 +374,12 @@ export class MapComponent implements AfterViewInit, OnInit {
   /**
    * ajout des points customs pour le routing
    */
-  addCustomPoint(){
-    let numberList = this.mapsService.getRoutingPoint();
+  addCustomPoint() {
+    const numberList = this.mapsService.getRoutingPoint();
     this.routingWaypoints = [];
-    for(let number of numberList) {
-      for(let point of this.pointList){
-        if( number == point.idPoint) {
+    for (const number of numberList) {
+      for (const point of this.pointList) {
+        if ( number == point.idPoint) {
           this.routingWaypoints.push(point);
           break;
         }
@@ -394,24 +390,22 @@ export class MapComponent implements AfterViewInit, OnInit {
   /**
    * ajout de tout les points chargé pour création de route
    */
-  addAllRoutingPoint(){
-    if(this.pointList.length > 24){ // plus de 24 points => en 2 parties
+  addAllRoutingPoint() {
+    if (this.pointList.length > 24) { // plus de 24 points => en 2 parties
       this.twoPartRouting = true;
-      this.mapTitle = 'Carte du '+ this.parcoursName + ' 1er partie';
-      for (let i = 0; i < 24; i++){
+      this.mapTitle = 'Carte du ' + this.parcoursName + ' 1er partie';
+      for (let i = 0; i < 24; i++) {
         this.routingWaypoints.push(this.pointList[i]);
       }
-      for(let i = 24; i < 49; i++){
-        if(this.pointList[i]) {
+      for (let i = 24; i < 49; i++) {
+        if (this.pointList[i]) {
           this.routingWayPointsSecondPart.push(this.pointList[i]);
-        }
-        else{
+        } else {
           break;
         }
       }
       this.routing = false;
-    }
-    else {
+    } else {
       this.routingWaypoints = this.pointList;
     }
     this.lunchRouting();
@@ -420,8 +414,8 @@ export class MapComponent implements AfterViewInit, OnInit {
   /**
    * lanchement de la 2e partie de points du parcours
    */
-  addSecondPart(){
-    this.mapTitle = 'Carte du '+ this.parcoursName + ' 2e partie';
+  addSecondPart() {
+    this.mapTitle = 'Carte du ' + this.parcoursName + ' 2e partie';
     this.routingWaypoints = this.routingWayPointsSecondPart;
     console.log('second part');
     console.log(this.routingWayPointsSecondPart);
@@ -440,7 +434,7 @@ export class MapComponent implements AfterViewInit, OnInit {
   /**
    * suppression de l'ensembles des routes acutelles et des waypoints
    */
-  clearRoute(){
+  clearRoute() {
     this.routingWaypoints = [];
     this.mapsService.clearRoutingPoint();
     this.routingControl.setWaypoints([]);
@@ -451,11 +445,10 @@ export class MapComponent implements AfterViewInit, OnInit {
   /**
    * switch affichage de la legende de route
    */
-  showRoutingLegend(){
-    if( this.showRouting ){
+  showRoutingLegend() {
+    if ( this.showRouting ) {
       this.routingControl.hide();
-    }
-    else {
+    } else {
       this.routingControl.show();
     }
     this.showRouting = !this.showRouting;
