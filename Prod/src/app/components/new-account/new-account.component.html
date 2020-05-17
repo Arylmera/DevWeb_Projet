@@ -36,8 +36,6 @@
        </div>
      </mat-form-field>
 
-     <app-alert></app-alert>
-
      <mat-card-actions>
        <button mat-raised-button type="submit" [disabled]="loading" style="background-color: #4CAF50; color: white;">
          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1" style="color: white;"></span>
@@ -47,6 +45,9 @@
      </mat-card-actions>
 
    </form>
+
+     <app-alert></app-alert>
+
    </div>
  </mat-card-content>
 </mat-card>

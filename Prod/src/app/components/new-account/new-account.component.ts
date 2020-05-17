@@ -61,12 +61,12 @@ export class NewAccountComponent implements OnInit {
       .pipe(first())
       .subscribe(
         // Si la requete réussi
-        data  => {
+        ()  => {
           this.alertService.success('Inscription Réussie.', true);
           this.router.navigate(['/login']);
         },
         // Si une erreur est renvoyée
-        error => {
+        () => {
           this.alertService.error('Nom d\'utilisateur éxistant.\n Veuillez en choisir un autre.', true);
           this.loading = false;
           });
