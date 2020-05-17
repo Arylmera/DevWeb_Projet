@@ -61,6 +61,9 @@ const routes: Routes = [
 ];
 
 
+// @ts-ignore
+// @ts-ignore
+// @ts-ignore
 @NgModule({
   declarations: [
     AppComponent,
@@ -109,7 +112,7 @@ const routes: Routes = [
   ],
   entryComponents: [
     PointSheetComponent,
-    MapComponent
+    MapComponent,
   ],
   providers: [
     PointsService,

@@ -26,17 +26,20 @@ export class NewAccountComponent implements OnInit {
     private accountService: AccountService
   ) {
     if (this.loginService.currentUserValue) {
+      // Si l'utilisateur est déjà connecté -> normalement se fait déjà sur la login page mais le cas peut arriver
       this.router.navigate(['/']);
     }
   }
 
   ngOnInit(): void {
+    // Initie les controls du formulaire
     this.registerForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(32)]]
     });
   }
 
+  // Récupération du formulaire
   get f() { return this.registerForm.controls; }
 
   register(): void {
@@ -45,21 +48,25 @@ export class NewAccountComponent implements OnInit {
 
     this.alertService.clear();
 
+    // Si formulaire invalide
     if (this.registerForm.invalid) {
       return;
     }
 
+    // loading = true permet l'affichage de la roue de chargment
     this.loading = true;
+
+    // Appel de la requete d'enregistrement
     this.accountService.register(this.registerForm.value)
       .pipe(first())
       .subscribe(
-        data  => {
-          console.log(data);
+        // Si la requete réussi
+        ()  => {
           this.alertService.success('Inscription Réussie.', true);
           this.router.navigate(['/login']);
         },
-        error => {
-          console.log(error);
+        // Si une erreur est renvoyée
+        () => {
           this.alertService.error('Nom d\'utilisateur éxistant.\n Veuillez en choisir un autre.', true);
           this.loading = false;
           });

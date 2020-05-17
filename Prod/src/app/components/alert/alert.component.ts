@@ -14,6 +14,10 @@ export class AlertComponent implements OnInit, OnDestroy {
   constructor(private alertService: AlertService) { }
 
   ngOnInit(): void {
+    /*
+    / Gestion des types d'alertes et attribustion d'une class en fonction du case succes-> vert, error->rouge
+    / S'active quand on fait appel à AlertService grace à l'observable
+    */
     this.subscription = this.alertService.getAlert()
       .subscribe(message => {
         switch (message && message.type) {

@@ -12,8 +12,11 @@ export class AdminGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const currentUser = this.authenticationService.currentUserValue;
+
+    // Vérifie si l'utilisateur est bien admin
+    // pourrait aussi etre implenté en tant boolean dans le model user (gestion des admins necessaires depuis la table utilisateurs)
     if (currentUser.username === 'admin') {
-      // authorised so return true
+      // True va permettre l'accès
       return true;
     }
 

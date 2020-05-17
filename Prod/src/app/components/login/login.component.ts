@@ -23,12 +23,16 @@ export class LoginComponent implements OnInit {
     private loginService: LoginService,
     private alertService: AlertService
   ) {
+
+    // Si l'utilisateur est déjà connecté le redirige vers la page d'accueil
     if (this.loginService.currentUserValue) {
       this.router.navigate(['/']);
     }
   }
 
   ngOnInit(): void {
+
+    // Initie les controls du formulaire
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
@@ -36,6 +40,7 @@ export class LoginComponent implements OnInit {
 
   }
 
+  // récupération des entrées du fromulaire
   get f() { return this.loginForm.controls; }
 
   connect(): void {
@@ -44,21 +49,25 @@ export class LoginComponent implements OnInit {
 
     this.alertService.clear();
 
+    // Si formulaire invalide
     if (this.loginForm.invalid) {
       return;
     }
 
+    // loading = true permet l'affichage de la roue de chargement
     this.loading = true;
+
+    // Appel à la fonction de connection
     this.loginService.login(this.f.username.value, this.f.password.value)
       .pipe(first())
       .subscribe(
-        data => {
-          console.log(data);
+        // Si la requete sql a renvoyé une réponse
+        () => {
           this.alertService.success('Connexion réussie.', true);
           this.router.navigate(['/']);
         },
-        error => {
-          console.log(error);
+        // Si la requete sql a renvoyé une erreur
+        () => {
           // tslint:disable-next-line:max-line-length
           this.alertService.error('Nom d\'utilisateur ou mot de passe incorrect.\n Si vous n\'êtes pas inscrit, veuillez vous inscrire.', true);
           this.loading = false;
