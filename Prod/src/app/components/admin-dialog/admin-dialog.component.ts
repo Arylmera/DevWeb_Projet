@@ -2,18 +2,6 @@ import {Component, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {Point, PointsService} from '../../services/points/points.service';
 
-/*
-export interface Point {
-  idPoint: number;
-  namePoint: string;
-  vernaculairePoint: string;
-  descriptionPoint: string;
-  latitudePoint: any;
-  longitudePoint: any;
-  disponiblePoint: any;
-}
-*/
-
 @Component({
   selector: 'app-admin-dialog',
   templateUrl: './admin-dialog.component.html',

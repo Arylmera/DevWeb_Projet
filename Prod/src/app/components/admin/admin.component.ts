@@ -1,20 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import {Point, PointsService} from '../../services/points/points.service';
+import {Component, OnInit} from '@angular/core';
+import {PointsService} from '../../services/points/points.service';
 import {MatTableDataSource} from '@angular/material/table';
 import {AdminDialogComponent} from '../admin-dialog/admin-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
-
-/*
-export interface Point {
-  idPoint: number;
-  namePoint: string;
-  vernaculairePoint: string;
-  descriptionPoint: string;
-  latitudePoint: any;
-  longitudePoint: any;
-  disponiblePoint: any;
-}
- */
 
 @Component({
   selector: 'app-admin',

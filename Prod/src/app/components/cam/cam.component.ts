@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {AlertService} from "../../services/alert/alert.service";
+import { Component } from '@angular/core';
+import {AlertService} from '../../services/alert/alert.service';
 
 
 @Component({
@@ -7,14 +7,11 @@ import {AlertService} from "../../services/alert/alert.service";
   templateUrl: './cam.component.html',
   styleUrls: ['./cam.component.scss']
 })
-export class CamComponent implements OnInit {
+export class CamComponent {
 
   constructor(
     private alertService: AlertService
   ) {}
-
-  ngOnInit(): void {
-  }
 
   handleQr(qrRes: string) {
     this.alertService.success('Scan réussi.', true);

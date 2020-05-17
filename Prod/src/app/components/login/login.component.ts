@@ -57,17 +57,9 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/']);
         },
         error => {
-          console.log(error);
-          if (error.status === '403') {
-            this.alertService.error('Mot de passe érroné.');
+            this.alertService.error('Nom d\'utilisateur ou mot de passe incorrect.\n Si vous n\'êtes pas inscrit, veuillez vous inscrire.');
             this.loading = false;
-          } else if (error.status === '401') {
-            this.alertService.error('Nom d\'utilisateur incorrect ou inexistant,\n veuillez vous inscrire.');
-            this.loading = false;
-          } else {
-            this.alertService.error(error);
-            this.loading = false;
-          }});
+          });
 
   }
 
