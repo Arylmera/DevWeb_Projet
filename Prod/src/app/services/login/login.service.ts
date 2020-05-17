@@ -27,8 +27,8 @@ export class LoginService {
   login(username, password) {
     return this.http.post<any>(`https://www.wt1-2.ephec-ti.be:3000/api/utilisateurs/login`, { username, password })
       .pipe(map(user => {
-        localStorage.setItem('currentUser', JSON.stringify(user)); // Sauvegarde la reponse dans la memoire cache
-        this.currentUserSubject.next(user); // Met à jour l'utilisateur actuel
+        localStorage.setItem('currentUser', user); // Sauvegarde la reponse dans la memoire cache
+        this.currentUserSubject.next(JSON.parse(user)); // Met à jour l'utilisateur actuel
         return user; // Renvoie le user récupéré
       }));
   }
