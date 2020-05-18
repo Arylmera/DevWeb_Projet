@@ -22,25 +22,25 @@ const routingOptions = {profile: 'mapbox/walking', polylinePrecision: 0};
 
 // lln = [50.668351,4.611746];
 // iconMap
-const greenIcon = new L.Icon({
+const markerGreen = new L.Icon({
   iconUrl: '../../../assets/Map/marker/marker-icon-green.png',
-  shadowUrl: '../../../assets/Map/marker/marker-shadow.png',
+  //shadowUrl: '../../../assets/Map/marker/marker-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
+  popupAnchor: [0, -34],
+  shadowSize: [25, 25]
 });
-const redIcon = new L.Icon({
-  iconUrl: '../../../assets/Map/marker/marker-icon-red.png',
-  shadowUrl: '../../../assets/Map/marker/marker-shadow.png',
+const greenIconLeaf = new L.Icon({
+  iconUrl: '../../../assets/Map/marker/leaf-green.png',
+  //shadowUrl: '../../../assets/Map/marker/leaf-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
-  shadowSize: [41, 41]
+  shadowSize: [25, 25]
 });
 
-const positionIcon = greenIcon;
-const pointIcon = redIcon;
+const positionIcon = markerGreen;
+const pointIcon = greenIconLeaf;
 
 @Component({
   selector: 'app-map',
@@ -245,7 +245,7 @@ export class MapComponent implements AfterViewInit, OnInit {
    * @param id
    */
   addPoint(latlng: [number, number], id: number) {
-    const point = L.marker(latlng, {icon: pointIcon}).setOpacity(0.8);
+    const point = L.marker(latlng, {icon: pointIcon}).setOpacity(1);
     point.on('click', () => {
       this.openSheet(id);
     });
