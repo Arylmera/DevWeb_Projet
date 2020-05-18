@@ -45,18 +45,18 @@ import {AuthGuard} from './helpers/auth.guard';
 import {ErrorInterceptor} from './helpers/error.interceptor';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'home', component: HomeComponent, /*canActivate: [AuthGuard]*/ },
   { path: 'login', component: LoginComponent},
   { path: 'newAccount', component: NewAccountComponent},
-  { path: 'pointList', component: PointListComponent,  canActivate: [AuthGuard]},
-  { path: 'pointInfo/:id', component: PointInfoComponent,  canActivate: [AuthGuard]},
-  { path: 'parcours-select', component: ParcoursSelectComponent,  canActivate: [AuthGuard]},
-  { path: 'map', component: MapComponent,  canActivate: [AuthGuard]},
-  { path: 'map/:id', component: MapComponent,  canActivate: [AuthGuard]},
-  { path: '', component: HomeComponent,  canActivate: [AuthGuard] },
+  { path: 'pointList', component: PointListComponent,  /*canActivate: [AuthGuard]*/},
+  { path: 'pointInfo/:id', component: PointInfoComponent, /* canActivate: [AuthGuard]*/},
+  { path: 'parcours-select', component: ParcoursSelectComponent,/*  canActivate: [AuthGuard]*/},
+  { path: 'map', component: MapComponent, /* canActivate: [AuthGuard]*/},
+  { path: 'map/:id', component: MapComponent,/*  canActivate: [AuthGuard]*/},
+  { path: '', component: HomeComponent, /* canActivate: [AuthGuard]*/},
   { path: 'not-found', component: FourthOFourthComponent },
-  { path: 'cam', component: CamComponent, canActivate: [AuthGuard]},
-  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
+  { path: 'cam', component: CamComponent,/* canActivate: [AuthGuard]*/},
+  { path: 'admin', component: AdminComponent,/* canActivate: [AdminGuard] */},
   { path: '**', redirectTo: '' }
 ];
 

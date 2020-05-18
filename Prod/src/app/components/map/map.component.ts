@@ -32,50 +32,9 @@ const redIcon = new L.Icon({
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 });
-const blueIcon = new L.Icon({
-  iconUrl: '../../../assets/Map/marker/marker-icon-blue.png',
-  shadowUrl: '../../../assets/Map/marker/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
-});
-const orangeIcon = new L.Icon({
-  iconUrl: '../../../assets/Map/marker/marker-icon-orange.png',
-  shadowUrl: '../../../assets/Map/marker/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
-});
-const yellowIcon = new L.Icon({
-  iconUrl: '../../../assets/Map/marker/marker-icon-yellow.png',
-  shadowUrl: '../../../assets/Map/marker/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
-});
-const greyIcon = new L.Icon({
-  iconUrl: '../../../assets/Map/marker/marker-icon-grey.png',
-  shadowUrl: '../../../assets/Map/marker/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
-});
-const violetIcon = new L.Icon({
-  iconUrl: '../../../assets/Map/marker/marker-icon-violet.png',
-  shadowUrl: '../../../assets/Map/marker/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
-});
 
 const positionIcon = greenIcon;
 const pointIcon = redIcon;
-const routingIcon = blueIcon;
 
 @Component({
   selector: 'app-map',
@@ -97,6 +56,7 @@ export class MapComponent implements AfterViewInit, OnInit {
   mapTitle = 'Carte des Arbres';
 
   // routing variables
+  routingWaypointsBkp: any = [];
   routingWaypoints: any = [];
   routingWayPointsSecondPart: any = [];
   twoPartRouting = false;
@@ -232,8 +192,6 @@ export class MapComponent implements AfterViewInit, OnInit {
    * open BottomSheet based on point
    */
   openSheet(id: number) {
-    console.log('open popup from point');
-    console.log(id);
     this.pointSheet.open(PointSheetComponent, {
       data: id
     });
@@ -245,7 +203,6 @@ export class MapComponent implements AfterViewInit, OnInit {
    * ajout des points depuis la base de donnée
    */
   private addPointsFromDb() {
-    console.log('adding points from database with');
     this.pointList.forEach(point => {
       if (point.disponiblePoint) {
         const pLatLng = this.parsPointXYLatLng([point.latitudePoint, point.longitudePoint]);
@@ -253,10 +210,9 @@ export class MapComponent implements AfterViewInit, OnInit {
         point.latitudePoint = pLatLng.lat;
         point.longitudePoint = pLatLng.lng;
       } else {
-        console.log('Point :' + point.idPoint + '/' + point.namePoint + ' non dispoible');
       }
     });
-    console.log('points from db added');
+    console.log('points from db loaded');
   }
 
   /**
@@ -338,8 +294,7 @@ export class MapComponent implements AfterViewInit, OnInit {
         console.log('plotting routes ...');
       })
       .on('routesfound', (e) => {
-        const route = e.routes;
-        console.log(' routing with :' + route + ' routes');
+        console.log('routing');
       })
       .on('routingerror', () => console.log('error in routing'))
       .addTo(this.map);
@@ -360,6 +315,9 @@ export class MapComponent implements AfterViewInit, OnInit {
     this.routingControl.route(); // lancement du routing
     this.showRoutingBtn = true;
     this.routing = true;
+    if( this.parcoursId){
+
+    }
   }
 
   /**
@@ -391,6 +349,7 @@ export class MapComponent implements AfterViewInit, OnInit {
    * ajout de tout les points chargé pour création de route
    */
   addAllRoutingPoint() {
+    this.routingWaypointsBkp = this.pointList;
     if (this.pointList.length > 24) { // plus de 24 points => en 2 parties
       this.twoPartRouting = true;
       this.mapTitle = 'Carte du ' + this.parcoursName + ' 1er partie';
@@ -418,8 +377,6 @@ export class MapComponent implements AfterViewInit, OnInit {
     this.mapTitle = 'Carte du ' + this.parcoursName + ' 2e partie';
     this.routingWaypoints = this.routingWayPointsSecondPart;
     console.log('second part');
-    console.log(this.routingWayPointsSecondPart);
-    console.log(this.routingWaypoints);
     this.twoPartRouting = false;
     this.lunchRouting();
   }
@@ -440,6 +397,13 @@ export class MapComponent implements AfterViewInit, OnInit {
     this.routingControl.setWaypoints([]);
     this.showRoutingBtn = false;
     this.routing = false;
+    // si dans un parcours
+    if (this.parcoursId){
+      this.pointList = this.routingWaypointsBkp; // récupération de la liste des points
+      this.routingWayPointsSecondPart = [] // clean de la route
+      this.routingWaypoints = [] // clean de la route
+      this.twoPartRouting = false; // remise a zero tu routing
+    }
   }
 
   /**
