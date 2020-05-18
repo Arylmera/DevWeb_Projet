@@ -416,7 +416,8 @@ export class MapComponent implements AfterViewInit, OnInit {
       this.routingWayPointsSecondPart = [] // clean de la route
       this.routingWaypoints = [] // clean de la route
       this.twoPartRouting = false; // remise a zero tu routing
-      this.trajetRdy = true;
+      this.trajetRdy = true; // trajet près a etre relancé
+      this.setTitle(); // reset titre de la carte
     }
   }
 
