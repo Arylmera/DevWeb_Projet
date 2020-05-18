@@ -63,13 +63,12 @@ export class LoginComponent implements OnInit {
       .subscribe(
         // Si la requete sql a renvoyé une réponse
         () => {
-          this.alertService.success('Connexion réussie.');
           this.router.navigate(['/']);
         },
         // Si la requete sql a renvoyé une erreur
-        () => {
+        error => {
           // tslint:disable-next-line:max-line-length
-          this.alertService.error('Nom d\'utilisateur ou mot de passe incorrect.\n Si vous n\'êtes pas inscrit, veuillez vous inscrire.', true);
+          this.alertService.error(error);
           this.loading = false;
           });
 

@@ -45,8 +45,16 @@
 
     </form>
 
-      <app-alert></app-alert>
-
     </div>
+
+    <app-alert></app-alert>
+
+    <div *ngIf="this.loginService.currentUserValue">
+      <h1 class="h1 text-center">
+        Vous êtes déjà connecté.
+      </h1>
+      <button mat-raised-button routerLink="/">Retour</button>
+    </div>
+
   </mat-card-content>
 </mat-card>
