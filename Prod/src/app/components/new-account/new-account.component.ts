@@ -24,19 +24,21 @@ export class NewAccountComponent implements OnInit {
     private loginService: LoginService,
     private alertService: AlertService,
     private accountService: AccountService
-  ) {
-    if (this.loginService.currentUserValue) {
-      // Si l'utilisateur est déjà connecté -> normalement se fait déjà sur la login page mais le cas peut arriver
-      this.router.navigate(['/']);
-    }
-  }
+  ) {}
 
   ngOnInit(): void {
+
+    // Si l'utilisateur est déjà connecté le redirige vers la page d'accueil
+    if (this.loginService.currentUserValue) {
+      this.router.navigate(['/']);
+    }
+
     // Initie les controls du formulaire
     this.registerForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(32)]]
     });
+
   }
 
   // Récupération du formulaire
