@@ -23,15 +23,14 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private loginService: LoginService,
     private alertService: AlertService
-  ) {
+  ) {}
+
+  ngOnInit(): void {
 
     // Si l'utilisateur est déjà connecté le redirige vers la page d'accueil
     if (this.loginService.currentUserValue) {
       this.router.navigate(['/']);
     }
-  }
-
-  ngOnInit(): void {
 
     // Initie les controls du formulaire
     this.loginForm = this.formBuilder.group({
