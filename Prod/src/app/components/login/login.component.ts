@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {AlertService} from '../../services/alert/alert.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {first} from 'rxjs/operators';
+import {User} from '../../models/user.model';
 
 @Component({
   selector: 'app-login',
