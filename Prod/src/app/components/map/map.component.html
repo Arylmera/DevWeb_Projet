@@ -4,13 +4,16 @@
     <div class="mat-subheader"><u>Liste des arrêts du trajet</u></div>
     <mat-list id="waypointRouteList">
       <div *ngFor="let routePoint of routingWaypoints">
-        <mat-list-item> {{routePoint.namePoint}} </mat-list-item>
+        <mat-list-item> <fa-icon [icon]="faTree" style="color: #43a047; padding-right: 10px"></fa-icon>{{routePoint.namePoint}} </mat-list-item>
       </div>
     </mat-list>
     <button mat-stroked-button id="clearRouteBtn" (click)="clearRoute()">Supprimer mon trajet</button>
   </mat-sidenav>
 
   <mat-sidenav-content>
+
+    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1" id="loader" style="color: #43a047; z-index: 100"></span>
+
     <link rel="stylesheet"
           href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
           integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
@@ -19,6 +22,7 @@
       <span class="mat-title">{{mapTitle}}</span>
     </div>
     <div id="map">
+      <span *ngIf="!this.loading">
       <mat-slide-toggle class="leftSide" id="toogleCenter" (toggleChange)="switchLocalisationCenter()">Centrer</mat-slide-toggle>
       <mat-slide-toggle class="leftSide" checked *ngIf="this.showRoutingBtn" id="toogleLegendRoute" (toggleChange)="showRoutingLegend()">Info Route</mat-slide-toggle>
       <button mat-stroked-button *ngIf="!this.routing" class="rightSide routingButton" id="routingButton" (click)="lunchRouting()">
@@ -32,6 +36,7 @@
       <button mat-stroked-button class="rightSide routingButton" *ngIf="this.twoPartRouting" id="AddSecondPart" (click)="addSecondPart()">2e partie</button>
       <button mat-stroked-button class="rightSide routingButton" *ngIf="this.parcoursId && !this.twoPartRouting && this.trajetRdy" id="AddAllPoints" (click)="addAllRoutingPoint()">Trajet complet</button>
       <button mat-stroked-button class="rightSide routingButton" id="sideOpenner" (click)="sidenav.toggle(); sidenavOpen()">Montrer la route</button>
+      </span>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

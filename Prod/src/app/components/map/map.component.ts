@@ -8,6 +8,12 @@ import 'leaflet-gps';
 import {ActivatedRoute} from '@angular/router';
 import {MatBottomSheet} from '@angular/material/bottom-sheet';
 import {PointSheetComponent} from '../point-sheet/point-sheet.component';
+import {faTree} from '@fortawesome/free-solid-svg-icons/faTree';
+
+//------------------------------------------------------------
+// définition Variables globales
+//------------------------------------------------------------
+
 
 const mapboxAPI = 'pk.eyJ1IjoiYXJ5bG1lcmEiLCJhIjoiY2s3aGZ1OW0zMDk1bzNubW5ya2twdDZxcSJ9.IVUHXKtgN21QPirw0ZVWpQ';
 // tslint:disable-next-line:max-line-length
@@ -43,6 +49,12 @@ const pointIcon = redIcon;
 })
 
 export class MapComponent implements AfterViewInit, OnInit {
+
+  //------------------------------------------------------------
+  // définition Variables locales
+  //------------------------------------------------------------
+
+  faTree = faTree;
   private map;
   private pointList: any = [];
   private positionMarker;
@@ -73,6 +85,11 @@ export class MapComponent implements AfterViewInit, OnInit {
               private pointsService: PointsService,
               private pointSheet: MatBottomSheet
   ) { }
+
+
+  //------------------------------------------------------------
+  // initalisation
+  //------------------------------------------------------------
 
   /**
    * chargement de la page
@@ -137,7 +154,8 @@ export class MapComponent implements AfterViewInit, OnInit {
     // création de la map
     this.map = L.map('map', {
       center: ([51.673, 2.826]),
-      zoom: 17
+      zoom: 17,
+      trackResize: true
     })
       .addLayer(mapLayer);
     L.easyButton('<img src="../../../assets/Map/target.png" width="12em" height="auto">',
@@ -162,6 +180,51 @@ export class MapComponent implements AfterViewInit, OnInit {
     this.positionCircle.setRadius(0);
     this.positionMarker.addTo(this.map);
   }
+
+  //------------------------------------------------------------
+  // Localisation
+  //------------------------------------------------------------
+
+  /**
+   * localisation
+   */
+  private locate() {
+    this.map.locate(({
+      setView : false,
+      maxZoom: 120,
+      watch : false, // localisation en continu
+      enableHighAccuracy : true
+    }))
+      .on('locationfound', (e) => {
+        console.log (' your are at ' +  e.latlng + ' with in ' + e.accuracy + 'm');
+        this.currentlatlng = [e.latlng.lat, e.latlng.lng];
+        this.setPositionMarker(e);
+        this.map.panTo([e.latlng.lat, e.latlng.lng]);
+        this.loading = false;
+      });
+  }
+
+  /**
+   * help au switch de la valeur de centre de localisation sur géolocalisation
+   */
+  switchLocalisationCenter() {
+    if ( this.localisationCenter) {
+      this.localisationCenter = false;
+      this.map.options.dragging = true;
+      console.log('follow is now false');
+    } else {
+      this.localisationCenter = true;
+      this.map.options.dragging = false;
+      this.map.panTo([this.currentlatlng[0], this.currentlatlng[1]]);
+      console.log('follow is now true');
+    }
+    this.map.locate.watch = this.localisationCenter;
+    this.map.locate.setView = this.localisationCenter;
+  }
+
+  //------------------------------------------------------------
+  // Gestion Points
+  //------------------------------------------------------------
 
   /**
    * définition de la positon du marker de position
@@ -213,61 +276,13 @@ export class MapComponent implements AfterViewInit, OnInit {
       } else {
       }
     });
-    console.log(this.pointList);
     console.log('points from db loaded');
   }
 
-  /**
-   * parsing de la coordonée depuis XY vers latLong
-   * @param pointXY
-   */
-  parsPointXYLatLng(pointXY: [number, number]) {
-    const point = L.point(pointXY);
-    return this.map.layerPointToLatLng(point);
-  }
 
-  /**
-   * localisation
-   */
-  private locate() {
-    this.map.locate(({
-      setView : false,
-      maxZoom: 120,
-      watch : false, // localisation en continu
-      enableHighAccuracy : true
-    }))
-      .on('locationfound', (e) => {
-        console.log (' your are at ' +  e.latlng + ' with in ' + e.accuracy + 'm');
-        this.currentlatlng = [e.latlng.lat, e.latlng.lng];
-        this.setPositionMarker(e);
-        this.map.panTo([e.latlng.lat, e.latlng.lng]);
-        this.loading = false;
-      });
-    // this.map.setZoom(18);
-  }
-
-  /**
-   * help au switch de la valeur de centre de localisation sur géolocalisation
-   */
-  switchLocalisationCenter() {
-    if ( this.localisationCenter) {
-      this.localisationCenter = false;
-      console.log('follow is now false');
-    } else {
-      this.localisationCenter = true;
-      this.map.panTo([this.currentlatlng[0], this.currentlatlng[1]]);
-      console.log('follow is now true');
-    }
-    this.map.locate.watch = this.localisationCenter;
-    this.map.locate.setView = this.localisationCenter;
-  }
-
-  /**
-   * définition dynamique du titre de la carte
-   */
-  private setTitle() {
-    this.mapTitle = 'Carte du ' + this.parcoursName;
-  }
+  //------------------------------------------------------------
+  // Routing
+  //------------------------------------------------------------
 
   /**
    * initalisation du module de routing
@@ -387,13 +402,6 @@ export class MapComponent implements AfterViewInit, OnInit {
   }
 
   /**
-   * actions a effectuer lors de l'ouverture de la liste de navigation
-   */
-  sidenavOpen() {
-    this.addRoutingPoint();
-  }
-
-  /**
    * suppression de l'ensembles des routes acutelles et des waypoints
    */
   clearRoute() {
@@ -422,5 +430,32 @@ export class MapComponent implements AfterViewInit, OnInit {
       this.routingControl.show();
     }
     this.showRouting = !this.showRouting;
+  }
+
+  //------------------------------------------------------------
+  // Helpers
+  //------------------------------------------------------------
+
+  /**
+   * parsing de la coordonée depuis XY vers latLong
+   * @param pointXY
+   */
+  parsPointXYLatLng(pointXY: [number, number]) {
+    const point = L.point(pointXY);
+    return this.map.layerPointToLatLng(point);
+  }
+
+  /**
+   * définition dynamique du titre de la carte
+   */
+  private setTitle() {
+    this.mapTitle = 'Carte du ' + this.parcoursName;
+  }
+
+  /**
+   * actions a effectuer lors de l'ouverture de la liste de navigation
+   */
+  sidenavOpen() {
+    this.addRoutingPoint();
   }
 }

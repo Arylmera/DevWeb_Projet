@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {MapsService} from '../../services/maps/maps.service';
 import {Router} from '@angular/router';
 import {ChangeDetectorRef} from '@angular/core';
+import {faTree} from '@fortawesome/free-solid-svg-icons/faTree';
 
 @Component({
   selector: 'app-point-sheet',
@@ -13,6 +14,7 @@ import {ChangeDetectorRef} from '@angular/core';
 })
 export class PointSheetComponent implements OnInit {
 
+  faTree = faTree;
   point: any;
   html: any;
   ready = false;

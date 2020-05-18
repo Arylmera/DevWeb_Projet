@@ -3,6 +3,7 @@ import {PointListComponent} from '../point-list/point-list.component';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Point, PointsService} from '../../services/points/points.service';
 import {HttpClient} from '@angular/common/http';
+import {faTree} from '@fortawesome/free-solid-svg-icons/faTree';
 
 @Component({
   selector: 'app-point-info',
@@ -13,6 +14,7 @@ import {HttpClient} from '@angular/common/http';
 
 export class PointInfoComponent implements OnInit {
 
+  faTree = faTree;
   point: Point;
   wikiDesc: any = null;
   wikiDescImg: any = null;

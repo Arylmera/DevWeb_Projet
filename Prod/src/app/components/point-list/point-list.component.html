@@ -4,10 +4,12 @@
   <mat-list class="list-horizontal" >
     <mat-list-item *ngFor="let categorie of categList" class="form-inline">
       <mat-radio-button id="{{categorie.idCategorie}}" value="{{categorie.idCategorie}}" name="categList" (change)="selectPointsFromCategorie()">
-        <fa-icon [icon]="faTree"></fa-icon> {{categorie.nameCategorie}}
+        <fa-icon [icon]="faTree" style="color: #43a047"></fa-icon> {{categorie.nameCategorie}}
       </mat-radio-button>
     </mat-list-item>
   </mat-list>
+
+  <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1" id="loader" style="color: #43a047; z-index: 100"></span>
 
   <cdk-virtual-scroll-viewport itemSize="10" class="viewport">
     <div *cdkVirtualFor="let p of pointListSelected"  class="text-center text-white">
