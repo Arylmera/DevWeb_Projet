@@ -1,6 +1,8 @@
+<span *ngIf="!ready" class="spinner-border spinner-border-sm mr-1" id="loader" style="color: #43a047; z-index: 100"></span>
+
 <mat-card class="point-card" *ngIf="ready">
   <mat-card-header>
-    <mat-card-title>{{point.namePoint}}</mat-card-title>
+    <mat-card-title> <fa-icon [icon]="faTree" style="color: #43a047; padding-right: 10px"></fa-icon> {{point.namePoint}}</mat-card-title>
     <mat-card-subtitle *ngIf="point.vernaculairePoint">{{point.vernaculairePoint}}</mat-card-subtitle>
   </mat-card-header>
   <img mat-card-image id="imageHeader" [src]="this.wikiDescImg">

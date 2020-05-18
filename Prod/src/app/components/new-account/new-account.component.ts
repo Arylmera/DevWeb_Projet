@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AlertService} from '../../services/alert/alert.service';
 import {LoginService} from '../../services/login/login.service';
 import {AccountService} from '../../services/account/account.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {first} from 'rxjs/operators';
 
 @Component({
@@ -24,19 +24,24 @@ export class NewAccountComponent implements OnInit {
     private loginService: LoginService,
     private alertService: AlertService,
     private accountService: AccountService
-  ) {
+  ) {}
+
+  ngOnInit(): void {
+
+    // Si l'utilisateur est déjà connecté le redirige vers la page d'accueil
     if (this.loginService.currentUserValue) {
       this.router.navigate(['/']);
     }
-  }
 
-  ngOnInit(): void {
+    // Initie les controls du formulaire
     this.registerForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(32)]]
     });
+
   }
 
+  // Récupération du formulaire
   get f() { return this.registerForm.controls; }
 
   register(): void {
@@ -45,22 +50,28 @@ export class NewAccountComponent implements OnInit {
 
     this.alertService.clear();
 
+    // Si formulaire invalide
     if (this.registerForm.invalid) {
       return;
     }
 
+    // loading = true permet l'affichage de la roue de chargment
     this.loading = true;
+
+    // Appel de la requete d'enregistrement
     this.accountService.register(this.registerForm.value)
       .pipe(first())
       .subscribe(
-        data  => {
+        // Si la requete réussi
+        ()  => {
           this.alertService.success('Inscription Réussie.', true);
           this.router.navigate(['/login']);
         },
+        // Si une erreur est renvoyée
         error => {
           this.alertService.error(error);
           this.loading = false;
-        });
+          });
 
   }
 

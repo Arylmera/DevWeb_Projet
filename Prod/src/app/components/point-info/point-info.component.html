@@ -1,11 +1,9 @@
 <body>
-<div class="loader" *ngIf="loading" >
-  <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-</div>
+<span *ngIf="loading" class="spinner-border spinner-border-sm mr-1" id="loader" style="color: #43a047; z-index: 100"></span>
 
 <mat-card class="point-card" *ngIf="!loading">
   <mat-card-header>
-    <mat-card-title><u>{{point.namePoint}}</u> <span *ngIf="!point.disponiblePoint" style="color: red"> Non accessible </span> </mat-card-title>
+    <mat-card-title> <fa-icon [icon]="faTree" style="color: #43a047; padding-right: 10px"></fa-icon><u>{{point.namePoint}}</u><span *ngIf="!point.disponiblePoint" style="color: red"> Non accessible </span> </mat-card-title>
     <mat-card-subtitle *ngIf="point.vernaculairePoint">{{point.vernaculairePoint}}</mat-card-subtitle>
   </mat-card-header>
   <img mat-card-image id="imageHeader" [src]="this.wikiDescImg">

@@ -51,9 +51,9 @@ const routes: Routes = [
   { path: 'pointList', component: PointListComponent,  canActivate: [AuthGuard]},
   { path: 'pointInfo/:id', component: PointInfoComponent,  canActivate: [AuthGuard]},
   { path: 'parcours-select', component: ParcoursSelectComponent,  canActivate: [AuthGuard]},
-  { path: 'map', component: MapComponent,  canActivate: [AuthGuard]},
+  { path: 'map', component: MapComponent, canActivate: [AuthGuard]},
   { path: 'map/:id', component: MapComponent,  canActivate: [AuthGuard]},
-  { path: '', component: HomeComponent,  canActivate: [AuthGuard] },
+  { path: '', component: HomeComponent,  canActivate: [AuthGuard]},
   { path: 'not-found', component: FourthOFourthComponent },
   { path: 'cam', component: CamComponent, canActivate: [AuthGuard]},
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
@@ -61,6 +61,9 @@ const routes: Routes = [
 ];
 
 
+// @ts-ignore
+// @ts-ignore
+// @ts-ignore
 @NgModule({
   declarations: [
     AppComponent,
@@ -109,7 +112,7 @@ const routes: Routes = [
   ],
   entryComponents: [
     PointSheetComponent,
-    MapComponent
+    MapComponent,
   ],
   providers: [
     PointsService,

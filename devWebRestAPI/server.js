@@ -229,21 +229,18 @@ const getPointsLvl2 = (req, res) => {
 
 const login = (req, res) => {
     let reqSql = 'SELECT * FROM Utilisateurs WHERE username = "' + req.body.username + '";';
-    console.log(reqSql);
     connection.query(reqSql, function (err, results) {
-        if (err) {
-            res.status(401).send('Nom d\'utilisateur incorrect ou inexistant,\n veuillez vous inscrire.');
-        }
-        else {
-            if (results[0].password === req.body.password) {
-                let user = {
-                    id: results[0].id,
-                    username: results[0].username
-                };
-                res.status(200).json(user);
-            } else {
-                res.status(401).send('Mot de passe érroné.');
-            }
+        if (results[0].password === req.body.password) {
+            let user = {
+                id: results[0].id,
+                username: results[0].username,
+                password: results[0].password
+            };
+            res.status(200).json(user);
+        } else if (results[0].password !== req.body.password) {
+            res.status(400).json({message : 'Mot de passe incorrect.'});
+        } else {
+            res.status(400).json({message: 'Votre nom d\'utilisateur n\'éxiste pas,\n veuillez vous inscrire.'});
         }
     });
 }
@@ -252,10 +249,10 @@ const register = (req, res) => {
     let reqSql = 'INSERT INTO Utilisateurs(username, password) VALUES("' + req.body.username + '", "' + req.body.password + '")';
     connection.query(reqSql, function (err, results) {
         if (err) {
-            res.status(401).send('Nom d\'utilisateur déjà utilisé.\n Veuillez en choisir un autre.');
+            res.status(400).json({message: 'Ce nom d\'utilisateur éxiste déjà,\n veuillez en choisir un autre.'});
         }
         else {
-            res.status(200).json(req.body);
+            res.status(200).json({});
         }
     });
 }

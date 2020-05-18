@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {faHome} from '@fortawesome/free-solid-svg-icons';
 import {faSignOutAlt} from '@fortawesome/free-solid-svg-icons';
 import {faMapPin} from '@fortawesome/free-solid-svg-icons/faMapPin';
@@ -18,7 +18,7 @@ import {User} from '../../models/user.model';
   styleUrls: ['./navigation.component.scss']
 })
 
-export class NavigationComponent  {
+export class NavigationComponent implements OnInit {
   currentUser: User;
   faHome = faHome;
   faMapPin = faMapPin;
@@ -34,13 +34,20 @@ export class NavigationComponent  {
     private router: Router,
     private loginService: LoginService
   ) {
+    // Récupération de l'utilisateur -> sert à vérifier si c'est un admin et lui afficher ou non l'accès à la page admin
     this.loginService.currentUser.subscribe(x => this.currentUser = x);
   }
 
+  ngOnInit() {
+    document.getElementById('user').innerHTML = this.currentUser.username;
+  }
+
+  // Ouverture du component de scan dans un dialog
   openCam(): void {
     this.dialog.open(CamComponent);
   }
 
+  // Logout de l'utilisateur
   logout() {
     this.loginService.logout();
     this.router.navigate(['/login']);

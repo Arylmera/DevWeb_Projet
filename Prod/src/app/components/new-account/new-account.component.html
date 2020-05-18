@@ -1,4 +1,8 @@
-<mat-toolbar style="background-color: #43A047;"></mat-toolbar>
+<mat-toolbar style="background-color: #43A047;">
+  <h1 class="h1 text-left" style="color: white;">
+    BioDiv-LLN
+  </h1>
+</mat-toolbar>
 
 <mat-toolbar>
   <span>Inscription</span>
@@ -6,7 +10,9 @@
 
 <mat-card class="registration-card">
  <mat-card-content>
-   <form class="register-form" [formGroup]="registerForm" (ngSubmit)="register()">
+
+   <div class="register-form">
+   <form [formGroup]="registerForm" (ngSubmit)="register()">
 
      <mat-form-field class="field" appearance="outline">
        <mat-label>
@@ -31,18 +37,19 @@
        </div>
      </mat-form-field>
 
-     <app-alert></app-alert>
-
-     <div class="form-group">
      <mat-card-actions>
-       <button mat-raised-button type="submit" [disabled]="loading" class="btn btn-primary" style="background-color: #4CAF50; color: white;">
+       <button mat-raised-button type="submit" [disabled]="loading" style="background-color: #4CAF50; color: white;">
          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1" style="color: white;"></span>
-         Créer compte
+         S'inscrire
        </button>
-       <button mat-raised-button type="button" routerLink="/login" class="btn btn-link" style="color: black;">Annuler</button>
+       <button mat-raised-button type="button" routerLink="/login" style="color: black;">Retour</button>
      </mat-card-actions>
-     </div>
 
    </form>
+
+     <app-alert></app-alert>
+
+   </div>
+
  </mat-card-content>
 </mat-card>
