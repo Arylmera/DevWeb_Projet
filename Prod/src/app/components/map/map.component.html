@@ -30,7 +30,7 @@
         Arreter le trajet
       </button>
       <button mat-stroked-button class="rightSide routingButton" *ngIf="this.twoPartRouting" id="AddSecondPart" (click)="addSecondPart()">2e partie</button>
-      <button mat-stroked-button class="rightSide routingButton" *ngIf="this.parcoursId && !this.twoPartRouting" id="AddAllPoints" (click)="addAllRoutingPoint()">Trajet complet</button>
+      <button mat-stroked-button class="rightSide routingButton" *ngIf="this.parcoursId && !this.twoPartRouting && this.trajetRdy" id="AddAllPoints" (click)="addAllRoutingPoint()">Trajet complet</button>
       <button mat-stroked-button class="rightSide routingButton" id="sideOpenner" (click)="sidenav.toggle(); sidenavOpen()">Montrer la route</button>
     </div>
   </mat-sidenav-content>

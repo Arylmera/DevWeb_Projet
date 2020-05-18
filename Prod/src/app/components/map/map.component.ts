@@ -59,13 +59,14 @@ export class MapComponent implements AfterViewInit, OnInit {
   routingWaypointsBkp: any = [];
   routingWaypoints: any = [];
   routingWayPointsSecondPart: any = [];
-  twoPartRouting = false;
+  twoPartRouting: boolean = false;
   routingWaypointsCoord: any = [];
   routingControl: any;
-  showRouting = true;
-  showRoutingBtn = false;
-  routing = false;
-  loading = true;
+  showRouting: boolean = true;
+  showRoutingBtn: boolean = false;
+  routing: boolean = false;
+  loading: boolean = true;
+  trajetRdy: boolean = true;
 
   constructor(private mapsService: MapsService,
               private route: ActivatedRoute,
@@ -212,6 +213,7 @@ export class MapComponent implements AfterViewInit, OnInit {
       } else {
       }
     });
+    console.log(this.pointList);
     console.log('points from db loaded');
   }
 
@@ -223,7 +225,6 @@ export class MapComponent implements AfterViewInit, OnInit {
     const point = L.point(pointXY);
     return this.map.layerPointToLatLng(point);
   }
-
 
   /**
    * localisation
@@ -305,12 +306,14 @@ export class MapComponent implements AfterViewInit, OnInit {
    */
   lunchRouting() {
     this.addRoutingPoint();
-    console.log(this.routingWaypoints);
     this.routingWaypointsCoord = [];
     this.routingWaypointsCoord.push(L.latLng(this.currentlatlng[0], this.currentlatlng[1]));
     this.routingWaypoints.forEach( point => {
-      this.routingWaypointsCoord.push([point.latitudePoint, point.longitudePoint]);
+      if(point.disponiblePoint) {
+        this.routingWaypointsCoord.push([point.latitudePoint, point.longitudePoint]);
+      }
     });
+    console.log(this.routingWaypoints);
     this.routingControl.setWaypoints(this.routingWaypointsCoord);
     this.routingControl.route(); // lancement du routing
     this.showRoutingBtn = true;
@@ -367,6 +370,7 @@ export class MapComponent implements AfterViewInit, OnInit {
     } else {
       this.routingWaypoints = this.pointList;
     }
+    this.trajetRdy = true;
     this.lunchRouting();
   }
 
@@ -378,6 +382,7 @@ export class MapComponent implements AfterViewInit, OnInit {
     this.routingWaypoints = this.routingWayPointsSecondPart;
     console.log('second part');
     this.twoPartRouting = false;
+    this.trajetRdy = false;
     this.lunchRouting();
   }
 
@@ -403,6 +408,7 @@ export class MapComponent implements AfterViewInit, OnInit {
       this.routingWayPointsSecondPart = [] // clean de la route
       this.routingWaypoints = [] // clean de la route
       this.twoPartRouting = false; // remise a zero tu routing
+      this.trajetRdy = true;
     }
   }
 
