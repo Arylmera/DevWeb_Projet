@@ -36,6 +36,7 @@ export class NavigationComponent  {
   ) {
     // Récupération de l'utilisateur -> sert à vérifier si c'est un admin et lui afficher ou non l'accès à la page admin
     this.loginService.currentUser.subscribe(x => this.currentUser = x);
+    document.getElementById('user').innerHTML = this.currentUser.username;
   }
 
   // Ouverture du component de scan dans un dialog

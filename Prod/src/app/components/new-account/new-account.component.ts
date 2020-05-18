@@ -66,8 +66,8 @@ export class NewAccountComponent implements OnInit {
           this.router.navigate(['/login']);
         },
         // Si une erreur est renvoyée
-        () => {
-          this.alertService.error('Nom d\'utilisateur éxistant.\n Veuillez en choisir un autre.', true);
+        error => {
+          this.alertService.error(error);
           this.loading = false;
           });
 
