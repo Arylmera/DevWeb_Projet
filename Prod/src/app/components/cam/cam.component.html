@@ -1,5 +1,6 @@
 <mat-dialog-content style="text-align: center">
   <zxing-scanner (scanSuccess)="handleQr($event)" (scanError)="errorQr()" (scanFailure)="failureQr()" (camerasNotFound)="cameraNotFound()"></zxing-scanner>
   <app-alert></app-alert>
+  <button mat-raised-button color="primary" *ngIf="scanned" (click)="open()">Ouvrir</button>
   <button mat-stroked-button mat-dialog-close>Fermer</button>
 </mat-dialog-content>
