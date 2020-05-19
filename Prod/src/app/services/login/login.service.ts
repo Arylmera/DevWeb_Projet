@@ -11,7 +11,7 @@ export class LoginService {
 
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>; // Objet contenant l'utilisateur actuellement connecté
-
+  private key = 'ytdNQFB@Duca*o-aMoh7zMWU3Q.FbVuX';
   // Le constructeur regarde s'il y a déjà un utilisateur de sauvegardé dans le cache de l'utilisateur
   constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
@@ -25,7 +25,7 @@ export class LoginService {
 
   // Requete de login à l'api
   login(username, password) {
-    return this.http.post<any>(`https://www.wt1-2.ephec-ti.be:3000/api/utilisateurs/login`, { username, password })
+    return this.http.post<any>(`https://www.wt1-2.ephec-ti.be:3000/api/utilisateurs/login?key=` + this.key, { username, password })
       .pipe(map(user => {
         localStorage.setItem('currentUser', JSON.stringify(user)); // Sauvegarde la reponse dans la memoire cache
         this.currentUserSubject.next(user); // Met à jour l'utilisateur actuel
