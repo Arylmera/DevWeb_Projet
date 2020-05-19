@@ -1,3 +1,33 @@
 .plainText {
-  margin: 2em;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+#ephec {
+  width: 50%;
+  margin-left: 25%;
+  margin-right: 25%;
+}
+
+li {
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
+h2 {
+  margin-left: 0;
+  text-align: center;
+}
+
+ul, mat-list, mat-list-item {
+  padding: 0;
+}
+
+mat-list {
+  width: 100%;
+}
+
+mat-list-item {
+  margin-left: 15%;
+  margin-right: 15%;
 }

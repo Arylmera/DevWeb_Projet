@@ -46,7 +46,7 @@ import {ErrorInterceptor} from './helpers/error.interceptor';
 import {NotfoundInterceptor} from './helpers/notfound.interceptor';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'home', component: HomeComponent,/* canActivate: [AuthGuard] */},
   { path: 'login', component: LoginComponent},
   { path: 'newAccount', component: NewAccountComponent},
   { path: 'pointList', component: PointListComponent,  canActivate: [AuthGuard]},
