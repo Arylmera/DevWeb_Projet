@@ -37,7 +37,7 @@ const cors = require('cors');
 const corsOptions = {
     origin: 'https://biodiversite-lln.web.app',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
+};
 app.use(cors(corsOptions));
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////// Outils requêtes ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,6 +46,26 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 // parse requests of content-type: application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////// Fonction connexion ////////////////////////////////////////////////////////////////////////////////////////////
+const keyVerfication = (req, res, next) => {
+    const key = 'ytdNQFB@Duca*o-aMoh7zMWU3Q.FbVuX';
+    const reqKey = req.query.key;
+    if (!req.query.key){
+        res.status(401).send('Accès refusé, clé non trouvée.');
+    }
+    else {
+        if (reqKey == key){
+            delete req.query.key;
+            console.log(req.query);
+            next();
+        }
+        else {
+            res.status(401).send('Accès refusé, clé incorrecte.');
+        }
+    }
+};
+app.use(keyVerfication);
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////// Routes ////////////////////////////////////////////////////////////////////////////////////////////////////////
 // la route /api/:table est dynamique et fonctionne pour toutes les tables de la base de données
@@ -226,7 +246,6 @@ const getPointsLvl2 = (req, res) => {
         res.status(400).send("Vous devez renseigner des paramètres dans votre requête");
     }
 };
-
 const login = (req, res) => {
     let reqSql = 'SELECT * FROM Utilisateurs WHERE username = "' + req.body.username + '";';
     connection.query(reqSql, function (err, results) {
@@ -239,8 +258,9 @@ const login = (req, res) => {
             res.status(200).json(user);
         } else if (results[0].password !== req.body.password) {
             res.status(400).json({message : 'Mot de passe incorrect.'});
+        } else {
+            res.status(400).json({message : 'Votre nom d\'utilisateur n\'éxiste pas,\n veuillez vous inscrire.'});
         }
-        res.status(400).json({message : 'Votre nom d\'utilisateur n\'éxiste pas,\n veuillez vous inscrire.'});
     });
 };
 
