@@ -65,8 +65,8 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/']);
         },
         // Si la requete sql a renvoyé une erreur
-        error => {
-          this.alertService.error(error);
+        () => {
+          this.alertService.error('Nom d\'utilisateur ou mot de passe incorrect.\n Veuillez réessayer ou vous inscrire.');
           this.loading = false;
           });
 
