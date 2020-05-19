@@ -56,7 +56,7 @@ const routes: Routes = [
   { path: '', component: HomeComponent,  canActivate: [AuthGuard]},
   { path: 'not-found', component: FourthOFourthComponent },
   { path: 'cam', component: CamComponent, canActivate: [AuthGuard]},
-  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] },
+  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard]},
   { path: '**', redirectTo: '' }
 ];
 
