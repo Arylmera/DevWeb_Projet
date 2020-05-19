@@ -25,7 +25,6 @@ export class CamComponent implements OnInit {
     this.site = qrRes;
     this.alertService.success('Scan réussi.', true);
     this.scanned = true;
-    window.open(qrRes);
   }
 
   open() {
