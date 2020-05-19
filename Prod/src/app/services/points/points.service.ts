@@ -30,7 +30,7 @@ export class PointsService {
    */
   recupPoints() {
     const body = {key: this.key};
-    return this.http.get('http://localhost:3000/api/Points?key=' + this.key);
+    return this.http.get('https://www.wt1-2.ephec-ti.be:3000/api/Points?key=' + this.key);
   }
 
   /**
