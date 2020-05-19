@@ -14,17 +14,14 @@ import {faTree} from '@fortawesome/free-solid-svg-icons/faTree';
 // définition Variables globales
 //------------------------------------------------------------
 
-
 const mapboxAPI = 'pk.eyJ1IjoiYXJ5bG1lcmEiLCJhIjoiY2s3aGZ1OW0zMDk1bzNubW5ya2twdDZxcSJ9.IVUHXKtgN21QPirw0ZVWpQ';
 // tslint:disable-next-line:max-line-length
 const mapboxStyle = 'https://api.mapbox.com/styles/v1/arylmera/ck7ix7bma010g1io6aa528sla/tiles/256/{z}/{x}/{y}@2x?access_token=' + mapboxAPI;
 const routingOptions = {profile: 'mapbox/walking', polylinePrecision: 0};
 
-// lln = [50.668351,4.611746];
 // iconMap
 const markerGreen = new L.Icon({
   iconUrl: '../../../assets/Map/marker/marker-icon-green.png',
-  //shadowUrl: '../../../assets/Map/marker/marker-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [0, -34],
@@ -32,7 +29,6 @@ const markerGreen = new L.Icon({
 });
 const greenIconLeaf = new L.Icon({
   iconUrl: '../../../assets/Map/marker/leaf-green.png',
-  //shadowUrl: '../../../assets/Map/marker/leaf-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
@@ -40,7 +36,6 @@ const greenIconLeaf = new L.Icon({
 });
 const redIconLeaf = new L.Icon({
   iconUrl: '../../../assets/Map/marker/leaf-red.png',
-  //shadowUrl: '../../../assets/Map/marker/leaf-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
@@ -153,7 +148,7 @@ export class MapComponent implements AfterViewInit, OnInit {
    */
   private initMap(): void {
     // ajout des tuiles de carte
-    const mapLayer = L.tileLayer( mapboxStyle, { // 'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png'
+    const mapLayer = L.tileLayer( mapboxStyle, {
       attribution: '© <a href=\'https://www.mapbox.com/about/maps/\'>Mapbox</a>' +
         '© <a href=\'http://www.openstreetmap.org/copyright\'>OpenStreetMap</a>' +
         '<strong><a href=\'https://www.mapbox.com/map-feedback/\' target=\'_blank\'>' +
@@ -286,7 +281,6 @@ export class MapComponent implements AfterViewInit, OnInit {
     });
     console.log('points from db loaded');
   }
-
 
   //------------------------------------------------------------
   // Routing

@@ -27,14 +27,14 @@ export class ParcoursSelectComponent implements OnInit {
     });
   }
 
+  /**
+   * chargement des données du parcours sélectionné
+   */
   loadParcours() {
-    console.log(this.parcoursNum);
     this.pointsService.recupParcoursPointsById(this.parcoursNum).subscribe( data => {
-      console.log(this.parcoursPointList);
     });
     this.pointsService.recupParcoursById(this.parcoursNum).subscribe( data => {
       this.parcoursName = data[0].nameParcours;
-      console.log(this.parcoursName);
       this.parcours = '../../assets/Parcours/' + this.parcoursName + '.png';
       this.parcours_points = '../../assets/Parcours/' + this.parcoursName + '-Points.png';
     });

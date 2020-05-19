@@ -65,7 +65,6 @@ export class PointSheetComponent implements OnInit {
         this.wikiDesc = data.extract;
         // @ts-ignore
         this.wikiDescImg = data.thumbnail.source;
-        console.log(this.wikiDescImg);
         this.router.navigate(['/map']);
       },
       error => {

@@ -65,7 +65,6 @@ export class PointInfoComponent implements OnInit {
         this.wikiDesc = data.extract;
         // @ts-ignore
         this.wikiDescImg = data.thumbnail.source;
-        console.log(this.wikiDescImg);
       },
       error => {
         console.log(error.status + ' no page found');
