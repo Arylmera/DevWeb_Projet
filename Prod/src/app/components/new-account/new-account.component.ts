@@ -64,7 +64,7 @@ export class NewAccountComponent implements OnInit {
       .subscribe(
         // Si la requete réussi
         ()  => {
-          this.alertService.success('Inscription Réussie.', true);
+          this.alertService.success('Inscription réussie.', true);
           this.router.navigate(['/login']);
         },
         // Si une erreur est renvoyée

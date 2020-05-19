@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {AlertService} from '../../services/alert/alert.service';
 
 
@@ -7,16 +7,29 @@ import {AlertService} from '../../services/alert/alert.service';
   templateUrl: './cam.component.html',
   styleUrls: ['./cam.component.scss']
 })
-export class CamComponent {
+export class CamComponent implements OnInit {
+
+  scanned = false;
+  site: string;
 
   constructor(
     private alertService: AlertService
   ) {}
 
+  ngOnInit() {
+    this.alertService.clear();
+  }
+
   // Si le scan est réussi
   handleQr(qrRes: string) {
+    this.site = qrRes;
     this.alertService.success('Scan réussi.', true);
+    this.scanned = true;
     window.open(qrRes);
+  }
+
+  open() {
+    window.open(this.site);
   }
 
   // Si il y a une erreur durant le scan
