@@ -66,7 +66,6 @@ export class LoginComponent implements OnInit {
         },
         // Si la requete sql a renvoyé une erreur
         error => {
-          // tslint:disable-next-line:max-line-length
           this.alertService.error(error);
           this.loading = false;
           });
