@@ -43,6 +43,7 @@ import { AlertComponent } from './components/alert/alert.component';
 import {AdminGuard} from './helpers/admin.guard';
 import {AuthGuard} from './helpers/auth.guard';
 import {ErrorInterceptor} from './helpers/error.interceptor';
+import {NotfoundInterceptor} from './helpers/notfound.interceptor';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
@@ -60,10 +61,6 @@ const routes: Routes = [
   { path: '**', redirectTo: '' }
 ];
 
-
-// @ts-ignore
-// @ts-ignore
-// @ts-ignore
 @NgModule({
   declarations: [
     AppComponent,
@@ -117,7 +114,8 @@ const routes: Routes = [
   providers: [
     PointsService,
     MapComponent,
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: NotfoundInterceptor, multi: true }
   ],
   bootstrap: [
     AppComponent,
