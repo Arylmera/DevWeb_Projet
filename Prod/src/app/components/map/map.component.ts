@@ -38,9 +38,17 @@ const greenIconLeaf = new L.Icon({
   popupAnchor: [1, -34],
   shadowSize: [25, 25]
 });
+const redIconLeaf = new L.Icon({
+  iconUrl: '../../../assets/Map/marker/leaf-red.png',
+  //shadowUrl: '../../../assets/Map/marker/leaf-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [25, 25]
+});
 
 const positionIcon = markerGreen;
-const pointIcon = greenIconLeaf;
+const pointIcon = redIconLeaf;
 
 @Component({
   selector: 'app-map',
@@ -300,7 +308,7 @@ export class MapComponent implements AfterViewInit, OnInit {
         addWaypoints : false,
         styles: [{
           color: '#43A047',
-          opacity: 0.8,
+          opacity: 0.9,
           weight: 3
         }]
       },

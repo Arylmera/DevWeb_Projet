@@ -11,9 +11,6 @@
 
     <mat-card-content>
       <div *ngIf="this.parcours && this.parcours_points">
-        <mat-card-subtitle> Nombre d'arrêtes : {{numberOfPoints()}}</mat-card-subtitle>
-      </div>
-      <div *ngIf="this.parcours && this.parcours_points">
         <img mat-card-image class="images" id="parcours-points" src={{parcours_points}} width="500px" height="auto"> <br>
         <img mat-card-image class="images" id="parcours" src={{parcours}}  width="500px" height="auto">
       </div>

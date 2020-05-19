@@ -40,11 +40,4 @@ export class ParcoursSelectComponent implements OnInit {
     });
   }
 
-  numberOfPoints() {
-    let size = 0, key;
-    for (key in this.parcoursPointList) {
-      if (this.parcoursPointList.hasOwnProperty(key)) { size++; }
-    }
-    return size;
-  }
 }

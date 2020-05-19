@@ -28,7 +28,13 @@ export class PointListComponent implements OnInit {
     // récupération des caractéristiques du serveur
     this.pointsService.recupPoints().subscribe( data => {
       this.pointList = data;
-    });
+    },
+    error => {},
+      () => {
+        this.pointsService.recupPointsByCategorie('1').subscribe( data => {
+          this.pointListSelected = data;
+        });
+      });
   }
 
   /**
