@@ -1,8 +1,3 @@
-body, html {
-  margin: 0;
-  padding: 0;
-}
-
 .plainText {
   padding-left: 5%;
   padding-right: 5%;
@@ -24,15 +19,15 @@ h2 {
   text-align: center;
 }
 
-ul, mat-list, mat-list-item {
+ul, li {
   padding: 0;
 }
 
-mat-list {
-  width: 100%;
-}
-
-mat-list-item {
-  margin-left: 15%;
-  margin-right: 15%;
+.list {
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+  display: flex;
+  padding: 0;
 }
