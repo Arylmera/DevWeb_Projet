@@ -207,24 +207,6 @@ export class MapComponent implements AfterViewInit, OnInit {
       });
   }
 
-  /**
-   * help au switch de la valeur de centre de localisation sur géolocalisation
-   */
-  switchLocalisationCenter() {
-    if ( this.localisationCenter) {
-      this.localisationCenter = false;
-      this.map.options.dragging = true;
-      console.log('follow is now false');
-    } else {
-      this.localisationCenter = true;
-      this.map.options.dragging = false;
-      this.map.panTo([this.currentlatlng[0], this.currentlatlng[1]]);
-      console.log('follow is now true');
-    }
-    this.map.locate.watch = this.localisationCenter;
-    this.map.locate.setView = this.localisationCenter;
-  }
-
   //------------------------------------------------------------
   // Gestion Points
   //------------------------------------------------------------
@@ -256,27 +238,19 @@ export class MapComponent implements AfterViewInit, OnInit {
   }
 
   /**
-   * open BottomSheet based on point
-   */
-  openSheet(id: number) {
-    this.pointSheet.open(PointSheetComponent, {
-      data: id
-    });
-    this.mapsService.getCurrentSheet(this.pointSheet); // passage au service
-    return id;
-  }
-
-  /**
    * ajout des points depuis la base de donnée
    */
   private addPointsFromDb() {
     this.pointList.forEach(point => {
       if (point.disponiblePoint) {
-        const pLatLng = this.parsPointXYLatLng([point.latitudePoint, point.longitudePoint]);
-        this.addPoint([pLatLng.lat, pLatLng.lng], point.idPoint);
-        point.latitudePoint = pLatLng.lat;
-        point.longitudePoint = pLatLng.lng;
-      } else {
+        if (point.latitudePoint > 90 || point.latitudePoint < -90 || point.longitudePoint > 90 || point.longitudePoint < 90) { // si coordonnées XY
+          const pLatLng = this.parsPointXYLatLng([point.latitudePoint, point.longitudePoint]);
+          this.addPoint([pLatLng.lat, pLatLng.lng], point.idPoint);
+          point.latitudePoint = pLatLng.lat;
+          point.longitudePoint = pLatLng.lng;
+        }
+      } else { // si coordonnées LatLong
+        this.addPoint([point.latitudePoint, point.longitudePoint], point.idPoint);
       }
     });
     console.log('points from db loaded');
@@ -423,18 +397,6 @@ export class MapComponent implements AfterViewInit, OnInit {
     }
   }
 
-  /**
-   * switch affichage de la legende de route
-   */
-  showRoutingLegend() {
-    if ( this.showRouting ) {
-      this.routingControl.hide();
-    } else {
-      this.routingControl.show();
-    }
-    this.showRouting = !this.showRouting;
-  }
-
   //------------------------------------------------------------
   // Helpers
   //------------------------------------------------------------
@@ -461,4 +423,46 @@ export class MapComponent implements AfterViewInit, OnInit {
   sidenavOpen() {
     this.addRoutingPoint();
   }
+
+  /**
+   * switch affichage de la legende de route
+   */
+  showRoutingLegend() {
+    if ( this.showRouting ) {
+      this.routingControl.hide();
+    } else {
+      this.routingControl.show();
+    }
+    this.showRouting = !this.showRouting;
+  }
+
+  /**
+   * open BottomSheet based on point
+   */
+  openSheet(id: number) {
+    this.pointSheet.open(PointSheetComponent, {
+      data: id
+    });
+    this.mapsService.getCurrentSheet(this.pointSheet); // passage au service
+    return id;
+  }
+
+  /**
+   * help au switch de la valeur de centre de localisation sur géolocalisation
+   */
+  switchLocalisationCenter() {
+    if ( this.localisationCenter) {
+      this.localisationCenter = false;
+      this.map.options.dragging = true;
+      console.log('follow is now false');
+    } else {
+      this.localisationCenter = true;
+      this.map.options.dragging = false;
+      this.map.panTo([this.currentlatlng[0], this.currentlatlng[1]]);
+      console.log('follow is now true');
+    }
+    this.map.locate.watch = this.localisationCenter;
+    this.map.locate.setView = this.localisationCenter;
+  }
+
 }
