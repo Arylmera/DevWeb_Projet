@@ -239,18 +239,21 @@ export class MapComponent implements AfterViewInit, OnInit {
 
   /**
    * ajout des points depuis la base de donnée
-   */
-  private addPointsFromDb() {
-    this.pointList.forEach(point => {
-      if (point.disponiblePoint) {
-        if (point.latitudePoint > 90 || point.latitudePoint < -90 || point.longitudePoint > 90 || point.longitudePoint < 90) { // si coordonnées XY
+   *
+   *
+   *   utilisation des point en coordonnées XY
           const pLatLng = this.parsPointXYLatLng([point.latitudePoint, point.longitudePoint]);
           this.addPoint([pLatLng.lat, pLatLng.lng], point.idPoint);
           point.latitudePoint = pLatLng.lat;
           point.longitudePoint = pLatLng.lng;
         }
-      } else { // si coordonnées LatLong
-        this.addPoint([point.latitudePoint, point.longitudePoint], point.idPoint);
+   *
+   *
+   */
+  private addPointsFromDb() {
+    this.pointList.forEach(point => {
+      if (point.disponiblePoint) {
+          this.addPoint([point.latitudePoint, point.longitudePoint], point.idPoint);
       }
     });
     console.log('points from db loaded');
