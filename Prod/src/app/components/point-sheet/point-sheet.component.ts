@@ -15,6 +15,7 @@ import {faTree} from '@fortawesome/free-solid-svg-icons/faTree';
 export class PointSheetComponent implements OnInit {
 
   faTree = faTree;
+  parcoursId: any;
   point: any;
   html: any;
   ready = false;
@@ -30,7 +31,8 @@ export class PointSheetComponent implements OnInit {
 
   ngOnInit(): void {
     this.ready = false;
-    this.pointsService.recupPointById(this.data).subscribe( pointData => {
+    this.parcoursId = this.data[0];
+    this.pointsService.recupPointById(this.data[1]).subscribe( pointData => {
       this.point = pointData[0];
       this.ready = true;
       this.getDescriptionWiki(this.point.namePoint);
@@ -65,15 +67,24 @@ export class PointSheetComponent implements OnInit {
         this.wikiDesc = data.extract;
         // @ts-ignore
         this.wikiDescImg = data.thumbnail.source;
-        this.router.navigate(['/map']);
+        if(this.parcoursId){
+          this.router.navigate(['/map/'+this.parcoursId]);
+        }
+        else {
+          this.router.navigate(['/map']);
+        }
       },
       error => {
         console.log(error.status + ' no page found');
         this.wikiDesc = 'Désolé nous n\'avons pas trouvé de page wikipedia';
       },
       () => {
-        this.router.navigate(['/map']);
-        this.cdr.markForCheck();
+        if(this.parcoursId){
+          this.router.navigate(['/map/'+this.parcoursId]);
+        }
+        else {
+          this.router.navigate(['/map']);
+        }
       }
     );
   }

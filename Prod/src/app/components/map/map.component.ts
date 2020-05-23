@@ -118,7 +118,10 @@ export class MapComponent implements AfterViewInit, OnInit {
             } else {
               this.pointList.push(data[0]);
             }
-            if (Object.keys(this.pointList).length + 1 == Object.keys(pointIdList).length) {
+          },
+            () => {},
+          () => {
+            if (Object.keys(this.pointList).length == Object.keys(pointIdList).length) {
               this.addPointsFromDb();
             }
           });
@@ -241,21 +244,14 @@ export class MapComponent implements AfterViewInit, OnInit {
 
   /**
    * ajout des points depuis la base de donnée
-   *
-   *
-   *   utilisation des point en coordonnées XY
-          const pLatLng = this.parsPointXYLatLng([point.latitudePoint, point.longitudePoint]);
-          this.addPoint([pLatLng.lat, pLatLng.lng], point.idPoint);
-          point.latitudePoint = pLatLng.lat;
-          point.longitudePoint = pLatLng.lng;
-        }
-   *
-   *
    */
   private addPointsFromDb() {
     this.pointList.forEach(point => {
       if (point.disponiblePoint) {
           this.addPoint([point.latitudePoint, point.longitudePoint], point.idPoint);
+      }
+      else {
+        console.log("Point : " + point.idPoint + " \n non disponible actuellement");
       }
     });
     console.log('points from db loaded');
@@ -446,7 +442,7 @@ export class MapComponent implements AfterViewInit, OnInit {
    */
   openSheet(id: number) {
     this.pointSheet.open(PointSheetComponent, {
-      data: id
+      data: [this.parcoursId,id]
     });
     this.mapsService.getCurrentSheet(this.pointSheet); // passage au service
     return id;

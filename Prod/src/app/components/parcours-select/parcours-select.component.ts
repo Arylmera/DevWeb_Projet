@@ -30,15 +30,10 @@ export class ParcoursSelectComponent implements OnInit {
    * chargement des données du parcours sélectionné
    */
   loadParcours() {
-    this.pointsService.recupParcoursPointsById(this.parcoursNum).subscribe( data => {
-    });
     this.pointsService.recupParcoursById(this.parcoursNum).subscribe( data => {
       this.parcoursName = data[0].nameParcours;
       this.parcours = '../../assets/Parcours/' + this.parcoursName + '.png';
       this.parcours_points = '../../assets/Parcours/' + this.parcoursName + '-Points.png';
-      console.log(this.parcoursName);
-      console.log(this.parcours);
-      console.log(this.parcours_points);
     });
   }
 
