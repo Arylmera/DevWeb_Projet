@@ -86,10 +86,19 @@ export class PointsService {
     return this.http.get('https://www.wt1-2.ephec-ti.be:3000/api/Categories?idCategorie=' + id + '&key=' + this.key);
   }
 
+  /**
+   * mise a jour d'un point dans la base de donnée
+   * @param id
+   * @param body
+   */
   updatePoint(id, body) {
     return this.http.put('https://www.wt1-2.ephec-ti.be:3000/api/Points?idPoint=' + id + '&key=' + this.key, JSON.parse(body));
   }
 
+  /**
+   * suppression d'un point dans la base de donnée
+   * @param id
+   */
   deletePoint(id) {
     return this.http.delete('https://www.wt1-2.ephec-ti.be:3000/api/Points?idPoint=' + id + '&key=' + this.key);
   }

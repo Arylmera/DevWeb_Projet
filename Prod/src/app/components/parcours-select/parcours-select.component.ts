@@ -14,7 +14,6 @@ export class ParcoursSelectComponent implements OnInit {
   faDownload = faDownload;
 
   parcoursList: any;
-  parcoursPointList: any;
   parcoursNum: number;
   parcoursName: string;
 
@@ -37,6 +36,9 @@ export class ParcoursSelectComponent implements OnInit {
       this.parcoursName = data[0].nameParcours;
       this.parcours = '../../assets/Parcours/' + this.parcoursName + '.png';
       this.parcours_points = '../../assets/Parcours/' + this.parcoursName + '-Points.png';
+      console.log(this.parcoursName);
+      console.log(this.parcours);
+      console.log(this.parcours_points);
     });
   }
 

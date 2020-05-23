@@ -51,7 +51,7 @@ const routes: Routes = [
   { path: 'newAccount', component: NewAccountComponent},
   { path: 'pointList', component: PointListComponent, canActivate: [AuthGuard]},
   { path: 'pointInfo/:id', component: PointInfoComponent,  canActivate: [AuthGuard]},
-  { path: 'parcours-select', component: ParcoursSelectComponent,  canActivate: [AuthGuard] },
+  { path: 'parcours-select', component: ParcoursSelectComponent, /* canActivate: [AuthGuard] */},
   { path: 'map', component: MapComponent,canActivate: [AuthGuard] },
   { path: 'map/:id', component: MapComponent, canActivate: [AuthGuard] },
   { path: '', component: HomeComponent,  canActivate: [AuthGuard]},

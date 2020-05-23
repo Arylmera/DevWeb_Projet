@@ -22,11 +22,11 @@
               <button mat-raised-button color="primary" [routerLink]="['/map', this.parcoursNum]">Lancer le Trajet</button>
             </mat-list-item>
             <mat-list-item>
-              <a mat-raised-button color="accent" href="../../assets/Parcours/'{{this.parcoursName}}'.png'" download="Paroucours_{{this.parcoursName}}">Version PDF de la carte
+              <a mat-raised-button color="accent" href="{{this.parcours}}" download>Version PDF de la carte
                 <fa-icon [icon]="faDownload"></fa-icon></a>
             </mat-list-item>
             <mat-list-item>
-              <a mat-raised-button color="accent" href="../../assets/Parcours/'{{this.parcoursName}}-Points'.png'" download="Paroucours_{{this.parcoursName}}-Points">Version PDF de la liste des arrêts
+              <a mat-raised-button color="accent" href="{{this.parcours_points}}" download>Version PDF de la liste des arrêts
                 <fa-icon [icon]="faDownload"></fa-icon></a>
             </mat-list-item>
           </mat-list>
