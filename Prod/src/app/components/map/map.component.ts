@@ -101,16 +101,18 @@ export class MapComponent implements AfterViewInit, OnInit {
     // add de tout les points
     this.parcoursId = Number(this.route.snapshot.params.id);
     if (typeof this.parcoursId != 'number') { this.parcoursId = 0; }
-    console.log('chargement de la carte avec le parcours : ' + this.parcoursId);
     if (this.parcoursId) {
+      console.log('chargement de la carte avec le parcours : ' + this.parcoursId);
       this.pointsService.recupParcoursPointsById(this.parcoursId).subscribe( data => {
         const pointIdList = data;
         this.pointsService.recupParcoursById(this.parcoursId).subscribe( data => {
           this.parcoursName = data[0].nameParcours;
           this.setTitle();
         });
-        for (const id in pointIdList) {
-          this.pointsService.recupPointById(Number(id)).subscribe( data => {
+        // @ts-ignore
+        for (const point of pointIdList) {
+          // @ts-ignore
+          this.pointsService.recupPointById(point.idPoint).subscribe( data => {
             if (!this.pointList[0]) {
               this.pointList = [data[0]];
             } else {
